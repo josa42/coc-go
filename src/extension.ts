@@ -1,7 +1,6 @@
 import which from 'which'
 import { commands, ExtensionContext, LanguageClient, ServerOptions, workspace, services, LanguageClientOptions, RevealOutputChannelOn } from 'coc.nvim'
-import path from 'path'
-import fs from 'fs'
+import { installGoTool, goToolBin, runGoTool } from './utils/tools'
 
 // import coc from 'coc.nvim'
 
@@ -12,10 +11,10 @@ export async function activate(context: ExtensionContext): Promise<void> {
   if (enable === false) return
 
 
-  const command = config.commandPath || await goplsBin()
+  const command = config.commandPath || await goToolBin('gopls')
 
   if (!await goplsExists(command)) {
-    await installGopls()
+    await installGoTool('gopls')
   }
 
   let serverOptions: ServerOptions = { command }
@@ -33,14 +32,14 @@ export async function activate(context: ExtensionContext): Promise<void> {
     services.registLanguageClient(client)
   )
 
-  commands.registerCommand("go.installGopls", async () => {
-    if (!await installGopls()) {
+  subscriptions.push(commands.registerCommand("go.installGopls", async () => {
+    if (!await installGoTool('gopls')) {
       workspace.showMessage('Installing gopls failed', 'error')
       return
     }
     workspace.showMessage('Restart gopls', 'more')
     client.restart()
-  })
+  }))
 }
 
 async function goplsExists(gopls: string): Promise<boolean> {
@@ -49,35 +48,4 @@ async function goplsExists(gopls: string): Promise<boolean> {
   });
 }
 
-async function goRun(args: string): Promise<boolean> {
-  const gopath = await configDir('tools')
 
-  const cmd = `GOPATH=${gopath}; go ${args}`
-  const res = await workspace.runTerminalCommand(cmd)
-
-  return res.success
-}
-
-async function installGopls() {
-
-  const gopls = await goplsBin()
-
-  return (
-    await goRun('get -d -u golang.org/x/tools/cmd/gopls') &&
-    await goRun(`build -o ${gopls} golang.org/x/tools/cmd/gopls`)
-  )
-}
-
-async function goplsBin(): Promise<string> {
-  return path.join(await configDir('bin'), 'gopls')
-}
-
-async function configDir(...names: string[]): Promise<string> {
-  const home = require('os').homedir();
-  const dir = path.join(home, '.config', 'coc', 'go', ...names);
-
-  return new Promise((resolve) => {
-    fs.mkdirSync(dir, { recursive: true });
-    resolve(dir)
-  })
-}
