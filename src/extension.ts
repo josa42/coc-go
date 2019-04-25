@@ -33,7 +33,7 @@ export async function activate(context: ExtensionContext): Promise<void> {
     services.registLanguageClient(client)
   )
 
-  subscriptions.push(commands.registerCommand("go.installGopls", async () => {
+  subscriptions.push(commands.registerCommand("go.install.gopls", async () => {
     if (!await installGoTool('gopls')) {
       workspace.showMessage('Installing gopls failed', 'error')
       return

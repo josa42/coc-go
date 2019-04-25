@@ -21,7 +21,9 @@
     "prepare": "yarn clean && yarn build"
   },
   "activationEvents": [
-    "onLanguage:go"
+    "onLanguage:go",
+    "onCommand:go.version",
+    "onCommand:go.install.gopls"
   ],
   "contributes": {
     "configuration": {
@@ -41,6 +43,9 @@
       {
         "command": "go.installGopls",
         "title": "Install / Update gopls"
+      },{
+        "command": "go.version",
+        "title": "Print extension version"
       }
     ]
   },

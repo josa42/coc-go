@@ -19,22 +19,22 @@ const main = async (action) => {
 
 const remove = async () => {
   await run('.', 'yarn','unlink')
-  await run(extensionsPath, 'yarn','unlink', 'coc-docker')
+  await run(extensionsPath, 'yarn','unlink', 'coc-go')
 
   const pkg = await readJSON(pkgPath)
-  delete pkg.dependencies['coc-docker']
+  delete pkg.dependencies['coc-go']
   await writeJSON(pkgPath, pkg)
 
-  await run(extensionsPath, 'yarn','add', 'coc-docker')
+  await run(extensionsPath, 'yarn','add', 'coc-go')
 }
 
 const add = async () => {
   const pkg = await readJSON(pkgPath)
-  pkg.dependencies['coc-docker'] = '*'
+  pkg.dependencies['coc-go'] = '*'
   await writeJSON(pkgPath, pkg)
 
   await run('.', 'yarn','link')
-  await run(extensionsPath, 'yarn','link', 'coc-docker')
+  await run(extensionsPath, 'yarn','link', 'coc-go')
 }
 
 const readJSON = async (p) => new Promise(resolve => fs.readFile(p, (_, d) => resolve(JSON.parse(d))))
