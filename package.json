@@ -41,6 +41,10 @@
       {
         "command": "go.installGopls",
         "title": "Install / Update gopls"
+      },
+      {
+        "command": "go.format.imports",
+        "title": "Format imports"
       }
     ]
   },

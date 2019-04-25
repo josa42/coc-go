@@ -17,6 +17,8 @@ export async function activate(context: ExtensionContext): Promise<void> {
     await installGoTool('gopls')
   }
 
+  await installGoTool('goimports')
+
   let serverOptions: ServerOptions = { command }
 
   let clientOptions: LanguageClientOptions = {
@@ -39,6 +41,11 @@ export async function activate(context: ExtensionContext): Promise<void> {
     }
     workspace.showMessage('Restart gopls', 'more')
     client.restart()
+  }))
+
+  subscriptions.push(commands.registerCommand("go.format.imports", async () => {
+    let document = await workspace.document
+    runGoTool('goimports', ['-w', `${document.uri.replace(/^file:\/\//, '')}`])
   }))
 }
 
