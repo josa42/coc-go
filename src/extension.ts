@@ -1,4 +1,5 @@
 import which from 'which'
+import path from 'path'
 import { commands, ExtensionContext, LanguageClient, ServerOptions, workspace, services, LanguageClientOptions, RevealOutputChannelOn } from 'coc.nvim'
 import { installGoTool, goToolBin, runGoTool } from './utils/tools'
 
@@ -39,6 +40,11 @@ export async function activate(context: ExtensionContext): Promise<void> {
     }
     workspace.showMessage('Restart gopls', 'more')
     client.restart()
+  }))
+
+  subscriptions.push(commands.registerCommand("go.version", async () => {
+    const v = require(path.resolve(__dirname, '..', 'package.json')).version
+    workspace.showMessage(`Version: ${v}`, 'more')
   }))
 }
 

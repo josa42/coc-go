@@ -20,6 +20,18 @@ See [`gopls`](https://github.com/golang/go/wiki/gopls)
 
 Trigger completion in `coc-settings.json` to get complete list.
 
+## Development
+
+1. Run `yarn build` or `yarn build:watch`
+2. Link extension
+
+```sh
+cd ~/github/coc-go          && yarn link
+cd ~/.config/coc/extensions && yarn link coc-go
+```
+
+3. Add `"coc-go": "*"` to dependencies in `~/.config/coc/extensions/package.json`
+
 ## License
 
 [MIT © Josa Gesell](LICENSE)

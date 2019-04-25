@@ -1,5 +1,7 @@
-src
-tsconfig.json
-tslint.json
+/src
+/tsconfig.json
+/tslint.json
+/scripts
 *.map
 *.ts
+
