@@ -5,7 +5,10 @@
   "author": "josa@gesell.me",
   "license": "MIT",
   "main": "lib/extension.js",
-  "publisher": "josa42",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/josa42/coc-go.git"
+  },
   "engines": {
     "coc": "^0.0.65"
   },
