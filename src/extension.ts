@@ -7,7 +7,7 @@ import { installGoTool, goToolBin, runGoTool } from './utils/tools'
 
 export async function activate(context: ExtensionContext): Promise<void> {
   let { subscriptions } = context
-  const config = workspace.getConfiguration().get('gopls', {}) as any
+  const config = workspace.getConfiguration().get('go', {}) as any
   const enable = config.enable
   if (enable === false) return
 
