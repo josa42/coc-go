@@ -1,11 +1,11 @@
 import path from 'path'
 import fs from 'fs'
-import { configDir } from './config'
+import { spawn } from 'child_process';
 import { workspace } from 'coc.nvim'
-import { spawn } from 'child_process'
+import which from 'which'
+import { configDir } from './config'
 
 export async function installGoTool(name: string, force: boolean = false) {
-
   const bin = await goToolBin(name)
 
   if (!force && await goToolExists(name)) {
@@ -40,6 +40,10 @@ async function goRun(args: string): Promise<boolean> {
   const res = await workspace.runTerminalCommand(cmd)
 
   return res.success
+}
+
+export async function commandExists(command: string): Promise<boolean> {
+  return new Promise(resolve => which(command, (err, _: string) => resolve(err == null)));
 }
 
 
