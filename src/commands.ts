@@ -8,7 +8,7 @@ export async function version() {
 }
 
 export async function installGopls(client: LanguageClient) {
-  await installGoTool('gopls')
+  await installGoTool('gopls', true)
 
   if (client.needsStop()) {
     await client.stop()

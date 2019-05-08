@@ -44,7 +44,7 @@
     },
     "commands": [
       {
-        "command": "go.installGopls",
+        "command": "go.install.gopls",
         "title": "Install / Update gopls"
       },
       {
