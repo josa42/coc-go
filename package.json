@@ -26,7 +26,8 @@
   "activationEvents": [
     "onLanguage:go",
     "onCommand:go.version",
-    "onCommand:go.install.gopls"
+    "onCommand:go.install.gopls",
+    "onCommand:go.install.gomodifytags"
   ],
   "contributes": {
     "configuration": {
@@ -39,32 +40,80 @@
         },
         "go.commandPath": {
           "type": "string"
+        },
+        "go.tags": {
+          "type": "object",
+          "properties": {
+            "tags": {
+              "type": "string",
+              "default": "json",
+              "description": "Comma separated tags to be used by Go: Add Tags command"
+            },
+            "options": {
+              "type": "string",
+              "default": "json=omitempty",
+              "description": "Comma separated tag=options pairs to be used by Go: Add Tags command"
+            },
+            "transform": {
+              "type": "string",
+              "enum": [
+                "snakecase",
+                "camelcase"
+              ],
+              "default": "snakecase",
+              "description": "Transformation rule used by Go: Add Tags command to add tags"
+            }
+          }
         }
-      }
-    },
-    "commands": [
-      {
-        "command": "go.install.gopls",
-        "title": "Install / Update gopls"
       },
-      {
-        "command": "go.version",
-        "title": "Print extension version"
-      }
-    ]
-  },
-  "devDependencies": {
-    "@chemzqm/tsconfig": "^0.0.3",
-    "@chemzqm/tslint-config": "^1.0.17",
-    "@types/node": "^10.14.6",
-    "@types/which": "^1.3.1",
-    "coc.nvim": "0.0.67",
-    "rimraf": "^2.6.2",
-    "tslint": "^5.11.0",
-    "typescript": "^3.0.3"
-  },
-  "dependencies": {
-    "tslib": "^1.9.3",
-    "which": "^1.3.1"
+      "commands": [
+        {
+          "command": "go.install.gopls",
+          "title": "Go: Install / Update gopls"
+        },
+        {
+          "command": "go.install.gomodifytags",
+          "title": "Go: Install / Update gomodifytags"
+        },
+        {
+          "command": "go.version",
+          "title": "Go: Print extension version"
+        },
+        {
+          "command": "go.tags.add",
+          "title": "Go: Add Tags To Struct Fields"
+        },
+        {
+          "command": "go.tags.add.prompt",
+          "title": "Go: Add Tags To Struct Fields (prompt)"
+        },
+        {
+          "command": "go.tags.remove",
+          "title": "Go: Remove Tags From Struct Fields"
+        },
+        {
+          "command": "go.tags.remove.prompt",
+          "title": "Go: Remove Tags From Struct Fields (prompt)"
+        },
+        {
+          "command": "go.tags.clear",
+          "title": "Go: RemoAe All Tags From Struct Fields"
+        }
+      ]
+    },
+    "devDependencies": {
+      "@chemzqm/tsconfig": "^0.0.3",
+      "@chemzqm/tslint-config": "^1.0.17",
+      "@types/node": "^10.14.6",
+      "@types/which": "^1.3.1",
+      "coc.nvim": "0.0.67",
+      "rimraf": "^2.6.2",
+      "tslint": "^5.11.0",
+      "typescript": "^3.0.3"
+    },
+    "dependencies": {
+      "tslib": "^1.9.3",
+      "which": "^1.3.1"
+    }
   }
 }
