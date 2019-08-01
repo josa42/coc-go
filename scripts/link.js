@@ -3,9 +3,9 @@ const os = require('os')
 const fs = require('fs')
 const { spawn } = require('child_process')
 
-const home = os.homedir();
-const extensionsPath = path.join(home, '.config', 'coc', 'extensions');
-const pkgPath = path.join(extensionsPath, 'package.json');
+const home = os.homedir()
+const extensionsPath = path.join(home, '.config', 'coc', 'extensions')
+const pkgPath = path.join(extensionsPath, 'package.json')
 
 const main = async (action) => {
   switch(action) {
@@ -14,7 +14,6 @@ const main = async (action) => {
     default:
       console.error('Usage: link (add|remove)')
   }
-
 }
 
 const remove = async () => {

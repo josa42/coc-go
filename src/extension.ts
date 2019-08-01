@@ -1,6 +1,8 @@
-import { commands, ExtensionContext, LanguageClient, ServerOptions, workspace, services, LanguageClientOptions, RevealOutputChannelOn } from 'coc.nvim'
-import { installGoTool, goToolBin, commandExists } from './utils/tools'
-import { installGopls, version } from './commands'
+import { commands, ExtensionContext, LanguageClient, ServerOptions, workspace, services, LanguageClientOptions } from 'coc.nvim'
+import { installGoBin, goBinPath, commandExists } from './utils/tools'
+import { installGopls, installGomodifytags, addTags, removeTags, version } from './commands'
+
+import { GOPLS } from './binaries'
 
 export async function activate(context: ExtensionContext): Promise<void> {
 
@@ -9,9 +11,9 @@ export async function activate(context: ExtensionContext): Promise<void> {
     return
   }
 
-  const command = config.commandPath || await goToolBin('gopls')
+  const command = config.commandPath || await goBinPath(GOPLS)
   if (!await commandExists(command)) {
-    await installGoTool('gopls')
+    await installGoBin(GOPLS)
   }
 
   const serverOptions: ServerOptions = { command }
@@ -25,8 +27,10 @@ export async function activate(context: ExtensionContext): Promise<void> {
   context.subscriptions.push(
     services.registLanguageClient(client),
     commands.registerCommand("go.version", () => version()),
-    commands.registerCommand("go.install.gopls", () => installGopls(client))
+    commands.registerCommand("go.install.gopls", () => installGopls(client)),
+    commands.registerCommand("go.install.gomodifytags", () => installGomodifytags()),
+    commands.registerCommand("go.add.tags", addTags),
+    commands.registerCommand("go.remove.tags", removeTags)
   )
 }
-
 

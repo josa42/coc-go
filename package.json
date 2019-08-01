@@ -45,11 +45,23 @@
     "commands": [
       {
         "command": "go.install.gopls",
-        "title": "Install / Update gopls"
+        "title": "Go: Install / Update gopls"
+      },
+      {
+        "command": "go.install.gomodifytags",
+        "title": "Go: Install / Update gomodifytags"
       },
       {
         "command": "go.version",
-        "title": "Print extension version"
+        "title": "Go: Print extension version"
+      },
+      {
+        "command": "go.add.tags",
+        "title": "Go: Add Tags To Struct Fields"
+      },
+      {
+        "command": "go.remove.tags",
+        "title": "Go: Remove Tags From Struct Fields"
       }
     ]
   },
