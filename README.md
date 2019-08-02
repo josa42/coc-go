@@ -7,11 +7,26 @@ for [`coc.nvim`](https://github.com/neoclide/coc.nvim).
 
 In your vim/neovim, run command:
 
-    :CocInstall coc-go
+```
+:CocInstall coc-go
+```
 
 ## Features
 
 See [`gopls`](https://github.com/golang/go/wiki/gopls)
+
+## Commands
+
+Additional to commands provided by gopls, this extensions provides these commands:
+
+- `go.install.gopls` Go: Install / Update gopls
+- `go.install.gomodifytags` Go: Install / Update gomodifytags
+- `go.tags.add` Go: Add Tags To Struct Fields
+- `go.tags.add.prompt` Go: Add Tags To Struct Fields (prompt)
+- `go.tags.remove` Go: Remove Tags From Struct Fields
+- `go.tags.remove.prompt` Go: Remove Tags From Struct Fields (prompt)
+- `go.tags.clear` Go: Remove All Tags From Struct Fields
+- `go.version` Go: Print extension version
 
 ## Configuration options
 
@@ -38,3 +53,4 @@ cd ~/.config/coc/extensions && yarn link coc-go
 ## License
 
 [MIT © Josa Gesell](LICENSE)
+
