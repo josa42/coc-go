@@ -17,7 +17,6 @@ export function setStoragePath(dir: string): void {
   state.storagePath = dir
 }
 
-
 export async function configDir(...names: string[]): Promise<string> {
 
   const storage = state.storagePath || (() => {

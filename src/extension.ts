@@ -1,8 +1,9 @@
 import {commands, ExtensionContext, LanguageClient, ServerOptions, workspace, services, LanguageClientOptions} from 'coc.nvim'
 import {installGoBin, goBinPath, commandExists} from './utils/tools'
-import {installGopls, installGomodifytags, version, activeTextDocument} from './commands'
+import {installGopls, installGomodifytags, version} from './commands'
 import {addTags, removeTags, clearTags} from './utils/modify-tags'
 import {setStoragePath} from './utils/config'
+import {activeTextDocument} from './editor'
 
 import {GOPLS, GOMODIFYTAGS} from './binaries'
 
