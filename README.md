@@ -50,6 +50,11 @@ cd ~/.config/coc/extensions && yarn link coc-go
 
 3. Add `"coc-go": "*"` to dependencies in `~/.config/coc/extensions/package.json`
 
+TODO
+
+- Add [`goimple`](https://github.com/sasha-s/goimpl) command
+- Add [`godoctor`](https://github.com/godoctor/godoctor) refactor commands
+
 ## License
 
 [MIT © Josa Gesell](LICENSE)
