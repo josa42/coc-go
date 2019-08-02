@@ -8,6 +8,8 @@ import {GOPLS, GOMODIFYTAGS} from './binaries'
 
 export async function activate(context: ExtensionContext): Promise<void> {
 
+  setStoragePath(context.storagePath)
+
   const config = workspace.getConfiguration().get('go', {}) as any
   if (config.enable === false) {
     return
