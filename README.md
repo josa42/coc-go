@@ -17,6 +17,9 @@ See [`gopls`](https://github.com/golang/go/wiki/gopls)
 
 - `go.enable` set to `false` to disable gopls language server.
 - `go.commandPath` absolute path of gopls executable.
+- `go.tags.tags` Comma separated tags to be used by `go.tags.add` command
+- `go.tags.options` Comma separated tag=options pairs to be used by `go.tags.add` command
+- `go.tags.transform` Transformation rule used by `go.tags.add` command to add tags
 
 Trigger completion in `coc-settings.json` to get complete list.
 
