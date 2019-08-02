@@ -10,7 +10,7 @@
     "url": "https://github.com/josa42/coc-go.git"
   },
   "engines": {
-    "coc": "^0.0.65"
+    "coc": "^0.0.73"
   },
   "keywords": [
     "coc.nvim",
@@ -100,20 +100,20 @@
           "title": "Go: RemoAe All Tags From Struct Fields"
         }
       ]
-    },
-    "devDependencies": {
-      "@chemzqm/tsconfig": "^0.0.3",
-      "@chemzqm/tslint-config": "^1.0.17",
-      "@types/node": "^10.14.6",
-      "@types/which": "^1.3.1",
-      "coc.nvim": "0.0.67",
-      "rimraf": "^2.6.2",
-      "tslint": "^5.11.0",
-      "typescript": "^3.0.3"
-    },
-    "dependencies": {
-      "tslib": "^1.9.3",
-      "which": "^1.3.1"
     }
+  },
+  "devDependencies": {
+    "@chemzqm/tsconfig": "^0.0.3",
+    "@chemzqm/tslint-config": "^1.0.17",
+    "@types/node": "^10.14.6",
+    "@types/which": "^1.3.1",
+    "coc.nvim": "0.0.73",
+    "rimraf": "^2.6.2",
+    "tslint": "^5.11.0",
+    "typescript": "^3.0.3"
+  },
+  "dependencies": {
+    "tslib": "^1.9.3",
+    "which": "^1.3.1"
   }
 }
