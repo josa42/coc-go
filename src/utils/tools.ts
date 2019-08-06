@@ -15,7 +15,7 @@ export async function installGoBin(source: string, force: boolean = false) {
 
   return (
     await goRun(`get -d -u ${source}`) &&
-    await goRun(`build -o ${bin} ${source}`)
+    await goRun(`build -o ${bin} ${goSourcePath(source)}`)
   )
 }
 
@@ -49,6 +49,10 @@ async function goRun(args: string): Promise<boolean> {
 }
 
 function goBinName(source: string): string {
-  return source.split('/').pop()
+  return goSourcePath(source).split('/').pop()
+}
+
+function goSourcePath(source: string): string {
+  return source.replace(/\@.*$/, '')
 }
 

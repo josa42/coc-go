@@ -74,6 +74,8 @@ async function runGomodifytags(document: TextDocument, args: string[]) {
   const input = fileArchive(fileName, document.getText())
   const edit = await execGomodifytags(args, input)
 
+  workspace.showMessage(JSON.stringify(edit))
+
   await workspace.applyEdit({changes: {[document.uri]: [edit]}})
 }
 
