@@ -42,7 +42,7 @@ async function goBinExists(source: string): Promise<boolean> {
 async function goRun(args: string): Promise<boolean> {
   const gopath = await configDir('tools')
 
-  const cmd = `GOPATH=${gopath} go ${args}`
+  const cmd = `env GOPATH=${gopath} go ${args}`
   const res = await workspace.runTerminalCommand(cmd)
 
   return res.success
