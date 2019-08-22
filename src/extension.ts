@@ -4,7 +4,6 @@ import {installGopls, installGomodifytags, version} from './commands'
 import {addTags, removeTags, clearTags} from './utils/modify-tags'
 import {setStoragePath} from './utils/config'
 import {activeTextDocument} from './editor'
-
 import {GOPLS, GOMODIFYTAGS} from './binaries'
 
 export async function activate(context: ExtensionContext): Promise<void> {
