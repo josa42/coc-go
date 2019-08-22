@@ -13,10 +13,20 @@ export async function installGoBin(source: string, force: boolean = false) {
     return
   }
 
-  return (
+  workspace.showMessage(`Installing: ${name}`)
+
+  const success = (
     await goRun(`get -d -u ${source}`) &&
     await goRun(`build -o ${bin} ${source}`)
   )
+
+  if (success) {
+    workspace.showMessage(`Installed '${name}'`)
+  } else {
+    workspace.showMessage(`Failed to install '${name}'`, 'error')
+  }
+
+  return success
 }
 
 export async function goBinPath(source: string): Promise<string> {
@@ -41,11 +51,16 @@ async function goBinExists(source: string): Promise<boolean> {
 
 async function goRun(args: string): Promise<boolean> {
   const gopath = await configDir('tools')
-
   const cmd = `GOPATH=${gopath} go ${args}`
-  const res = await workspace.runTerminalCommand(cmd)
 
-  return res.success
+  try {
+    await workspace.runCommand(cmd, gopath)
+  } catch (ex) {
+    workspace.showMessage(ex)
+    return false
+  }
+
+  return true
 }
 
 function goBinName(source: string): string {
