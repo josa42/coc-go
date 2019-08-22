@@ -4,7 +4,7 @@ import {installGopls, installGomodifytags, installGotests, version} from './comm
 import {addTags, removeTags, clearTags} from './utils/modify-tags'
 import {setStoragePath} from './utils/config'
 import {activeTextDocument} from './editor'
-import {GOPLS, GOMODIFYTAGS} from './binaries'
+import {GOPLS, GOMODIFYTAGS, GOTESTS} from './binaries'
 import {generateTestsAll, generateTestsExported, toogleTests} from './utils/tests'
 
 export async function activate(context: ExtensionContext): Promise<void> {
@@ -20,7 +20,9 @@ export async function activate(context: ExtensionContext): Promise<void> {
   if (!await commandExists(command)) {
     await installGoBin(GOPLS)
   }
-  await installGoBin(GOMODIFYTAGS)
+
+  installGoBin(GOMODIFYTAGS)
+  installGoBin(GOTESTS)
 
   const serverOptions: ServerOptions = {command}
 
