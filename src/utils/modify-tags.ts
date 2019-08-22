@@ -10,6 +10,8 @@ interface Params {
   prompt?: boolean
 }
 
+////////////////////////////////////////////////////////////////////////////////
+
 export async function addTags(document: TextDocument, params: Params = {}) {
   const config = workspace.getConfiguration().get('go.tags', {}) as GoTagsConfig
 
@@ -49,14 +51,17 @@ export async function removeTags(document: TextDocument, params: Params = {}) {
     '-remove-tags', (tags || "json"),
     '-clear-options'
   ])
-
 }
+
 export async function clearTags(document: TextDocument) {
   await runGomodifytags(document, [
     '-clear-tags',
     '-clear-options'
   ])
 }
+
+////////////////////////////////////////////////////////////////////////////////
+
 
 async function runGomodifytags(document: TextDocument, args: string[]) {
 

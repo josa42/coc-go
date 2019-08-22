@@ -27,6 +27,9 @@ Additional to commands provided by gopls, this extensions provides these command
 - `go.tags.remove.prompt` Go: Remove Tags From Struct Fields (prompt)
 - `go.tags.clear` Go: Remove All Tags From Struct Fields
 - `go.version` Go: Print extension version
+- `go.test.generate.file`: Go: Generate Unit Tests For File
+- `go.test.generate.exported`: Go: Generate Unit Tests For Exported Functions in File
+- `go.test.toggle`: Go: Toggle Test File
 
 ## Configuration options
 

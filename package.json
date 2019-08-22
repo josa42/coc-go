@@ -98,6 +98,18 @@
         {
           "command": "go.tags.clear",
           "title": "Go: RemoAe All Tags From Struct Fields"
+        },
+        {
+          "command": "go.test.generate.file",
+          "title": "Go: Generate Unit Tests For File"
+        },
+        {
+          "command": "go.test.generate.exported",
+          "title": "Go: Generate Unit Tests For Exported Functions in File"
+        },
+        {
+          "command": "go.test.toggle",
+          "title": "Go: Toggle Test File"
         }
       ]
     }
