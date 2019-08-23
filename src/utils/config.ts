@@ -13,6 +13,10 @@ export interface GoTagsConfig {
   transform?: string
 }
 
+export interface GoTestsConfig {
+  generateFlags?: string[]
+}
+
 export function setStoragePath(dir: string): void {
   state.storagePath = dir
 }

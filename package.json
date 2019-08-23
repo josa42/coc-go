@@ -64,6 +64,19 @@
               "description": "Transformation rule used by Go: Add Tags command to add tags"
             }
           }
+        },
+        "go.tests": {
+          "type": "object",
+          "properties": {
+            "generateFlags": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              },
+              "default": [],
+              "description": "Additional command line flags to pass to `gotests` for generating tests."
+            }
+          }
         }
       },
       "commands": [

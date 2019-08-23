@@ -3,6 +3,7 @@ import {TextDocument} from 'vscode-languageserver-protocol'
 import cp = require('child_process')
 import {goBinPath} from './tools'
 import {GOTESTS} from '../binaries'
+import {GoTestsConfig} from './config'
 
 ////////////////////////////////////////////////////////////////////////////////
 
@@ -50,7 +51,9 @@ function sourceURI(document: TextDocument) {
 
 async function runGotests(document: TextDocument, args: string[]): Promise<boolean> {
 
-  args.push('-w', document.uri.replace(/^file:\/\//, ''))
+  const config = workspace.getConfiguration().get('go.tests', {}) as GoTestsConfig
+
+  args.push(...(config.generateFlags || []), '-w', document.uri.replace(/^file:\/\//, ''))
 
   const gotests = await goBinPath(GOTESTS)
 

@@ -42,6 +42,7 @@ Imported from [`microsoft/vscode-go`](https://github.com/microsoft/vscode-go).
 - `go.tags.tags` Comma separated tags to be used by `go.tags.add` command
 - `go.tags.options` Comma separated tag=options pairs to be used by `go.tags.add` command
 - `go.tags.transform` Transformation rule used by `go.tags.add` command to add tags
+- `go.tests.generateFlags`: Additional command line flags to pass to `gotests` for generating tests."
 
 Trigger completion in `coc-settings.json` to get complete list.
 
