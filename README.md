@@ -31,6 +31,10 @@ Additional to commands provided by gopls, this extensions provides these command
 - `go.test.generate.exported`: Go: Generate Unit Tests For Exported Functions in File
 - `go.test.toggle`: Go: Toggle Test File
 
+## Snippets
+
+Imported from [`microsoft/vscode-go`](https://github.com/microsoft/vscode-go).
+
 ## Configuration options
 
 - `go.enable` set to `false` to disable gopls language server.

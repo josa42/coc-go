@@ -112,7 +112,13 @@
           "title": "Go: Toggle Test File"
         }
       ]
-    }
+    },
+    "snippets": [
+      {
+        "language": "go",
+        "path": "./snippets/go.json"
+      }
+    ]
   },
   "devDependencies": {
     "@chemzqm/tsconfig": "^0.0.3",
