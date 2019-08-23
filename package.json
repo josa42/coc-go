@@ -126,7 +126,8 @@
         {
           "command": "go.tags.clear.line",
           "title": "Go: RemoAe All Tags From Struct Fields at current line"
-        },        {
+        },
+        {
           "command": "go.test.generate.file",
           "title": "Go: Generate Unit Tests For File"
         },
@@ -137,6 +138,10 @@
         {
           "command": "go.test.toggle",
           "title": "Go: Toggle Test File"
+        },
+        {
+          "command": "go.playground",
+          "title": "Go: Run on Go Playground"
         }
       ]
     },

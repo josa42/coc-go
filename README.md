@@ -33,6 +33,7 @@ Additional to commands provided by gopls, this extensions provides these command
 - `go.test.generate.file`: Go: Generate Unit Tests For File
 - `go.test.generate.exported`: Go: Generate Unit Tests For Exported Functions in File
 - `go.test.toggle`: Go: Toggle Test File
+- `go.playground`: Go: Run on Go Playground
 
 ### Examples
 
@@ -111,14 +112,12 @@ Trigger completion in `coc-settings.json` to get complete list.
   }
   ```
 
-- Add [`goplay`](https://github.com/haya14busa/goplay) command
+## Tools
 
-  ```
-  {
-    "command": "go.playground",
-    "title": "Go: Run on Go Playground"
-  }
-  ```
+- [`gomodifytags`](http://github.com/fatih/gomodifytags) - [BSD](https://github.com/fatih/gomodifytags/blob/master/LICENSE)
+- [`goplay`](http://github.com/haya14busa/goplay) - [MIT](https://github.com/haya14busa/goplay/blob/master/LICENSE)
+- [`gopls`](https://golang.org/x/tools/cmd/gopls)
+- [`gotests`](http://github.com/cweill/gotests) - [Apache](https://github.com/cweill/gotests/blob/develop/LICENSE)
 
 ## License
 

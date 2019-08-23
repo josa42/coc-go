@@ -4,8 +4,9 @@ import { installGopls, installGomodifytags, installGotests, version } from './co
 import { addTags, removeTags, clearTags } from './utils/modify-tags'
 import { setStoragePath } from './utils/config'
 import { activeTextDocument } from './editor'
-import { GOPLS, GOMODIFYTAGS, GOTESTS } from './binaries'
+import { GOPLS, GOMODIFYTAGS, GOTESTS, GOPLAY } from './binaries'
 import { generateTestsAll, generateTestsExported, toogleTests } from './utils/tests'
+import { openPlayground } from './utils/playground'
 
 export async function activate(context: ExtensionContext): Promise<void> {
 
@@ -93,6 +94,10 @@ export async function activate(context: ExtensionContext): Promise<void> {
     commands.registerCommand(
       "go.test.toggle",
       async () => toogleTests(await activeTextDocument())
+    ),
+    commands.registerCommand(
+      "go.playground",
+      async () => openPlayground(await activeTextDocument())
     )
   )
 }

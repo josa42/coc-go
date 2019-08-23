@@ -1,9 +1,9 @@
 import path from 'path'
 import fs from 'fs'
-import {spawn} from 'child_process'
-import {workspace} from 'coc.nvim'
+import { spawn } from 'child_process'
+import { workspace } from 'coc.nvim'
 import which from 'which'
-import {configDir} from './config'
+import { configDir } from './config'
 
 ////////////////////////////////////////////////////////////////////////////////
 
