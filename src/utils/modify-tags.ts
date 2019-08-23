@@ -78,7 +78,6 @@ export async function clearTags(document: TextDocument, params: ClearParams = {}
 
 ////////////////////////////////////////////////////////////////////////////////
 
-
 async function runGomodifytags(document: TextDocument, args: string[]) {
 
   const fileName = document.uri.replace(/^file:\/\//, '')
