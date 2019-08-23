@@ -16,7 +16,7 @@ export async function addTags(document: TextDocument, params: Params = {}) {
   const config = workspace.getConfiguration().get('go.tags', {}) as GoTagsConfig
 
   let tags = (config.tags || 'json')
-  let options = (config.options || 'json=omitempty')
+  let options = config.options === "" ? "" : (config.options || 'json=omitempty')
   let transform = (config.transform || "snakecase")
 
   if (params.prompt) {

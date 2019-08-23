@@ -14,7 +14,7 @@ export async function installGoBin(source: string, force: boolean = false) {
     return
   }
 
-  workspace.showMessage(`Installing: ${name}`)
+  workspace.showMessage(`Installing '${name}'`)
 
   const success = await goRun(`get -u ${source}`)
 

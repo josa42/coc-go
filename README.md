@@ -31,6 +31,12 @@ Additional to commands provided by gopls, this extensions provides these command
 - `go.test.generate.exported`: Go: Generate Unit Tests For Exported Functions in File
 - `go.test.toggle`: Go: Toggle Test File
 
+You can add key maps to commands like this:
+
+```
+autocmd FileType go nmap gta :call CocAction('runCommand', 'go.tags.add')<cr>
+```
+
 ## Snippets
 
 Imported from [`microsoft/vscode-go`](https://github.com/microsoft/vscode-go).
@@ -45,6 +51,14 @@ Imported from [`microsoft/vscode-go`](https://github.com/microsoft/vscode-go).
 - `go.tests.generateFlags`: Additional command line flags to pass to `gotests` for generating tests."
 
 Trigger completion in `coc-settings.json` to get complete list.
+
+## FAQ
+
+- **How do I add missing imports on save?**
+
+  ```
+  autocmd BufWritePre *.go :call CocAction('runCommand', 'editor.action.organizeImport')
+  ```
 
 ## Development
 
