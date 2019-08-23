@@ -13,6 +13,10 @@ export interface GoTagsConfig {
   transform?: string
 }
 
+export interface GoTestsConfig {
+  generateFlags?: string[]
+}
+
 export function setStoragePath(dir: string): void {
   state.storagePath = dir
 }
@@ -27,7 +31,7 @@ export async function configDir(...names: string[]): Promise<string> {
   const dir = path.join(storage, ...names)
 
   return new Promise((resolve) => {
-    fs.mkdirSync(dir, { recursive: true })
+    fs.mkdirSync(dir, {recursive: true})
     resolve(dir)
   })
 }

@@ -5,18 +5,26 @@ import {workspace} from 'coc.nvim'
 import which from 'which'
 import {configDir} from './config'
 
+////////////////////////////////////////////////////////////////////////////////
+
 export async function installGoBin(source: string, force: boolean = false) {
   const name = goBinName(source)
-  const bin = await goBinPath(name)
 
   if (!force && await goBinExists(name)) {
     return
   }
 
-  return (
-    await goRun(`get -d -u ${source}`) &&
-    await goRun(`build -o ${bin} ${source}`)
-  )
+  workspace.showMessage(`Installing '${name}'`)
+
+  const success = await goRun(`get -u ${source}`)
+
+  if (success) {
+    workspace.showMessage(`Installed '${name}'`)
+  } else {
+    workspace.showMessage(`Failed to install '${name}'`, 'error')
+  }
+
+  return success
 }
 
 export async function goBinPath(source: string): Promise<string> {
@@ -33,6 +41,8 @@ export async function commandExists(command: string): Promise<boolean> {
   return new Promise(resolve => which(command, (err, _: string) => resolve(err == null)))
 }
 
+////////////////////////////////////////////////////////////////////////////////
+
 async function goBinExists(source: string): Promise<boolean> {
   const name = goBinName(source)
   const bin = await goBinPath(name)
@@ -41,14 +51,20 @@ async function goBinExists(source: string): Promise<boolean> {
 
 async function goRun(args: string): Promise<boolean> {
   const gopath = await configDir('tools')
+  const gobin = await configDir('bin')
+  const cmd = `env GOBIN=${gobin} GOPATH=${gopath} go ${args}`
 
-  const cmd = `env GOPATH=${gopath} go ${args}`
-  const res = await workspace.runTerminalCommand(cmd)
+  try {
+    await workspace.runCommand(cmd, gopath)
+  } catch (ex) {
+    workspace.showMessage(ex)
+    return false
+  }
 
-  return res.success
+  return true
 }
 
 function goBinName(source: string): string {
-  return source.split('/').pop()
+  return source.replace(/\/\.\.\.$/, '').split('/').pop()
 }
 

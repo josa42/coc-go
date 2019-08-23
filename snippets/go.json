@@ -1,0 +1,447 @@
+{
+  "single import": {
+    "prefix": "im",
+    "body": [
+      "import \"${1:package}\""
+    ],
+    "description": "import statement"
+  },
+  "multiple imports": {
+    "prefix": "ims",
+    "body": [
+      "import (",
+      "\t\"${1:package}\"",
+      ")"
+    ],
+    "description": "a import block"
+  },
+  "single constant": {
+    "prefix": "co",
+    "body": [
+      "const ${1:name} = ${2:value}"
+    ],
+    "description": "a constant"
+  },
+  "multiple constants": {
+    "prefix": "cos",
+    "body": [
+      "const (",
+      "\t${1:name} = ${2:value}",
+      ")"
+    ],
+    "description": "a constant block"
+  },
+  "type interface declaration": {
+    "prefix": "tyi",
+    "body": [
+      "type ${1:name} interface {",
+      "\t$0",
+      "}"
+    ],
+    "description": "a type interface"
+  },
+  "type struct declaration": {
+    "prefix": "tys",
+    "body": [
+      "type ${1:name} struct {",
+      "\t$0",
+      "}"
+    ],
+    "description": "a struct declaration"
+  },
+  "package main and main function": {
+    "prefix": "pkgm",
+    "body": [
+      "package main",
+      "",
+      "func main() {",
+      "\t$0",
+      "}"
+    ],
+    "description": "main package & function"
+  },
+  "function declaration": {
+    "prefix": "func",
+    "body": [
+      "func $1($2) $3 {",
+      "\t$0",
+      "}"
+    ],
+    "description": "function declaration"
+  },
+  "variable declaration": {
+    "prefix": "var",
+    "body": [
+      "var ${1:name} ${2:type}"
+    ],
+    "description": "a variable"
+  },
+  "switch statement": {
+    "prefix": "switch",
+    "body": [
+      "switch ${1:expression} {",
+      "case ${2:condition}:",
+      "\t$0",
+      "}"
+    ],
+    "description": "switch statement"
+  },
+  "select statement": {
+    "prefix": "sel",
+    "body": [
+      "select {",
+      "case ${1:condition}:",
+      "\t$0",
+      "}"
+    ],
+    "description": "select statement"
+  },
+  "case clause": {
+    "prefix": "cs",
+    "body": [
+      "case ${1:condition}:$0"
+    ],
+    "description": "case clause"
+  },
+  "for statement": {
+    "prefix": "for",
+    "body": [
+      "for ${1:index} := 0; $1 < ${2:count}; $1${3:++} {",
+      "\t$0",
+      "}"
+    ],
+    "description": "a for loop"
+  },
+  "for range statement": {
+    "prefix": "forr",
+    "body": [
+      "for ${1:_, }${2:var} := range ${3:var} {",
+      "\t$0",
+      "}"
+    ],
+    "description": "a for range loop"
+  },
+  "channel declaration": {
+    "prefix": "ch",
+    "body": [
+      "chan ${1:type}"
+    ],
+    "description": "a channel"
+  },
+  "map declaration": {
+    "prefix": "map",
+    "body": [
+      "map[${1:type}]${2:type}"
+    ],
+    "description": "a map"
+  },
+  "empty interface": {
+    "prefix": "in",
+    "body": [
+      "interface{}"
+    ],
+    "description": "empty interface"
+  },
+  "if statement": {
+    "prefix": "if",
+    "body": [
+      "if ${1:condition} {",
+      "\t$0",
+      "}"
+    ],
+    "description": "if statement"
+  },
+  "else branch": {
+    "prefix": "el",
+    "body": [
+      "else {",
+      "\t$0",
+      "}"
+    ],
+    "description": "else branch"
+  },
+  "if else statement": {
+    "prefix": "ie",
+    "body": [
+      "if ${1:condition} {",
+      "\t$2",
+      "} else {",
+      "\t$0",
+      "}"
+    ],
+    "description": "if else"
+  },
+  "if err != nil": {
+    "prefix": "iferr",
+    "body": [
+      "if err != nil {",
+      "\t${1:return ${2:nil, }${3:err}}",
+      "}"
+    ],
+    "description": "if err != nil"
+  },
+  "fmt.Println": {
+    "prefix": "fp",
+    "body": [
+      "fmt.Println(\"$1\")"
+    ],
+    "description": "fmt.Println()"
+  },
+  "fmt.Printf": {
+    "prefix": "ff",
+    "body": [
+      "fmt.Printf(\"$1\", ${2:var})"
+    ],
+    "description": "fmt.Printf()"
+  },
+  "log.Println": {
+    "prefix": "lp",
+    "body": [
+      "log.Println(\"$1\")"
+    ],
+    "description": "log.Println()"
+  },
+  "log.Printf": {
+    "prefix": "lf",
+    "body": [
+      "log.Printf(\"$1\", ${2:var})"
+    ],
+    "description": "log.Printf()"
+  },
+  "log variable content": {
+    "prefix": "lv",
+    "body": [
+      "log.Printf(\"${1:var}: %#+v\\\\n\", ${1:var})"
+    ],
+    "description": "log.Printf() with variable content"
+  },
+  "t.Log": {
+    "prefix": "tl",
+    "body": [
+      "t.Log(\"$1\")"
+    ],
+    "description": "t.Log()"
+  },
+  "t.Logf": {
+    "prefix": "tlf",
+    "body": [
+      "t.Logf(\"$1\", ${2:var})"
+    ],
+    "description": "t.Logf()"
+  },
+  "t.Logf variable content": {
+    "prefix": "tlv",
+    "body": [
+      "t.Logf(\"${1:var}: %#+v\\\\n\", ${1:var})"
+    ],
+    "description": "t.Logf() with variable content"
+  },
+  "make(...)": {
+    "prefix": "make",
+    "body": [
+      "make(${1:type}, ${2:0})"
+    ],
+    "description": "make statement"
+  },
+  "new(...)": {
+    "prefix": "new",
+    "body": [
+      "new(${1:type})"
+    ],
+    "description": "new statement"
+  },
+  "panic(...)": {
+    "prefix": "pn",
+    "body": [
+      "panic(\"$0\")"
+    ],
+    "description": "panic"
+  },
+  "http ResponseWriter *Request": {
+    "prefix": "wr",
+    "body": [
+      "${1:w} http.ResponseWriter, ${2:r} *http.Request"
+    ],
+    "description": "http Response"
+  },
+  "http.HandleFunc": {
+    "prefix": "hf",
+    "body": [
+      "${1:http}.HandleFunc(\"${2:/}\", ${3:handler})"
+    ],
+    "description": "http.HandleFunc()"
+  },
+  "http handler declaration": {
+    "prefix": "hand",
+    "body": [
+      "func $1(${2:w} http.ResponseWriter, ${3:r} *http.Request) {",
+      "\t$0",
+      "}"
+    ],
+    "description": "http handler declaration"
+  },
+  "http.Redirect": {
+    "prefix": "rd",
+    "body": [
+      "http.Redirect(${1:w}, ${2:r}, \"${3:/}\", ${4:http.StatusFound})"
+    ],
+    "description": "http.Redirect()"
+  },
+  "http.Error": {
+    "prefix": "herr",
+    "body": [
+      "http.Error(${1:w}, ${2:err}.Error(), ${3:http.StatusInternalServerError})"
+    ],
+    "description": "http.Error()"
+  },
+  "http.ListenAndServe": {
+    "prefix": "las",
+    "body": [
+      "http.ListenAndServe(\"${1::8080}\", ${2:nil})"
+    ],
+    "description": "http.ListenAndServe"
+  },
+  "http.Serve": {
+    "prefix": "sv",
+    "body": [
+      "http.Serve(\"${1::8080}\", ${2:nil})"
+    ],
+    "description": "http.Serve"
+  },
+  "goroutine anonymous function": {
+    "prefix": "go",
+    "body": [
+      "go func($1) {",
+      "\t$0",
+      "}($2)"
+    ],
+    "description": "anonymous goroutine declaration"
+  },
+  "goroutine function": {
+    "prefix": "gf",
+    "body": [
+      "go ${1:func}($0)"
+    ],
+    "description": "goroutine declaration"
+  },
+  "defer statement": {
+    "prefix": "df",
+    "body": [
+      "defer ${1:func}($0)"
+    ],
+    "description": "defer statement"
+  },
+  "test function": {
+    "prefix": "tf",
+    "body": [
+      "func Test$1(t *testing.T) {",
+      "\t$0",
+      "}"
+    ],
+    "description": "Test function"
+  },
+  "benchmark function": {
+    "prefix": "bf",
+    "body": [
+      "func Benchmark$1(b *testing.B) {",
+      "\tfor ${2:i} := 0; ${2:i} < b.N; ${2:i}++ {",
+      "\t\t$0",
+      "\t}",
+      "}"
+    ],
+    "description": "Benchmark function"
+  },
+  "example function": {
+    "prefix": "ef",
+    "body": [
+      "func Example$1() {",
+      "\t$2",
+      "\t//Output:",
+      "\t$3",
+      "}"
+    ],
+    "description": "Example function"
+  },
+  "table driven test": {
+    "prefix": "tdt",
+    "body": [
+      "func Test$1(t *testing.T) {",
+      "\ttestCases := []struct {",
+      "\t\tdesc\tstring",
+      "\t\t$2",
+      "\t}{",
+      "\t\t{",
+      "\t\t\tdesc: \"$3\",",
+      "\t\t\t$4",
+      "\t\t},",
+      "\t}",
+      "\tfor _, tC := range testCases {",
+      "\t\tt.Run(tC.desc, func(t *testing.T) {",
+      "\t\t\t$0",
+      "\t\t})",
+      "\t}",
+      "}"
+    ],
+    "description": "table driven test"
+  },
+  "init function": {
+    "prefix": "finit",
+    "body": [
+      "func init() {",
+      "\t$1",
+      "}"
+    ],
+    "description": "init function"
+  },
+  "main function": {
+    "prefix": "fmain",
+    "body": [
+      "func main() {",
+      "\t$1",
+      "}"
+    ],
+    "description": "main function"
+  },
+  "method declaration": {
+    "prefix": "meth",
+    "body": [
+      "func (${1:receiver} ${2:type}) ${3:method}($4) $5 {",
+      "\t$0",
+      "}"
+    ],
+    "description": "method declaration"
+  },
+  "hello world web app": {
+    "prefix": "helloweb",
+    "body": [
+      "package main",
+      "",
+      "import (",
+      "\t\"fmt\"",
+      "\t\"net/http\"",
+      "\t\"time\"",
+      ")",
+      "",
+      "func greet(w http.ResponseWriter, r *http.Request) {",
+      "\tfmt.Fprintf(w, \"Hello World! %s\", time.Now())",
+      "}",
+      "",
+      "func main() {",
+      "\thttp.HandleFunc(\"/\", greet)",
+      "\thttp.ListenAndServe(\":8080\", nil)",
+      "}"
+    ],
+    "description": "sample hello world webapp"
+  },
+  "sort implementation": {
+    "prefix": "sort",
+    "body": [
+      "type ${1:SortBy} []${2:Type}",
+      "",
+      "func (a $1) Len() int           { return len(a) }",
+      "func (a $1) Swap(i, j int)      { a[i], a[j] = a[j], a[i] }",
+      "func (a $1) Less(i, j int) bool { ${3:return a[i] < a[j]} }"
+    ],
+    "description": "a custom sort.Sort interface implementation, for a given slice type."
+  }
+}

@@ -1,11 +1,11 @@
 import {commands, ExtensionContext, LanguageClient, ServerOptions, workspace, services, LanguageClientOptions} from 'coc.nvim'
 import {installGoBin, goBinPath, commandExists} from './utils/tools'
-import {installGopls, installGomodifytags, version} from './commands'
+import {installGopls, installGomodifytags, installGotests, version} from './commands'
 import {addTags, removeTags, clearTags} from './utils/modify-tags'
 import {setStoragePath} from './utils/config'
 import {activeTextDocument} from './editor'
-
-import {GOPLS, GOMODIFYTAGS} from './binaries'
+import {GOPLS, GOMODIFYTAGS, GOTESTS} from './binaries'
+import {generateTestsAll, generateTestsExported, toogleTests} from './utils/tests'
 
 export async function activate(context: ExtensionContext): Promise<void> {
 
@@ -20,7 +20,9 @@ export async function activate(context: ExtensionContext): Promise<void> {
   if (!await commandExists(command)) {
     await installGoBin(GOPLS)
   }
-  await installGoBin(GOMODIFYTAGS)
+
+  installGoBin(GOMODIFYTAGS)
+  installGoBin(GOTESTS)
 
   const serverOptions: ServerOptions = {command}
 
@@ -45,8 +47,12 @@ export async function activate(context: ExtensionContext): Promise<void> {
       () => installGomodifytags()
     ),
     commands.registerCommand(
+      "go.install.gotests",
+      () => installGotests()
+    ),
+    commands.registerCommand(
       "go.tags.add",
-      async () => addTags(await activeTextDocument())
+      async (...tags) => addTags(await activeTextDocument(), { tags })
     ),
     commands.registerCommand(
       "go.tags.add.prompt",
@@ -54,7 +60,7 @@ export async function activate(context: ExtensionContext): Promise<void> {
     ),
     commands.registerCommand(
       "go.tags.remove",
-      async () => removeTags(await activeTextDocument())
+      async (...tags) => removeTags(await activeTextDocument(), { tags })
     ),
     commands.registerCommand(
       "go.tags.remove.prompt",
@@ -63,6 +69,18 @@ export async function activate(context: ExtensionContext): Promise<void> {
     commands.registerCommand(
       "go.tags.clear",
       async () => clearTags(await activeTextDocument())
+    ),
+    commands.registerCommand(
+      "go.test.generate.file",
+      async () => generateTestsAll(await activeTextDocument())
+    ),
+    commands.registerCommand(
+      "go.test.generate.exported",
+      async () => generateTestsExported(await activeTextDocument())
+    ),
+    commands.registerCommand(
+      "go.test.toggle",
+      async () => toogleTests(await activeTextDocument())
     )
   )
 }
