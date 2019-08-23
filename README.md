@@ -19,21 +19,23 @@ See [`gopls`](https://github.com/golang/go/wiki/gopls)
 
 Additional to commands provided by gopls, this extensions provides these commands:
 
-- `go.install.gopls` Go: Install / Update gopls
-- `go.install.gomodifytags` Go: Install / Update gomodifytags
-- `go.tags.add` Go: Add Tags To Struct Fields
-- `go.tags.add.line` Go: Add Tags To Struct Field at current line
-- `go.tags.add.prompt` Go: Add Tags To Struct Fields (prompt)
-- `go.tags.remove` Go: Remove Tags From Struct Fields
-- `go.tags.remove.line` Go: Remove Tags From Struct Field at line
-- `go.tags.remove.prompt` Go: Remove Tags From Struct Fields (prompt)
-- `go.tags.clear` Go: Remove All Tags From Struct Fields
-- `go.tags.clear.line` Go: Remove All Tags From Struct Field at line
-- `go.version` Go: Print extension version
-- `go.test.generate.file`: Go: Generate Unit Tests For File
-- `go.test.generate.exported`: Go: Generate Unit Tests For Exported Functions in File
-- `go.test.toggle`: Go: Toggle Test File
-- `go.playground`: Go: Run on Go Playground
+| Key                         |                                                    |
+|-----------------------------|----------------------------------------------------|
+| `go.install.gopls`          | Install / Update gopls                             |
+| `go.install.gomodifytags`   | Install / Update gomodifytags                      |
+| `go.tags.add`               | Add Tags To Struct Fields                          |
+| `go.tags.add.line`          | Add Tags To Struct Field at current line           |
+| `go.tags.add.prompt`        | Add Tags To Struct Fields (prompt)                 |
+| `go.tags.remove`            | Remove Tags From Struct Fields                     |
+| `go.tags.remove.line`       | Remove Tags From Struct Field at line              |
+| `go.tags.remove.prompt`     | Remove Tags From Struct Fields (prompt)            |
+| `go.tags.clear`             | Remove All Tags From Struct Fields                 |
+| `go.tags.clear.line`        | Remove All Tags From Struct Field at line          |
+| `go.version`                | Print extension version                            |
+| `go.test.generate.file`:    | Generate Unit Tests For File                       |
+| `go.test.generate.exported` | Generate Unit Tests For Exported Functions in File |
+| `go.test.toggle`            | Toggle Test File                                   |
+| `go.playground`             | Run on Go Playground                               |
 
 ### Examples
 
@@ -65,12 +67,14 @@ Imported from [`microsoft/vscode-go`](https://github.com/microsoft/vscode-go).
 
 ## Configuration options
 
-- `go.enable` set to `false` to disable gopls language server.
-- `go.commandPath` absolute path of gopls executable.
-- `go.tags.tags` Comma separated tags to be used by `go.tags.add` command
-- `go.tags.options` Comma separated tag=options pairs to be used by `go.tags.add` command
-- `go.tags.transform` Transformation rule used by `go.tags.add` command to add tags
-- `go.tests.generateFlags`: Additional command line flags to pass to `gotests` for generating tests."
+| Key                      |                                                                           |
+|--------------------------|---------------------------------------------------------------------------|
+| `go.enable`              | Set to `false` to disable gopls language server.                          |
+| `go.commandPath`         | Absolute path of gopls executable.                                        |
+| `go.tags.tags`           | Comma separated tags to be used by `go.tags.add` command                  |
+| `go.tags.options`        | Comma separated tag=options pairs to be used by `go.tags.add` command     |
+| `go.tags.transform`      | Transformation rule used by `go.tags.add` command to add tags             |
+| `go.tests.generateFlags` | Additional command line flags to pass to `gotests` for generating tests." |
 
 Trigger completion in `coc-settings.json` to get complete list.
 
