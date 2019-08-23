@@ -53,7 +53,8 @@
     "prefix": "pkgm",
     "body": [
       "package main",
-      "\nfunc main() {",
+      "",
+      "func main() {",
       "\t$0",
       "}"
     ],
@@ -414,15 +415,18 @@
     "prefix": "helloweb",
     "body": [
       "package main",
-      "\nimport (",
+      "",
+      "import (",
       "\t\"fmt\"",
       "\t\"net/http\"",
       "\t\"time\"",
       ")",
-      "\nfunc greet(w http.ResponseWriter, r *http.Request) {",
+      "",
+      "func greet(w http.ResponseWriter, r *http.Request) {",
       "\tfmt.Fprintf(w, \"Hello World! %s\", time.Now())",
       "}",
-      "\nfunc main() {",
+      "",
+      "func main() {",
       "\thttp.HandleFunc(\"/\", greet)",
       "\thttp.ListenAndServe(\":8080\", nil)",
       "}"
@@ -433,7 +437,8 @@
     "prefix": "sort",
     "body": [
       "type ${1:SortBy} []${2:Type}",
-      "\nfunc (a $1) Len() int           { return len(a) }",
+      "",
+      "func (a $1) Len() int           { return len(a) }",
       "func (a $1) Swap(i, j int)      { a[i], a[j] = a[j], a[i] }",
       "func (a $1) Less(i, j int) bool { ${3:return a[i] < a[j]} }"
     ],

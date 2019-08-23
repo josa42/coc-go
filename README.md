@@ -70,22 +70,12 @@ Imported from [`microsoft/vscode-go`](https://github.com/microsoft/vscode-go).
 
 Trigger completion in `coc-settings.json` to get complete list.
 
-## FAQ
-
-
 ## Development
 
 1. Run `yarn build` or `yarn build:watch`
-2. Link extension
+2. Run `yarn run link:add` to link extension
 
-```sh
-cd ~/github/coc-go          && yarn link
-cd ~/.config/coc/extensions && yarn link coc-go
-```
-
-3. Add `"coc-go": "*"` to dependencies in `~/.config/coc/extensions/package.json`
-
-TODO
+## TODO
 
 - Add [`goimple`](https://github.com/sasha-s/goimpl) command
 - Add [`godoctor`](https://github.com/godoctor/godoctor) refactor commands
