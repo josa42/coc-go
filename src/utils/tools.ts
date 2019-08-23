@@ -52,7 +52,7 @@ async function goBinExists(source: string): Promise<boolean> {
 async function goRun(args: string): Promise<boolean> {
   const gopath = await configDir('tools')
   const gobin = await configDir('bin')
-  const cmd = `GOBIN=${gobin} GOPATH=${gopath} go ${args}`
+  const cmd = `env GOBIN=${gobin} GOPATH=${gopath} go ${args}`
 
   try {
     await workspace.runCommand(cmd, gopath)
