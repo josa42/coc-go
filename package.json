@@ -100,12 +100,20 @@
           "title": "Go: Add Tags To Struct Fields"
         },
         {
+          "command": "go.tags.add.line",
+          "title": "Go: Add Tags To Struct Field at current line"
+        },
+        {
           "command": "go.tags.add.prompt",
           "title": "Go: Add Tags To Struct Fields (prompt)"
         },
         {
           "command": "go.tags.remove",
           "title": "Go: Remove Tags From Struct Fields"
+        },
+        {
+          "command": "go.tags.remove.line",
+          "title": "Go: Remove Tags From Struct Field at current line"
         },
         {
           "command": "go.tags.remove.prompt",
@@ -116,6 +124,9 @@
           "title": "Go: RemoAe All Tags From Struct Fields"
         },
         {
+          "command": "go.tags.clear.line",
+          "title": "Go: RemoAe All Tags From Struct Fields at current line"
+        },        {
           "command": "go.test.generate.file",
           "title": "Go: Generate Unit Tests For File"
         },

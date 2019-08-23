@@ -1,11 +1,11 @@
-import {commands, ExtensionContext, LanguageClient, ServerOptions, workspace, services, LanguageClientOptions} from 'coc.nvim'
-import {installGoBin, goBinPath, commandExists} from './utils/tools'
-import {installGopls, installGomodifytags, installGotests, version} from './commands'
-import {addTags, removeTags, clearTags} from './utils/modify-tags'
-import {setStoragePath} from './utils/config'
-import {activeTextDocument} from './editor'
-import {GOPLS, GOMODIFYTAGS, GOTESTS} from './binaries'
-import {generateTestsAll, generateTestsExported, toogleTests} from './utils/tests'
+import { commands, ExtensionContext, LanguageClient, ServerOptions, workspace, services, LanguageClientOptions } from 'coc.nvim'
+import { installGoBin, goBinPath, commandExists } from './utils/tools'
+import { installGopls, installGomodifytags, installGotests, version } from './commands'
+import { addTags, removeTags, clearTags } from './utils/modify-tags'
+import { setStoragePath } from './utils/config'
+import { activeTextDocument } from './editor'
+import { GOPLS, GOMODIFYTAGS, GOTESTS } from './binaries'
+import { generateTestsAll, generateTestsExported, toogleTests } from './utils/tests'
 
 export async function activate(context: ExtensionContext): Promise<void> {
 
@@ -24,7 +24,7 @@ export async function activate(context: ExtensionContext): Promise<void> {
   installGoBin(GOMODIFYTAGS)
   installGoBin(GOTESTS)
 
-  const serverOptions: ServerOptions = {command}
+  const serverOptions: ServerOptions = { command }
 
   const clientOptions: LanguageClientOptions = {
     documentSelector: ['go']
@@ -55,20 +55,32 @@ export async function activate(context: ExtensionContext): Promise<void> {
       async (...tags) => addTags(await activeTextDocument(), { tags })
     ),
     commands.registerCommand(
+      "go.tags.add.line",
+      async (...tags) => addTags(await activeTextDocument(), { tags, selection: "line" })
+    ),
+    commands.registerCommand(
       "go.tags.add.prompt",
-      async () => addTags(await activeTextDocument(), {prompt: true})
+      async () => addTags(await activeTextDocument(), { prompt: true })
     ),
     commands.registerCommand(
       "go.tags.remove",
       async (...tags) => removeTags(await activeTextDocument(), { tags })
     ),
     commands.registerCommand(
+      "go.tags.remove.line",
+      async (...tags) => removeTags(await activeTextDocument(), { tags, selection: "line" })
+    ),
+    commands.registerCommand(
       "go.tags.remove.prompt",
-      async () => removeTags(await activeTextDocument(), {prompt: true})
+      async () => removeTags(await activeTextDocument(), { prompt: true })
     ),
     commands.registerCommand(
       "go.tags.clear",
       async () => clearTags(await activeTextDocument())
+    ),
+    commands.registerCommand(
+      "go.tags.clear.line",
+      async () => clearTags(await activeTextDocument(), { selection: "line" })
     ),
     commands.registerCommand(
       "go.test.generate.file",

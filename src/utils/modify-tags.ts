@@ -1,14 +1,19 @@
 import cp = require('child_process')
-import {TextDocument, Position, TextEdit} from 'vscode-languageserver-protocol'
-import {workspace} from 'coc.nvim'
+import { TextDocument, Position, TextEdit } from 'vscode-languageserver-protocol'
+import { workspace } from 'coc.nvim'
 
-import {GoTagsConfig} from './config'
-import {goBinPath} from './tools'
-import {GOMODIFYTAGS} from '../binaries'
+import { GoTagsConfig } from './config'
+import { goBinPath } from './tools'
+import { GOMODIFYTAGS } from '../binaries'
 
 interface Params {
   prompt?: boolean
   tags?: string[]
+  selection?: "line" | "struct"
+}
+
+interface ClearParams {
+  selection?: "line" | "struct"
 }
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -36,7 +41,8 @@ export async function addTags(document: TextDocument, params: Params = {}) {
   await runGomodifytags(document, [
     '-add-tags', tags.replace(/ +/g, ''),
     '-add-options', (options || ""),
-    '-transform', transform
+    '-transform', transform,
+    ...(await offsetArgs(document, (params.selection || "struct")))
   ])
 }
 
@@ -56,14 +62,16 @@ export async function removeTags(document: TextDocument, params: Params = {}) {
 
   await runGomodifytags(document, [
     '-remove-tags', (tags || "json"),
-    '-clear-options'
+    '-clear-options',
+    ...(await offsetArgs(document, (params.selection || "struct")))
   ])
 }
 
-export async function clearTags(document: TextDocument) {
+export async function clearTags(document: TextDocument, params: ClearParams = {}) {
   await runGomodifytags(document, [
     '-clear-tags',
-    '-clear-options'
+    '-clear-options',
+    ...(await offsetArgs(document, (params.selection || "struct")))
   ])
 }
 
@@ -80,13 +88,11 @@ async function runGomodifytags(document: TextDocument, args: string[]) {
     '-format', 'json'
   )
 
-  const byteOff = byteOffsetAt(document, await workspace.getCursorPosition())
-  args.push('-offset', String(byteOff))
 
   const input = fileArchive(fileName, document.getText())
   const edit = await execGomodifytags(args, input)
 
-  await workspace.applyEdit({changes: {[document.uri]: [edit]}})
+  await workspace.applyEdit({ changes: { [document.uri]: [edit] } })
 }
 
 // Interface for the output from gomodifytags
@@ -101,19 +107,19 @@ async function execGomodifytags(args: string[], input: string): Promise<TextEdit
   const gomodifytags = await goBinPath(GOMODIFYTAGS)
 
   return new Promise((resolve, reject) => {
-    const p = cp.execFile(gomodifytags, args, {env: {}}, async (err, stdout, stderr) => {
+    const p = cp.execFile(gomodifytags, args, { env: {} }, async (err, stdout, stderr) => {
       if (err) {
         workspace.showMessage(`Cannot modify tags: ${stderr}`)
 
         return reject()
       }
 
-      const mods = <GomodifytagsOutput>JSON.parse(stdout)
+      const mods = JSON.parse(stdout) as GomodifytagsOutput
 
       resolve({
         range: {
-          start: {line: mods.start - 1, character: 0},
-          end: {line: mods.end, character: 0}
+          start: { line: mods.start - 1, character: 0 },
+          end: { line: mods.end, character: 0 }
         },
         newText: mods.lines.join("\n") + "\n"
       })
@@ -130,11 +136,23 @@ function fileArchive(fileName: string, fileContents: string): string {
 }
 
 // https://github.com/microsoft/vscode-go/blob/master/src/util.ts#L84
-function byteOffsetAt(document: TextDocument, position: Position): number {
+function byteOffsetAt(document: TextDocument, position: Position): string {
   const offset = document.offsetAt(position)
   const text = document.getText()
-  return Buffer.byteLength(text.substr(0, offset))
+  return Buffer.byteLength(text.substr(0, offset)).toString()
 }
 
+async function offsetArgs(document: TextDocument, seletion: "struct" | "line"): Promise<string[]> {
 
+  const cursor = await workspace.getCursorPosition()
+
+  switch (seletion) {
+    case "struct":
+      return ['-offset', byteOffsetAt(document, cursor)]
+    case "line":
+      return ['-line', String(cursor.line+1)]
+  }
+
+  return []
+}
 

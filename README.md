@@ -22,10 +22,13 @@ Additional to commands provided by gopls, this extensions provides these command
 - `go.install.gopls` Go: Install / Update gopls
 - `go.install.gomodifytags` Go: Install / Update gomodifytags
 - `go.tags.add` Go: Add Tags To Struct Fields
+- `go.tags.add.line` Go: Add Tags To Struct Field at current line
 - `go.tags.add.prompt` Go: Add Tags To Struct Fields (prompt)
 - `go.tags.remove` Go: Remove Tags From Struct Fields
+- `go.tags.remove.line` Go: Remove Tags From Struct Field at line
 - `go.tags.remove.prompt` Go: Remove Tags From Struct Fields (prompt)
 - `go.tags.clear` Go: Remove All Tags From Struct Fields
+- `go.tags.clear.line` Go: Remove All Tags From Struct Field at line
 - `go.version` Go: Print extension version
 - `go.test.generate.file`: Go: Generate Unit Tests For File
 - `go.test.generate.exported`: Go: Generate Unit Tests For Exported Functions in File
@@ -77,8 +80,45 @@ Trigger completion in `coc-settings.json` to get complete list.
 
 ## TODO
 
-- Add [`goimple`](https://github.com/sasha-s/goimpl) command
+- Add [`goimpl`](https://github.com/sasha-s/goimpl) command
+  
+  ```
+  {
+    "command": "go.impl.cursor",
+    "title": "Go: Generate Interface Stubs"
+  }
+  ```
+
 - Add [`godoctor`](https://github.com/godoctor/godoctor) refactor commands
+
+  ```
+  {
+    "command": "go.godoctor.extract",
+    "title": "Go: Extract to function"
+  },
+  {
+    "command": "go.godoctor.variable",
+    "title": "Go: Extract to variable"
+  }
+  ```
+
+- Add [`fillstruct`](https://github.com/davidrjenni/reftools/tree/master/cmd/fillstruct) command
+
+  ```
+  {
+    "command": "go.fill.struct",
+    "title": "Go: Fill struct"
+  }
+  ```
+
+- Add [`goplay`](https://github.com/haya14busa/goplay) command
+
+  ```
+  {
+    "command": "go.playground",
+    "title": "Go: Run on Go Playground"
+  }
+  ```
 
 ## License
 
