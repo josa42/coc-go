@@ -8,6 +8,7 @@ import {GOMODIFYTAGS} from '../binaries'
 
 interface Params {
   prompt?: boolean
+  tags?: string[]
 }
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -15,8 +16,12 @@ interface Params {
 export async function addTags(document: TextDocument, params: Params = {}) {
   const config = workspace.getConfiguration().get('go.tags', {}) as GoTagsConfig
 
-  let tags = (config.tags || 'json')
-  let options = config.options === "" ? "" : (config.options || 'json=omitempty')
+  let tags = (params.tags && params.tags.length > 0)
+    ? params.tags.join(',')
+    : (config.tags || 'json')
+  let options = (config.options || config.options === "")
+    ? config.options
+    : 'json=omitempty'
   let transform = (config.transform || "snakecase")
 
   if (params.prompt) {
@@ -29,7 +34,7 @@ export async function addTags(document: TextDocument, params: Params = {}) {
   }
 
   await runGomodifytags(document, [
-    '-add-tags', tags,
+    '-add-tags', tags.replace(/ +/g, ''),
     '-add-options', (options || ""),
     '-transform', transform
   ])
@@ -38,7 +43,9 @@ export async function addTags(document: TextDocument, params: Params = {}) {
 export async function removeTags(document: TextDocument, params: Params = {}) {
   const config = workspace.getConfiguration().get('go.tags', {}) as GoTagsConfig
 
-  let tags = (config.tags || 'json')
+  let tags = (params.tags && params.tags.length > 0)
+    ? params.tags.join(',')
+    : (config.tags || 'json')
 
   if (params.prompt) {
     tags = await workspace.requestInput('Enter comma separated tag names', tags)

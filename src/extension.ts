@@ -52,7 +52,7 @@ export async function activate(context: ExtensionContext): Promise<void> {
     ),
     commands.registerCommand(
       "go.tags.add",
-      async () => addTags(await activeTextDocument())
+      async (...tags) => addTags(await activeTextDocument(), { tags })
     ),
     commands.registerCommand(
       "go.tags.add.prompt",
@@ -60,7 +60,7 @@ export async function activate(context: ExtensionContext): Promise<void> {
     ),
     commands.registerCommand(
       "go.tags.remove",
-      async () => removeTags(await activeTextDocument())
+      async (...tags) => removeTags(await activeTextDocument(), { tags })
     ),
     commands.registerCommand(
       "go.tags.remove.prompt",

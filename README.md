@@ -31,11 +31,29 @@ Additional to commands provided by gopls, this extensions provides these command
 - `go.test.generate.exported`: Go: Generate Unit Tests For Exported Functions in File
 - `go.test.toggle`: Go: Toggle Test File
 
-You can add key maps to commands like this:
+### Examples
 
-```
-autocmd FileType go nmap gta :call CocAction('runCommand', 'go.tags.add')<cr>
-```
+- **Add or Remove specific tags**
+
+  ```
+  CocCommand go.tags.add yaml
+  CocCommand go.tags.add yaml json xml
+  CocCommand go.tags.remove xml
+  ```
+
+- **Add missing imports on save**
+
+  ```
+  autocmd BufWritePre *.go :CocCommand editor.action.organizeImport
+  ```
+
+- **Map Keys to command**
+
+  ```
+  autocmd FileType go nmap gtj :CocCommand go.tags.add json<cr>
+  autocmd FileType go nmap gty :CocCommand go.tags.add yaml<cr>
+  autocmd FileType go nmap gtx :CocCommand go.tags.clear<cr>
+  ```
 
 ## Snippets
 
@@ -54,11 +72,6 @@ Trigger completion in `coc-settings.json` to get complete list.
 
 ## FAQ
 
-- **How do I add missing imports on save?**
-
-  ```
-  autocmd BufWritePre *.go :call CocAction('runCommand', 'editor.action.organizeImport')
-  ```
 
 ## Development
 
