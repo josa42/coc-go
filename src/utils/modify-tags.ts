@@ -40,6 +40,7 @@ export async function addTags(document: TextDocument, params: Params = {}) {
 
   await runGomodifytags(document, [
     '-add-tags', tags.replace(/ +/g, ''),
+    '-override',
     '-add-options', (options || ""),
     '-transform', transform,
     ...(await offsetArgs(document, (params.selection || "struct")))
