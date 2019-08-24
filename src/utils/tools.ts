@@ -14,7 +14,9 @@ export async function installGoBin(source: string, force: boolean = false) {
     return
   }
 
-  workspace.showMessage(`Installing '${name}'`)
+  const statusItem = workspace.createStatusBarItem(90, { progress: true })
+  statusItem.text = `Installing '${name}'`
+  statusItem.show()
 
   const success = await goRun(`get -u ${source}`)
 
@@ -24,6 +26,7 @@ export async function installGoBin(source: string, force: boolean = false) {
     workspace.showMessage(`Failed to install '${name}'`, 'error')
   }
 
+  statusItem.hide()
   return success
 }
 
