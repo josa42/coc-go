@@ -1,0 +1,17 @@
+name: Test
+on:
+  push:
+    branches: [ master ]
+jobs:
+  test:
+    strategy:
+      matrix:
+        node: [6, 8, 10, 12]
+    steps:
+      - uses: actions/setup-node@v1
+        with:
+          node-version: ${{ matrix.node }}
+      - run: |
+          yarn install --frozen-lockfile
+          yarn run build
+
