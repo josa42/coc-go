@@ -2,9 +2,9 @@ import { commands, ExtensionContext, LanguageClient, ServerOptions, workspace, s
 import { installGoBin, goBinPath, commandExists } from './utils/tools'
 import { installGopls, installGomodifytags, installGotests, version } from './commands'
 import { addTags, removeTags, clearTags } from './utils/modify-tags'
-import { setStoragePath } from './utils/config'
+import { setStoragePath, GoConfig } from './utils/config'
 import { activeTextDocument } from './editor'
-import { GOPLS, GOMODIFYTAGS, GOTESTS, GOPLAY } from './binaries'
+import { GOPLS, GOMODIFYTAGS, GOTESTS } from './binaries'
 import { generateTestsAll, generateTestsExported, toogleTests } from './utils/tests'
 import { openPlayground } from './utils/playground'
 
@@ -12,7 +12,7 @@ export async function activate(context: ExtensionContext): Promise<void> {
 
   setStoragePath(context.storagePath)
 
-  const config = workspace.getConfiguration().get('go', {}) as any
+  const config = workspace.getConfiguration().get('go', {}) as GoConfig
   if (config.enable === false) {
     return
   }
