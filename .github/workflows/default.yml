@@ -4,14 +4,18 @@ on:
     branches: [ master ]
 jobs:
   test:
+    runs-on: ${{ matrix.os }}
     strategy:
       matrix:
-        node: [6, 8, 10, 12]
+        os:   [macOS-latest, windows-latest, ubuntu-latest]
+        node: [8, 10, 12]
     steps:
-      - uses: actions/setup-node@v1
+      - uses: 'actions/checkout@master'
+      - uses: 'actions/setup-node@v1'
         with:
           node-version: ${{ matrix.node }}
       - run: |
+          npm install -g yarn
           yarn install --frozen-lockfile
           yarn run build
 
