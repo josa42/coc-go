@@ -18,7 +18,7 @@ interface ClearParams {
 
 ////////////////////////////////////////////////////////////////////////////////
 
-export async function addTags(document: TextDocument, params: Params = {}) {
+export async function addTags(document: TextDocument, params: Params = {}): Promise<void> {
   const config = workspace.getConfiguration().get('go.tags', {}) as GoTagsConfig
 
   let tags = (params.tags && params.tags.length > 0)
@@ -27,7 +27,7 @@ export async function addTags(document: TextDocument, params: Params = {}) {
   let options = (config.options || config.options === "")
     ? config.options
     : 'json=omitempty'
-  let transform = (config.transform || "snakecase")
+  const transform = (config.transform || "snakecase")
 
   if (params.prompt) {
     tags = await workspace.requestInput('Enter comma separated tag names', tags)
@@ -47,7 +47,7 @@ export async function addTags(document: TextDocument, params: Params = {}) {
   ])
 }
 
-export async function removeTags(document: TextDocument, params: Params = {}) {
+export async function removeTags(document: TextDocument, params: Params = {}): Promise<void> {
   const config = workspace.getConfiguration().get('go.tags', {}) as GoTagsConfig
 
   let tags = (params.tags && params.tags.length > 0)
@@ -68,7 +68,7 @@ export async function removeTags(document: TextDocument, params: Params = {}) {
   ])
 }
 
-export async function clearTags(document: TextDocument, params: ClearParams = {}) {
+export async function clearTags(document: TextDocument, params: ClearParams = {}): Promise<void> {
   await runGomodifytags(document, [
     '-clear-tags',
     '-clear-options',
@@ -78,7 +78,7 @@ export async function clearTags(document: TextDocument, params: ClearParams = {}
 
 ////////////////////////////////////////////////////////////////////////////////
 
-async function runGomodifytags(document: TextDocument, args: string[]) {
+async function runGomodifytags(document: TextDocument, args: string[]): Promise<void> {
 
   const fileName = document.uri.replace(/^file:\/\//, '')
 
@@ -106,7 +106,7 @@ async function execGomodifytags(args: string[], input: string): Promise<TextEdit
 
   const gomodifytags = await goBinPath(GOMODIFYTAGS)
 
-  return new Promise((resolve, reject) => {
+  return new Promise((resolve, reject): void => {
     const p = cp.execFile(gomodifytags, args, { env: {} }, async (err, stdout, stderr) => {
       if (err) {
         workspace.showMessage(`Cannot modify tags: ${stderr}`)

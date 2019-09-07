@@ -4,7 +4,7 @@ import { execFile } from 'child_process'
 import { goBinPath, installGoBin, commandExists } from './tools'
 import { GOPLAY } from '../binaries'
 
-export async function openPlayground(document: TextDocument) {
+export async function openPlayground(document: TextDocument): Promise<boolean> {
 
   return runGoplay(document.getText())
 }
@@ -17,7 +17,7 @@ async function runGoplay(code: string): Promise<boolean> {
     await installGoBin(GOPLAY)
   }
 
-  return new Promise<boolean>((resolve, reject) => {
+  return new Promise<boolean>((resolve, reject): void => {
     const p = execFile(bin, ['-'], {}, async (err, stdout, stderr) => {
       workspace.showMessage(stdout)
 

@@ -18,4 +18,5 @@ jobs:
           npm install -g yarn
           yarn install --frozen-lockfile
           yarn run build
+          yarn lint
 

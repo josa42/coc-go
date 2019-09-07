@@ -1,5 +1,5 @@
-const https = require('https');
-const fs = require('fs');
+const https = require('https')
+const fs = require('fs')
 
 const run = async () => {
   const resp = await request('https://raw.githubusercontent.com/microsoft/vscode-go/master/snippets/go.json')
@@ -15,8 +15,8 @@ const run = async () => {
 const request = (url) => new Promise((resolve, reject) => {
   https
     .get(url, (resp) => {
-      let data = '';
-      resp.on('data', (chunk) => data += chunk);
+      let data = ''
+      resp.on('data', (chunk) => data += chunk)
       resp.on('end', () => resolve(JSON.parse(data)))
     })
     .on("error", (err) => reject(err))

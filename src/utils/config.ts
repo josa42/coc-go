@@ -5,7 +5,14 @@ interface State {
   storagePath?: string
 }
 
-let state: State = {}
+const state: State = {}
+
+export interface GoConfig {
+  enable: boolean
+  commandPath: string
+  tags: GoTestsConfig
+  tests: GoTestsConfig
+}
 
 export interface GoTagsConfig {
   tags?: string
@@ -23,14 +30,14 @@ export function setStoragePath(dir: string): void {
 
 export async function configDir(...names: string[]): Promise<string> {
 
-  const storage = state.storagePath || (() => {
+  const storage = state.storagePath || ((): string => {
     const home = require('os').homedir()
     return path.join(home, '.config', 'coc', 'go')
   })()
 
   const dir = path.join(storage, ...names)
 
-  return new Promise((resolve) => {
+  return new Promise((resolve): void => {
     fs.mkdirSync(dir, {recursive: true})
     resolve(dir)
   })
