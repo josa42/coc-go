@@ -44,13 +44,17 @@
       "properties": {
         "go.enable": {
           "type": "boolean",
-          "default": true
+          "default": true,
+          "description": "Enable or disable gopls"
         },
         "go.commandPath": {
-          "type": "string"
+          "type": "string",
+          "default": "",
+          "description": "Absolute path of gopls executable"
         },
         "go.tags": {
           "type": "object",
+          "description": "Tags/options/transform flags used by gomodifytags",
           "properties": {
             "tags": {
               "type": "string",
@@ -75,6 +79,7 @@
         },
         "go.tests": {
           "type": "object",
+          "description": "Additional command line flags to pass to `gotests` for generating tests",
           "properties": {
             "generateFlags": {
               "type": "array",
@@ -86,70 +91,74 @@
             }
           }
         }
-      },
-      "commands": [
-        {
-          "command": "go.install.gopls",
-          "title": "Go: Install / Update gopls"
-        },
-        {
-          "command": "go.install.gomodifytags",
-          "title": "Go: Install / Update gomodifytags"
-        },
-        {
-          "command": "go.version",
-          "title": "Go: Print extension version"
-        },
-        {
-          "command": "go.tags.add",
-          "title": "Go: Add Tags To Struct Fields"
-        },
-        {
-          "command": "go.tags.add.line",
-          "title": "Go: Add Tags To Struct Field at current line"
-        },
-        {
-          "command": "go.tags.add.prompt",
-          "title": "Go: Add Tags To Struct Fields (prompt)"
-        },
-        {
-          "command": "go.tags.remove",
-          "title": "Go: Remove Tags From Struct Fields"
-        },
-        {
-          "command": "go.tags.remove.line",
-          "title": "Go: Remove Tags From Struct Field at current line"
-        },
-        {
-          "command": "go.tags.remove.prompt",
-          "title": "Go: Remove Tags From Struct Fields (prompt)"
-        },
-        {
-          "command": "go.tags.clear",
-          "title": "Go: RemoAe All Tags From Struct Fields"
-        },
-        {
-          "command": "go.tags.clear.line",
-          "title": "Go: RemoAe All Tags From Struct Fields at current line"
-        },
-        {
-          "command": "go.test.generate.file",
-          "title": "Go: Generate Unit Tests For File"
-        },
-        {
-          "command": "go.test.generate.exported",
-          "title": "Go: Generate Unit Tests For Exported Functions in File"
-        },
-        {
-          "command": "go.test.toggle",
-          "title": "Go: Toggle Test File"
-        },
-        {
-          "command": "go.playground",
-          "title": "Go: Run on Go Playground"
-        }
-      ]
+      }
     },
+    "commands": [
+      {
+        "command": "go.install.gopls",
+        "title": "Go: Install / Update gopls"
+      },
+      {
+        "command": "go.install.gomodifytags",
+        "title": "Go: Install / Update gomodifytags"
+      },
+      {
+        "command": "go.install.gotests",
+        "title": "Go: Install / Update gotests"
+      },
+      {
+        "command": "go.version",
+        "title": "Go: Print extension version"
+      },
+      {
+        "command": "go.tags.add",
+        "title": "Go: Add Tags To Struct Fields"
+      },
+      {
+        "command": "go.tags.add.line",
+        "title": "Go: Add Tags To Struct Field at current line"
+      },
+      {
+        "command": "go.tags.add.prompt",
+        "title": "Go: Add Tags To Struct Fields (prompt)"
+      },
+      {
+        "command": "go.tags.remove",
+        "title": "Go: Remove Tags From Struct Fields"
+      },
+      {
+        "command": "go.tags.remove.line",
+        "title": "Go: Remove Tags From Struct Field at current line"
+      },
+      {
+        "command": "go.tags.remove.prompt",
+        "title": "Go: Remove Tags From Struct Fields (prompt)"
+      },
+      {
+        "command": "go.tags.clear",
+        "title": "Go: RemoAe All Tags From Struct Fields"
+      },
+      {
+        "command": "go.tags.clear.line",
+        "title": "Go: RemoAe All Tags From Struct Fields at current line"
+      },
+      {
+        "command": "go.test.generate.file",
+        "title": "Go: Generate Unit Tests For File"
+      },
+      {
+        "command": "go.test.generate.exported",
+        "title": "Go: Generate Unit Tests For Exported Functions in File"
+      },
+      {
+        "command": "go.test.toggle",
+        "title": "Go: Toggle Test File"
+      },
+      {
+        "command": "go.playground",
+        "title": "Go: Run on Go Playground"
+      }
+    ],
     "snippets": [
       {
         "language": "go",

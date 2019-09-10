@@ -32,7 +32,7 @@ Additional to commands provided by gopls, this extensions provides these command
 | `go.tags.clear`             | Remove All Tags From Struct Fields                 |
 | `go.tags.clear.line`        | Remove All Tags From Struct Field at line          |
 | `go.version`                | Print extension version                            |
-| `go.test.generate.file`:    | Generate Unit Tests For File                       |
+| `go.test.generate.file`     | Generate Unit Tests For File                       |
 | `go.test.generate.exported` | Generate Unit Tests For Exported Functions in File |
 | `go.test.toggle`            | Toggle Test File                                   |
 | `go.playground`             | Run on Go Playground                               |
@@ -74,7 +74,7 @@ Imported from [`microsoft/vscode-go`](https://github.com/microsoft/vscode-go).
 | `go.tags.tags`           | Comma separated tags to be used by `go.tags.add` command                  |
 | `go.tags.options`        | Comma separated tag=options pairs to be used by `go.tags.add` command     |
 | `go.tags.transform`      | Transformation rule used by `go.tags.add` command to add tags             |
-| `go.tests.generateFlags` | Additional command line flags to pass to `gotests` for generating tests." |
+| `go.tests.generateFlags` | Additional command line flags to pass to `gotests` for generating tests.  |
 
 Trigger completion in `coc-settings.json` to get complete list.
 
