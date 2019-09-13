@@ -21,21 +21,22 @@ Additional to commands provided by gopls, this extensions provides these command
 
 | Key                         |                                                    |
 |-----------------------------|----------------------------------------------------|
-| `go.install.gopls`          | Install / Update gopls                             |
 | `go.install.gomodifytags`   | Install / Update gomodifytags                      |
-| `go.tags.add`               | Add Tags To Struct Fields                          |
+| `go.install.gopls`          | Install / Update gopls                             |
+| `go.install.gotests`        | Install / Update gotests                           |
+| `go.playground`             | Run on Go Playground                               |
 | `go.tags.add.line`          | Add Tags To Struct Field at current line           |
 | `go.tags.add.prompt`        | Add Tags To Struct Fields (prompt)                 |
-| `go.tags.remove`            | Remove Tags From Struct Fields                     |
+| `go.tags.add`               | Add Tags To Struct Fields                          |
+| `go.tags.clear.line`        | Remove All Tags From Struct Field at line          |
+| `go.tags.clear`             | Remove All Tags From Struct Fields                 |
 | `go.tags.remove.line`       | Remove Tags From Struct Field at line              |
 | `go.tags.remove.prompt`     | Remove Tags From Struct Fields (prompt)            |
-| `go.tags.clear`             | Remove All Tags From Struct Fields                 |
-| `go.tags.clear.line`        | Remove All Tags From Struct Field at line          |
-| `go.version`                | Print extension version                            |
-| `go.test.generate.file`:    | Generate Unit Tests For File                       |
+| `go.tags.remove`            | Remove Tags From Struct Fields                     |
 | `go.test.generate.exported` | Generate Unit Tests For Exported Functions in File |
+| `go.test.generate.file`:    | Generate Unit Tests For File                       |
 | `go.test.toggle`            | Toggle Test File                                   |
-| `go.playground`             | Run on Go Playground                               |
+| `go.version`                | Print extension version                            |
 
 ### Examples
 
@@ -126,4 +127,3 @@ Trigger completion in `coc-settings.json` to get complete list.
 ## License
 
 [MIT © Josa Gesell](LICENSE)
-
