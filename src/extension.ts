@@ -17,7 +17,15 @@ export async function activate(context: ExtensionContext): Promise<void> {
     return
   }
 
-  const command = config.commandPath || await goBinPath(GOPLS)
+  const getGoplsPath = (): string => {
+    if (config.commandPath) {
+      workspace.showMessage("Go: Configuration 'go.commandPath' is deprected, use 'go.goplsPath' instead!", "warning")
+      return config.commandPath
+    }
+    return config.goplsPath
+  }
+
+  const command = getGoplsPath() || await goBinPath(GOPLS)
   if (!await commandExists(command)) {
     await installGoBin(GOPLS)
   }

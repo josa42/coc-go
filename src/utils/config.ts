@@ -9,6 +9,7 @@ const state: State = {}
 
 export interface GoConfig {
   enable: boolean
+  goplsPath: string
   commandPath: string
   tags: GoTestsConfig
   tests: GoTestsConfig
