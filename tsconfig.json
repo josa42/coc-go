@@ -12,7 +12,7 @@
     "forceConsistentCasingInFileNames": true,
     "noImplicitAny": true,
     "noImplicitReturns": true,
-    "noUnusedLocals":true,
+    "noUnusedLocals": true,
     "noUnusedParameters": false,
     "strictPropertyInitialization": false,
     "outDir": "lib",

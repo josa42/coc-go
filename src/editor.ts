@@ -6,6 +6,7 @@ export async function activeTextDocument(): Promise<TextDocument> {
   if (doc.filetype != 'go') {
     throw "Not a go document"
   }
+
   return doc.textDocument
 }
 

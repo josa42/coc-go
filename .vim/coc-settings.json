@@ -1,9 +1,5 @@
 {
   "coc.preferences.formatOnSaveFiletypes": ["js", "ts"],
-  "coc.preferences.formatOnType": true,
-
   "typescript.format.insertSpaceAfterOpeningAndBeforeClosingNonemptyBraces": true,
-  "typescript.preferences.noSemicolons": true,
-  "javascript.format.insertSpaceAfterOpeningAndBeforeClosingNonemptyBraces": true,
-  "javascript.preferences.noSemicolons": true
+  "javascript.format.insertSpaceAfterOpeningAndBeforeClosingNonemptyBraces": true
 }
