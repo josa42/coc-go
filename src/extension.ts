@@ -17,6 +17,20 @@ export async function activate(context: ExtensionContext): Promise<void> {
     return
   }
 
+  registerGopls(context, config)
+  registerTest(context)
+  registerTags(context)
+  registerPlaygroud(context)
+
+  context.subscriptions.push(
+    commands.registerCommand(
+      "go.version",
+      () => version()
+    ),
+  )
+}
+
+async function registerGopls(context: ExtensionContext, config: GoConfig): Promise<void> {
   const getGoplsPath = (): string => {
     if (config.commandPath) {
       workspace.showMessage("Go: Configuration 'go.commandPath' is deprected, use 'go.goplsPath' instead!", "warning")
@@ -27,11 +41,10 @@ export async function activate(context: ExtensionContext): Promise<void> {
 
   const command = getGoplsPath() || await goBinPath(GOPLS)
   if (!await commandExists(command)) {
-    await installGoBin(GOPLS)
+    if (!await installGoBin(GOPLS)) {
+      return
+    }
   }
-
-  installGoBin(GOMODIFYTAGS)
-  installGoBin(GOTESTS)
 
   const serverOptions: ServerOptions = { command }
 
@@ -43,21 +56,49 @@ export async function activate(context: ExtensionContext): Promise<void> {
 
   context.subscriptions.push(
     services.registLanguageClient(client),
-    commands.registerCommand(
-      "go.version",
-      () => version()
-    ),
-    commands.registerCommand(
+      commands.registerCommand(
       "go.install.gopls",
       () => installGopls(client)
     ),
-    commands.registerCommand(
-      "go.install.gomodifytags",
-      () => installGomodifytags()
-    ),
+
+  )
+}
+
+async function registerTest(context: ExtensionContext): Promise<void> {
+
+  if (!await installGoBin(GOTESTS)) {
+    return
+  }
+
+  context.subscriptions.push(
     commands.registerCommand(
       "go.install.gotests",
       () => installGotests()
+    ),
+    commands.registerCommand(
+      "go.test.generate.file",
+      async () => generateTestsAll(await activeTextDocument())
+    ),
+    commands.registerCommand(
+      "go.test.generate.exported",
+      async () => generateTestsExported(await activeTextDocument())
+    ),
+    commands.registerCommand(
+      "go.test.toggle",
+      async () => toogleTests(await activeTextDocument())
+    ),
+  )
+}
+
+async function registerTags(context: ExtensionContext): Promise<void> {
+  if (!await installGoBin(GOMODIFYTAGS)) {
+    return
+  }
+  
+  context.subscriptions.push(
+    commands.registerCommand(
+      "go.install.gomodifytags",
+      () => installGomodifytags()
     ),
     commands.registerCommand(
       "go.tags.add",
@@ -91,23 +132,19 @@ export async function activate(context: ExtensionContext): Promise<void> {
       "go.tags.clear.line",
       async () => clearTags(await activeTextDocument(), { selection: "line" })
     ),
+  )
+}
+
+async function registerPlaygroud(context: ExtensionContext): Promise<void> {
+  context.subscriptions.push(
     commands.registerCommand(
-      "go.test.generate.file",
-      async () => generateTestsAll(await activeTextDocument())
-    ),
-    commands.registerCommand(
-      "go.test.generate.exported",
-      async () => generateTestsExported(await activeTextDocument())
-    ),
-    commands.registerCommand(
-      "go.test.toggle",
-      async () => toogleTests(await activeTextDocument())
+      "go.version",
+      () => version()
     ),
     commands.registerCommand(
       "go.playground",
       async () => openPlayground(await activeTextDocument())
     )
   )
+
 }
-
-
