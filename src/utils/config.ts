@@ -10,6 +10,7 @@ const state: State = {}
 export interface GoConfig {
   enable: boolean
   goplsPath: string
+  goplsOptions: GoOptions
   commandPath: string
   tags: GoTestsConfig
   tests: GoTestsConfig
@@ -23,6 +24,22 @@ export interface GoTagsConfig {
 
 export interface GoTestsConfig {
   generateFlags?: string[]
+}
+
+// https://github.com/golang/tools/blob/master/gopls/doc/settings.md
+
+export interface GoOptions {
+  buildFlags: string[]
+  env: { string: string }
+  hoverKind: "NoDocumentation" | "SynopsisDocumentation" | "FullDocumentation" | "SingleLine" | "Structured"
+  usePlaceholders: boolean
+
+  // experimental
+  experimentalDisabledAnalyses: string[]
+  staticcheck: boolean
+  completionDocumentation: boolean
+  completeUnimported: boolean
+  deepCompletion: boolean
 }
 
 export function setStoragePath(dir: string): void {
@@ -39,7 +56,7 @@ export async function configDir(...names: string[]): Promise<string> {
   const dir = path.join(storage, ...names)
 
   return new Promise((resolve): void => {
-    fs.mkdirSync(dir, {recursive: true})
+    fs.mkdirSync(dir, { recursive: true })
     resolve(dir)
   })
 }

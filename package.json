@@ -59,11 +59,64 @@
         },
         "go.commandPath": {
           "type": "string",
-          "description": "[Deprecated] Use go.goplsPath"
+          "description": "[DEPRECATED] Use go.goplsPath"
         },
         "go.goplsPath": {
           "type": "string",
           "description": "Path to gopls bin"
+        },
+        "go.goplsOptions": {
+          "type": "object",
+          "description": "See gopls documentation: https://github.com/golang/tools/blob/master/gopls/doc/settings.md",
+          "properties": {
+              "buildFlags": {
+                "type": "array",
+                "items": { "type": "string" },
+                "description": "This is the set of flags passed on to the build system when invoked. It is applied to queries like go list, which is used when discovering files. The most common use is to set -tags."
+              },
+              "env": {
+                "type": "object",
+                "patternProperties": {
+                  ".+": { "type": "string" }
+                },
+                "description": "This can be used to add environment variables. These will not affect gopls itself, but will be used for any external commands it invokes."
+              },
+              "hoverKind": {
+                "type": "string",
+                "enum": ["NoDocumentation", "SynopsisDocumentation", "FullDocumentation"],
+                "default": "SynopsisDocumentation",
+                "description": "This controls the information that appears in the hover text."
+              },
+              "usePlaceholders": {
+                "type": "boolean",
+                "default": false,
+                "description": "If true, then completion responses may contain placeholders for function parameters or struct fields."
+              },
+
+              "experimentalDisabledAnalyses": {
+                "type": "array",
+                "items": { "type": "string" },
+                "description": "[EXPERIMENTAL] A list of the names of analysis passes that should be disabled. You can use this to turn off analyses that you feel are not useful in the editor."
+              },
+              "staticcheck": {
+                "type": "boolean",
+                "description": "[EXPERIMENTAL] If true, it enables the use of the staticcheck.io analyzers."
+              },
+              "completionDocumentation": {
+                "type": "boolean",
+                "default": true,
+                "description": "[EXPERIMENTAL] If false, indicates that the user does not want documentation with completion results."
+              },
+              "completeUnimported": {
+                "type": "boolean",
+                "default": false,
+                "description": "[EXPERIMENTAL] If true, the completion engine is allowed to make suggestions for packages that you do not currently import."
+              },
+              "deepCompletion": {
+                "type": "boolean",
+                "description": "[EXPERIMENTAL] If true, this turns on the ability to return completions from deep inside relevant entities, rather than just the locally accessible ones."
+              }
+          }
         },
         "go.tags": {
           "type": "object",
