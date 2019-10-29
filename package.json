@@ -63,11 +63,11 @@
         },
         "go.goplsPath": {
           "type": "string",
-          "description": "Path to gopls bin"
+          "description": "Path to `gopls` bin"
         },
         "go.goplsOptions": {
           "type": "object",
-          "description": "See gopls documentation: https://github.com/golang/tools/blob/master/gopls/doc/settings.md",
+          "description": "See `gopls` documentation: https://github.com/golang/tools/blob/master/gopls/doc/settings.md",
           "properties": {
             "buildFlags": {
               "type": "array",
@@ -83,7 +83,7 @@
                   "type": "string"
                 }
               },
-              "description": "This can be used to add environment variables. These will not affect gopls itself, but will be used for any external commands it invokes."
+              "description": "This can be used to add environment variables. These will not affect `gopls` itself, but will be used for any external commands it invokes."
             },
             "hoverKind": {
               "type": "string",
@@ -98,7 +98,7 @@
             "usePlaceholders": {
               "type": "boolean",
               "default": false,
-              "description": "If true, then completion responses may contain placeholders for function parameters or struct fields."
+              "description": "If `true`, then completion responses may contain placeholders for function parameters or struct fields."
             },
             "experimentalDisabledAnalyses": {
               "type": "array",
@@ -109,21 +109,21 @@
             },
             "staticcheck": {
               "type": "boolean",
-              "description": "[EXPERIMENTAL] If true, it enables the use of the staticcheck.io analyzers."
+              "description": "[EXPERIMENTAL] If `true`, it enables the use of the staticcheck.io analyzers."
             },
             "completionDocumentation": {
               "type": "boolean",
               "default": true,
-              "description": "[EXPERIMENTAL] If false, indicates that the user does not want documentation with completion results."
+              "description": "[EXPERIMENTAL] If `false`, indicates that the user does not want documentation with completion results."
             },
             "completeUnimported": {
               "type": "boolean",
               "default": false,
-              "description": "[EXPERIMENTAL] If true, the completion engine is allowed to make suggestions for packages that you do not currently import."
+              "description": "[EXPERIMENTAL] If `true`, the completion engine is allowed to make suggestions for packages that you do not currently import."
             },
             "deepCompletion": {
               "type": "boolean",
-              "description": "[EXPERIMENTAL] If true, this turns on the ability to return completions from deep inside relevant entities, rather than just the locally accessible ones."
+              "description": "[EXPERIMENTAL] If `true`, this turns on the ability to return completions from deep inside relevant entities, rather than just the locally accessible ones."
             }
           }
         },
@@ -133,12 +133,12 @@
             "tags": {
               "type": "string",
               "default": "json",
-              "description": "Comma separated tags to be used by Go: Add Tags command"
+              "description": "Comma separated tags to be used by `go.tags.add` command"
             },
             "options": {
               "type": "string",
               "default": "json=omitempty",
-              "description": "Comma separated tag=options pairs to be used by Go: Add Tags command"
+              "description": "Comma separated tag=options pairs to be used by `go.tags.add` command"
             },
             "transform": {
               "type": "string",
@@ -147,7 +147,7 @@
                 "camelcase"
               ],
               "default": "snakecase",
-              "description": "Transformation rule used by Go: Add Tags command to add tags"
+              "description": "Transformation rule used by `go.tags.add` command to add tags"
             }
           }
         },
