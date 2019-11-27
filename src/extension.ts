@@ -2,7 +2,7 @@ import { commands, ExtensionContext, LanguageClient, ServerOptions, workspace, s
 import { installGoBin, goBinPath, commandExists } from './utils/tools'
 import { installGopls, installGomodifytags, installGotests, version } from './commands'
 import { addTags, removeTags, clearTags } from './utils/modify-tags'
-import { setStoragePath, GoConfig, GoOptions } from './utils/config'
+import { setStoragePath, GoConfig, GoplsOptions } from './utils/config'
 import { activeTextDocument } from './editor'
 import { GOPLS, GOMODIFYTAGS, GOTESTS } from './binaries'
 import { generateTestsAll, generateTestsExported, toogleTests } from './utils/tests'
@@ -49,7 +49,7 @@ async function registerGopls(context: ExtensionContext, config: GoConfig): Promi
   const serverOptions: ServerOptions = { command }
   const clientOptions: LanguageClientOptions = {
     documentSelector: ['go'],
-    initializationOptions: () => workspace.getConfiguration().get('go.goplsOptions', {}) as GoOptions
+    initializationOptions: () => workspace.getConfiguration().get('go.goplsOptions', {}) as GoplsOptions
   }
 
   const client = new LanguageClient('go', 'gopls', serverOptions, clientOptions)

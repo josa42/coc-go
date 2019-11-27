@@ -57,6 +57,16 @@
           "default": true,
           "description": "Enable Go extension"
         },
+        "go.trace.server": {
+          "type": "string",
+          "default": "off",
+          "enum": [
+            "off",
+            "messages",
+            "verbose"
+          ],
+          "description": "Trace level of gopls"
+        },
         "go.commandPath": {
           "type": "string",
           "description": "[DEPRECATED] Use go.goplsPath"
@@ -124,6 +134,11 @@
             "deepCompletion": {
               "type": "boolean",
               "description": "[EXPERIMENTAL] If `true`, this turns on the ability to return completions from deep inside relevant entities, rather than just the locally accessible ones."
+            },
+            "fuzzyMatching": {
+              "type": "boolean",
+              "default": true,
+              "description": "If true, this enables server side fuzzy matching of completion candidates."
             }
           }
         },

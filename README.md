@@ -80,6 +80,7 @@ installed.
 | ‣ `deepCompletion`               | **EXPERIMENTAL** If `true`, this turns on the ability to return completions from deep inside relevant entities, rather than just the locally accessible ones.                          |
 | ‣ `env`                          | This can be used to add environment variables. These will not affect `gopls` itself, but will be used for any external commands it invokes.                                            |
 | ‣ `experimentalDisabledAnalyses` | **EXPERIMENTAL** A list of the names of analysis passes that should be disabled. You can use this to turn off analyses that you feel are not useful in the editor.                     |
+| ‣ `fuzzyMatching`                | If true, this enables server side fuzzy matching of completion candidates.                                                                                                             |
 | ‣ `hoverKind`                    | This controls the information that appears in the hover text.                                                                                                                          |
 | ‣ `staticcheck`                  | **EXPERIMENTAL** If `true`, it enables the use of the staticcheck.io analyzers.                                                                                                        |
 | ‣ `usePlaceholders`              | If `true`, then completion responses may contain placeholders for function parameters or struct fields.                                                                                |
@@ -90,6 +91,7 @@ installed.
 | ‣ `transform`                    | Transformation rule used by `go.tags.add` command to add tags                                                                                                                          |
 | **`go.tests`**                   |                                                                                                                                                                                        |
 | ‣ `generateFlags`                | Additional command line flags to pass to `gotests` for generating tests.                                                                                                               |
+| **`go.trace.server`**            | Trace level of gopls                                                                                                                                                                   |
 
 Trigger completion in `coc-settings.json` to get complete list.
 
