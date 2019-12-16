@@ -33,6 +33,7 @@ export interface GoplsOptions {
   env: { string: string }
   hoverKind: "NoDocumentation" | "SynopsisDocumentation" | "FullDocumentation" | "SingleLine" | "Structured"
   usePlaceholders: boolean
+  linkTarget: string
 
   // experimental
   experimentalDisabledAnalyses: string[]

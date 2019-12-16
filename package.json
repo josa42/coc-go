@@ -139,6 +139,11 @@
               "type": "boolean",
               "default": true,
               "description": "If true, this enables server side fuzzy matching of completion candidates."
+            },
+            "linkTarget": {
+              "type": "string",
+              "default": "pkg.go.dev",
+              "description": "This controls where points documentation for given package in textDocument/documentLink."
             }
           }
         },
