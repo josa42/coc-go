@@ -21,22 +21,22 @@ Additional to commands provided by gopls, this extensions provides these command
 
 | Key                             | Description                                        |
 |---------------------------------|----------------------------------------------------|
-| **`go.install.gopls`**          | Install / Update gopls                             |
-| **`go.install.gomodifytags`**   | Install / Update gomodifytags                      |
-| **`go.install.gotests`**        | Install / Update gotests                           |
+| **`go.install.gopls`**          | Install / update gopls                             |
+| **`go.install.gomodifytags`**   | Install / update gomodifytags                      |
+| **`go.install.gotests`**        | Install / update gotests                           |
 | **`go.version`**                | Print extension version                            |
-| **`go.tags.add`**               | Add Tags To Struct Fields                          |
-| **`go.tags.add.line`**          | Add Tags To Struct Field at current line           |
-| **`go.tags.add.prompt`**        | Add Tags To Struct Fields (prompt)                 |
-| **`go.tags.remove`**            | Remove Tags From Struct Fields                     |
-| **`go.tags.remove.line`**       | Remove Tags From Struct Field at current line      |
-| **`go.tags.remove.prompt`**     | Remove Tags From Struct Fields (prompt)            |
-| **`go.tags.clear`**             | RemoAe All Tags From Struct Fields                 |
-| **`go.tags.clear.line`**        | RemoAe All Tags From Struct Fields at current line |
-| **`go.test.generate.file`**     | Generate Unit Tests For File                       |
-| **`go.test.generate.exported`** | Generate Unit Tests For Exported Functions in File |
-| **`go.test.toggle`**            | Toggle Test File                                   |
-| **`go.playground`**             | Run on Go Playground                               |
+| **`go.tags.add`**               | Add tags to struct fields                          |
+| **`go.tags.add.line`**          | Add tags to struct field at current line           |
+| **`go.tags.add.prompt`**        | Add tags to struct fields (prompt)                 |
+| **`go.tags.remove`**            | Remove tags from struct fields                     |
+| **`go.tags.remove.line`**       | Remove tags from struct field at current line      |
+| **`go.tags.remove.prompt`**     | Remove tags from struct fields (prompt)            |
+| **`go.tags.clear`**             | Remove all tags from struct fields                 |
+| **`go.tags.clear.line`**        | Remove all tags from struct fields at current line |
+| **`go.test.generate.file`**     | Generate unit tests for file                       |
+| **`go.test.generate.exported`** | Generate unit tests for exported functions in file |
+| **`go.test.toggle`**            | Toggle test file                                   |
+| **`go.playground`**             | Run on go playground                               |
 
 ### Examples
 
