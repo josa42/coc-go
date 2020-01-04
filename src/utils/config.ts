@@ -10,6 +10,7 @@ const state: State = {}
 export interface GoConfig {
   enable: boolean
   goplsPath: string
+  goplsOptions: GoplsOptions
   commandPath: string
   tags: GoTestsConfig
   tests: GoTestsConfig
@@ -23,6 +24,24 @@ export interface GoTagsConfig {
 
 export interface GoTestsConfig {
   generateFlags?: string[]
+}
+
+// https://github.com/golang/tools/blob/master/gopls/doc/settings.md
+
+export interface GoplsOptions {
+  buildFlags: string[]
+  env: { string: string }
+  hoverKind: "NoDocumentation" | "SynopsisDocumentation" | "FullDocumentation" | "SingleLine" | "Structured"
+  usePlaceholders: boolean
+  linkTarget: string
+
+  // experimental
+  experimentalDisabledAnalyses: string[]
+  staticcheck: boolean
+  completionDocumentation: boolean
+  completeUnimported: boolean
+  deepCompletion: boolean
+  fuzzyMatching: boolean
 }
 
 export function setStoragePath(dir: string): void {

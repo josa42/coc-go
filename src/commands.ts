@@ -14,7 +14,7 @@ export async function installGopls(client: LanguageClient): Promise<void> {
 
   if (client.needsStop()) {
     await client.stop()
-    await client.start()
+    client.restart()
   }
 }
 

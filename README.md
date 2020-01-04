@@ -19,24 +19,24 @@ See [`gopls`](https://github.com/golang/go/wiki/gopls)
 
 Additional to commands provided by gopls, this extensions provides these commands:
 
-| Key                         |                                                    |
-|-----------------------------|----------------------------------------------------|
-| `go.install.gomodifytags`   | Install / Update gomodifytags                      |
-| `go.install.gopls`          | Install / Update gopls                             |
-| `go.install.gotests`        | Install / Update gotests                           |
-| `go.playground`             | Run on Go Playground                               |
-| `go.tags.add.line`          | Add Tags To Struct Field at current line           |
-| `go.tags.add.prompt`        | Add Tags To Struct Fields (prompt)                 |
-| `go.tags.add`               | Add Tags To Struct Fields                          |
-| `go.tags.clear.line`        | Remove All Tags From Struct Field at line          |
-| `go.tags.clear`             | Remove All Tags From Struct Fields                 |
-| `go.tags.remove.line`       | Remove Tags From Struct Field at line              |
-| `go.tags.remove.prompt`     | Remove Tags From Struct Fields (prompt)            |
-| `go.tags.remove`            | Remove Tags From Struct Fields                     |
-| `go.test.generate.exported` | Generate Unit Tests For Exported Functions in File |
-| `go.test.generate.file`:    | Generate Unit Tests For File                       |
-| `go.test.toggle`            | Toggle Test File                                   |
-| `go.version`                | Print extension version                            |
+| Key                             | Description                                        |
+|---------------------------------|----------------------------------------------------|
+| **`go.install.gopls`**          | Install / update gopls                             |
+| **`go.install.gomodifytags`**   | Install / update gomodifytags                      |
+| **`go.install.gotests`**        | Install / update gotests                           |
+| **`go.version`**                | Print extension version                            |
+| **`go.tags.add`**               | Add tags to struct fields                          |
+| **`go.tags.add.line`**          | Add tags to struct field at current line           |
+| **`go.tags.add.prompt`**        | Add tags to struct fields (prompt)                 |
+| **`go.tags.remove`**            | Remove tags from struct fields                     |
+| **`go.tags.remove.line`**       | Remove tags from struct field at current line      |
+| **`go.tags.remove.prompt`**     | Remove tags from struct fields (prompt)            |
+| **`go.tags.clear`**             | Remove all tags from struct fields                 |
+| **`go.tags.clear.line`**        | Remove all tags from struct fields at current line |
+| **`go.test.generate.file`**     | Generate unit tests for file                       |
+| **`go.test.generate.exported`** | Generate unit tests for exported functions in file |
+| **`go.test.toggle`**            | Toggle test file                                   |
+| **`go.playground`**             | Run on go playground                               |
 
 ### Examples
 
@@ -51,7 +51,7 @@ Additional to commands provided by gopls, this extensions provides these command
 - **Add missing imports on save**
 
   ```
-  autocmd BufWritePre *.go :CocCommand editor.action.organizeImport
+  autocmd BufWritePre *.go :call CocAction('runCommand', 'editor.action.organizeImport')
   ```
 
 - **Map Keys to command**
@@ -70,16 +70,40 @@ installed.
 
 ## Configuration options
 
-| Key                      |                                                                           |
-|--------------------------|---------------------------------------------------------------------------|
-| `go.enable`              | Set to `false` to disable gopls language server.                          |
-| `go.commandPath`         | Absolute path of gopls executable.                                        |
-| `go.tags.tags`           | Comma separated tags to be used by `go.tags.add` command                  |
-| `go.tags.options`        | Comma separated tag=options pairs to be used by `go.tags.add` command     |
-| `go.tags.transform`      | Transformation rule used by `go.tags.add` command to add tags             |
-| `go.tests.generateFlags` | Additional command line flags to pass to `gotests` for generating tests." |
+| Key                              | Description                                                                                                                                                                            | Default               |
+|----------------------------------|----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|-----------------------|
+| **`go.enable`**                  | Enable Go extension                                                                                                                                                                    |                       |
+| **`go.goplsOptions`**            | See [`gopls` documentation](https://github.com/golang/tools/blob/master/gopls/doc/settings.md)                                                                                         |                       |
+| ‣ `buildFlags`                   | This is the set of flags passed on to the build system when invoked. It is applied to queries like go list, which is used when discovering files. The most common use is to set -tags. |                       |
+| ‣ `completeUnimported`           | **EXPERIMENTAL** If `true`, the completion engine is allowed to make suggestions for packages that you do not currently import.                                                        | false                 |
+| ‣ `completionDocumentation`      | **EXPERIMENTAL** If `false`, indicates that the user does not want documentation with completion results.                                                                              | true                  |
+| ‣ `deepCompletion`               | **EXPERIMENTAL** If `true`, this turns on the ability to return completions from deep inside relevant entities, rather than just the locally accessible ones.                          |                       |
+| ‣ `env`                          | This can be used to add environment variables. These will not affect `gopls` itself, but will be used for any external commands it invokes.                                            |                       |
+| ‣ `experimentalDisabledAnalyses` | **EXPERIMENTAL** A list of the names of analysis passes that should be disabled. You can use this to turn off analyses that you feel are not useful in the editor.                     |                       |
+| ‣ `fuzzyMatching`                | If true, this enables server side fuzzy matching of completion candidates.                                                                                                             | true                  |
+| ‣ `hoverKind`                    | This controls the information that appears in the hover text.                                                                                                                          | SynopsisDocumentation |
+| ‣ `staticcheck`                  | **EXPERIMENTAL** If `true`, it enables the use of the staticcheck.io analyzers.                                                                                                        |                       |
+| ‣ `usePlaceholders`              | If `true`, then completion responses may contain placeholders for function parameters or struct fields.                                                                                | false                 |
+| **`go.goplsPath`**               | Path to `gopls` bin                                                                                                                                                                    |                       |
+| **`go.tags`**                    |                                                                                                                                                                                        |                       |
+| ‣ `options`                      | Comma separated tag=options pairs to be used by `go.tags.add` command                                                                                                                  | json=omitempty        |
+| ‣ `tags`                         | Comma separated tags to be used by `go.tags.add` command                                                                                                                               | json                  |
+| ‣ `transform`                    | Transformation rule used by `go.tags.add` command to add tags                                                                                                                          | snakecase             |
+| **`go.tests`**                   |                                                                                                                                                                                        |                       |
+| ‣ `generateFlags`                | Additional command line flags to pass to `gotests` for generating tests.                                                                                                               | []                    |
+| **`go.trace.server`**            | Trace level of gopls                                                                                                                                                                   |                       |
 
 Trigger completion in `coc-settings.json` to get complete list.
+
+### Example Configuration
+
+```json
+{
+  "go.goplsOptions": {
+    "completeUnimported": true
+  }
+}
+```
 
 ## Development
 
@@ -93,7 +117,7 @@ Trigger completion in `coc-settings.json` to get complete list.
   ```
   {
     "command": "go.impl.cursor",
-    "title": "Go: Generate Interface Stubs"
+    "title": "Generate Interface Stubs"
   }
   ```
 
@@ -102,11 +126,11 @@ Trigger completion in `coc-settings.json` to get complete list.
   ```
   {
     "command": "go.godoctor.extract",
-    "title": "Go: Extract to function"
+    "title": "Extract to function"
   },
   {
     "command": "go.godoctor.variable",
-    "title": "Go: Extract to variable"
+    "title": "Extract to variable"
   }
   ```
 
@@ -115,7 +139,7 @@ Trigger completion in `coc-settings.json` to get complete list.
   ```
   {
     "command": "go.fill.struct",
-    "title": "Go: Fill struct"
+    "title": "Fill struct"
   }
   ```
 

@@ -1,6 +1,6 @@
 {
   "name": "coc-go",
-  "version": "0.5.2",
+  "version": "0.6.1",
   "description": "gopls extension for coc",
   "author": "Josa Gesell <josa@gesell.me>",
   "license": "MIT",
@@ -57,13 +57,95 @@
           "default": true,
           "description": "Enable Go extension"
         },
+        "go.trace.server": {
+          "type": "string",
+          "default": "off",
+          "enum": [
+            "off",
+            "messages",
+            "verbose"
+          ],
+          "description": "Trace level of gopls"
+        },
         "go.commandPath": {
           "type": "string",
-          "description": "[Deprecated] Use go.goplsPath"
+          "description": "[DEPRECATED] Use go.goplsPath"
         },
         "go.goplsPath": {
           "type": "string",
-          "description": "Path to gopls bin"
+          "description": "Path to `gopls` bin"
+        },
+        "go.goplsOptions": {
+          "type": "object",
+          "description": "See `gopls` documentation: https://github.com/golang/tools/blob/master/gopls/doc/settings.md",
+          "properties": {
+            "buildFlags": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              },
+              "description": "This is the set of flags passed on to the build system when invoked. It is applied to queries like go list, which is used when discovering files. The most common use is to set -tags."
+            },
+            "env": {
+              "type": "object",
+              "patternProperties": {
+                ".+": {
+                  "type": "string"
+                }
+              },
+              "description": "This can be used to add environment variables. These will not affect `gopls` itself, but will be used for any external commands it invokes."
+            },
+            "hoverKind": {
+              "type": "string",
+              "enum": [
+                "NoDocumentation",
+                "SynopsisDocumentation",
+                "FullDocumentation"
+              ],
+              "default": "SynopsisDocumentation",
+              "description": "This controls the information that appears in the hover text."
+            },
+            "usePlaceholders": {
+              "type": "boolean",
+              "default": false,
+              "description": "If `true`, then completion responses may contain placeholders for function parameters or struct fields."
+            },
+            "experimentalDisabledAnalyses": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              },
+              "description": "[EXPERIMENTAL] A list of the names of analysis passes that should be disabled. You can use this to turn off analyses that you feel are not useful in the editor."
+            },
+            "staticcheck": {
+              "type": "boolean",
+              "description": "[EXPERIMENTAL] If `true`, it enables the use of the staticcheck.io analyzers."
+            },
+            "completionDocumentation": {
+              "type": "boolean",
+              "default": true,
+              "description": "[EXPERIMENTAL] If `false`, indicates that the user does not want documentation with completion results."
+            },
+            "completeUnimported": {
+              "type": "boolean",
+              "default": false,
+              "description": "[EXPERIMENTAL] If `true`, the completion engine is allowed to make suggestions for packages that you do not currently import."
+            },
+            "deepCompletion": {
+              "type": "boolean",
+              "description": "[EXPERIMENTAL] If `true`, this turns on the ability to return completions from deep inside relevant entities, rather than just the locally accessible ones."
+            },
+            "fuzzyMatching": {
+              "type": "boolean",
+              "default": true,
+              "description": "If true, this enables server side fuzzy matching of completion candidates."
+            },
+            "linkTarget": {
+              "type": "string",
+              "default": "pkg.go.dev",
+              "description": "This controls where points documentation for given package in textDocument/documentLink."
+            }
+          }
         },
         "go.tags": {
           "type": "object",
@@ -71,12 +153,12 @@
             "tags": {
               "type": "string",
               "default": "json",
-              "description": "Comma separated tags to be used by Go: Add Tags command"
+              "description": "Comma separated tags to be used by `go.tags.add` command"
             },
             "options": {
               "type": "string",
               "default": "json=omitempty",
-              "description": "Comma separated tag=options pairs to be used by Go: Add Tags command"
+              "description": "Comma separated tag=options pairs to be used by `go.tags.add` command"
             },
             "transform": {
               "type": "string",
@@ -85,7 +167,7 @@
                 "camelcase"
               ],
               "default": "snakecase",
-              "description": "Transformation rule used by Go: Add Tags command to add tags"
+              "description": "Transformation rule used by `go.tags.add` command to add tags"
             }
           }
         },
@@ -106,17 +188,17 @@
     },
     "commands": [
       {
-        "title": "Install / Update gopls",
+        "title": "Install / update gopls",
         "category": "Go",
         "command": "go.install.gopls"
       },
       {
-        "title": "Install / Update gomodifytags",
+        "title": "Install / update gomodifytags",
         "category": "Go",
         "command": "go.install.gomodifytags"
       },
       {
-        "title": "Install / Update gotests",
+        "title": "Install / update gotests",
         "category": "Go",
         "command": "go.install.gotests"
       },
@@ -126,62 +208,62 @@
         "command": "go.version"
       },
       {
-        "title": "Add Tags To Struct Fields",
+        "title": "Add tags to struct fields",
         "category": "Go",
         "command": "go.tags.add"
       },
       {
-        "title": "Add Tags To Struct Field at current line",
+        "title": "Add tags to struct field at current line",
         "category": "Go",
         "command": "go.tags.add.line"
       },
       {
-        "title": "Add Tags To Struct Fields (prompt)",
+        "title": "Add tags to struct fields (prompt)",
         "category": "Go",
         "command": "go.tags.add.prompt"
       },
       {
-        "title": "Remove Tags From Struct Fields",
+        "title": "Remove tags from struct fields",
         "category": "Go",
         "command": "go.tags.remove"
       },
       {
-        "title": "Remove Tags From Struct Field at current line",
+        "title": "Remove tags from struct field at current line",
         "category": "Go",
         "command": "go.tags.remove.line"
       },
       {
-        "title": "Remove Tags From Struct Fields (prompt)",
+        "title": "Remove tags from struct fields (prompt)",
         "category": "Go",
         "command": "go.tags.remove.prompt"
       },
       {
-        "title": "RemoAe All Tags From Struct Fields",
+        "title": "Remove all tags from struct fields",
         "category": "Go",
         "command": "go.tags.clear"
       },
       {
-        "title": "RemoAe All Tags From Struct Fields at current line",
+        "title": "Remove all tags from struct fields at current line",
         "category": "Go",
         "command": "go.tags.clear.line"
       },
       {
-        "title": "Generate Unit Tests For File",
+        "title": "Generate unit tests for file",
         "category": "Go",
         "command": "go.test.generate.file"
       },
       {
-        "title": "Generate Unit Tests For Exported Functions in File",
+        "title": "Generate unit tests for exported functions in file",
         "category": "Go",
         "command": "go.test.generate.exported"
       },
       {
-        "title": "Toggle Test File",
+        "title": "Toggle test file",
         "category": "Go",
         "command": "go.test.toggle"
       },
       {
-        "title": "Run on Go Playground",
+        "title": "Run on go playground",
         "category": "Go",
         "command": "go.playground"
       }
@@ -194,17 +276,17 @@
     ]
   },
   "devDependencies": {
-    "@types/node": "^12.7.2",
-    "@types/which": "^1.3.1",
-    "@typescript-eslint/eslint-plugin": "^2.1.0",
-    "@typescript-eslint/parser": "^2.1.0",
-    "coc.nvim": "0.0.73",
-    "eslint": "^6.3.0",
+    "@types/node": "^12.12.8",
+    "@types/which": "^1.3.2",
+    "@typescript-eslint/eslint-plugin": "^2.8.0",
+    "@typescript-eslint/parser": "^2.8.0",
+    "coc.nvim": "0.0.74",
+    "eslint": "^6.6.0",
     "rimraf": "^3.0.0",
-    "typescript": "^3.0.3"
+    "typescript": "3.6.2"
   },
   "dependencies": {
     "tslib": "^1.9.3",
-    "which": "^1.3.1"
+    "which": "^2.0.1"
   }
 }
