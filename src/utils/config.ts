@@ -58,8 +58,8 @@ export async function configDir(...names: string[]): Promise<string> {
   const dir = path.join(storage, ...names)
 
   return new Promise((resolve): void => {
-    if(!fs.existsSync(dir)) {
-        fs.mkdirSync(dir, {recursive: true})
+    if (!fs.existsSync(dir)) {
+      fs.mkdirSync(dir, { recursive: true })
     }
     resolve(dir)
   })
