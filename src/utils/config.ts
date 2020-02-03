@@ -1,11 +1,24 @@
 import fs from 'fs'
 import path from 'path'
+import { workspace } from 'coc.nvim'
 
 interface State {
   storagePath?: string
 }
 
 const state: State = {}
+
+export function getConfig(): GoConfig {
+  const config = workspace.getConfiguration().get('go') as GoConfig
+
+  if (config.commandPath) {
+    workspace.showMessage("Go: Configuration 'go.commandPath' is deprected, use 'go.goplsPath' instead!", "warning")
+    config.goplsPath = config.commandPath
+  }
+
+  return workspace.getConfiguration().get('go') as GoConfig
+}
+
 
 export interface GoConfig {
   enable: boolean

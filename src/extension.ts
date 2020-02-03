@@ -2,7 +2,7 @@ import { commands, ExtensionContext, LanguageClient, ServerOptions, workspace, s
 import { installGoBin, goBinPath, commandExists } from './utils/tools'
 import { installGopls, installGomodifytags, installGotests, version, installGoplay } from './commands'
 import { addTags, removeTags, clearTags } from './utils/modify-tags'
-import { setStoragePath, GoConfig, GoplsOptions } from './utils/config'
+import { setStoragePath, getConfig } from './utils/config'
 import { activeTextDocument } from './editor'
 import { GOPLS, GOMODIFYTAGS, GOTESTS } from './binaries'
 import { generateTestsAll, generateTestsExported, toogleTests } from './utils/tests'
@@ -12,14 +12,13 @@ export async function activate(context: ExtensionContext): Promise<void> {
 
   setStoragePath(context.storagePath)
 
-  const config = workspace.getConfiguration().get('go', {}) as GoConfig
-  if (config.enable === false) {
+  if (getConfig().enable === false) {
     return
   }
 
   registerGeneral(context)
 
-  registerGopls(context, config)
+  registerGopls(context)
   registerTest(context)
   registerTags(context)
   registerPlaygroud(context)
@@ -34,8 +33,9 @@ async function registerGeneral(context: ExtensionContext): Promise<void> {
   )
 }
 
+async function registerGopls(context: ExtensionContext): Promise<void> {
+  const config = getConfig()
 
-async function registerGopls(context: ExtensionContext, config: GoConfig): Promise<void> {
   const getGoplsPath = (): string => {
     if (config.commandPath) {
       workspace.showMessage("Go: Configuration 'go.commandPath' is deprected, use 'go.goplsPath' instead!", "warning")
@@ -54,7 +54,7 @@ async function registerGopls(context: ExtensionContext, config: GoConfig): Promi
   const serverOptions: ServerOptions = { command }
   const clientOptions: LanguageClientOptions = {
     documentSelector: ['go'],
-    initializationOptions: () => workspace.getConfiguration().get('go.goplsOptions', {}) as GoplsOptions
+    initializationOptions: () => getConfig().goplsOptions
   }
 
   const client = new LanguageClient('go', 'gopls', serverOptions, clientOptions)
