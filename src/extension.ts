@@ -1,6 +1,6 @@
 import { commands, ExtensionContext, LanguageClient, ServerOptions, workspace, services, LanguageClientOptions } from 'coc.nvim'
 import { installGoBin, goBinPath, commandExists } from './utils/tools'
-import { installGopls, installGomodifytags, installGotests, version } from './commands'
+import { installGopls, installGomodifytags, installGotests, version, installGoplay } from './commands'
 import { addTags, removeTags, clearTags } from './utils/modify-tags'
 import { setStoragePath, GoConfig, GoplsOptions } from './utils/config'
 import { activeTextDocument } from './editor'
@@ -10,6 +10,8 @@ import { openPlayground } from './utils/playground'
 
 export async function activate(context: ExtensionContext): Promise<void> {
 
+  workspace.showMessage("LOCAL VERSION")
+
   setStoragePath(context.storagePath)
 
   const config = workspace.getConfiguration().get('go', {}) as GoConfig
@@ -17,11 +19,15 @@ export async function activate(context: ExtensionContext): Promise<void> {
     return
   }
 
+  registerGeneral(context)
+
   registerGopls(context, config)
   registerTest(context)
   registerTags(context)
   registerPlaygroud(context)
+}
 
+async function registerGeneral(context: ExtensionContext): Promise<void> {
   context.subscriptions.push(
     commands.registerCommand(
       "go.version",
@@ -29,6 +35,7 @@ export async function activate(context: ExtensionContext): Promise<void> {
     ),
   )
 }
+
 
 async function registerGopls(context: ExtensionContext, config: GoConfig): Promise<void> {
   const getGoplsPath = (): string => {
@@ -146,13 +153,12 @@ async function registerTags(context: ExtensionContext): Promise<void> {
 async function registerPlaygroud(context: ExtensionContext): Promise<void> {
   context.subscriptions.push(
     commands.registerCommand(
-      "go.version",
-      () => version()
+      "go.install.goplay",
+      () => installGoplay()
     ),
     commands.registerCommand(
       "go.playground",
       async () => openPlayground(await activeTextDocument())
     )
   )
-
 }
