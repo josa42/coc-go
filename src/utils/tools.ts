@@ -18,7 +18,7 @@ export async function installGoBin(source: string, force = false): Promise<boole
   statusItem.text = `Installing '${name}'`
   statusItem.show()
 
-  const success = await goRun(`get -u ${source}`)
+  const success = await goRun(`get ${source}@latest`)
 
   if (success) {
     workspace.showMessage(`Installed '${name}'`)
