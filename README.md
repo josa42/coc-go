@@ -152,6 +152,18 @@ Trigger completion in `coc-settings.json` to get complete list.
 - [`gopls`](https://golang.org/x/tools/cmd/gopls)
 - [`gotests`](http://github.com/cweill/gotests) - [Apache](https://github.com/cweill/gotests/blob/develop/LICENSE)
 
+## FAQ
+
+### How does `coc-go` compare to `vim-go`?**
+
+With `coc-go` I do not aim to recreate the features of `vim-go`. For now, the
+main goal is to provide a convenient way to install `gopls` and use it with
+`coc.nvim`.
+
+If you need more than the features provided by `gopls`, you are probably better
+of with [`vim-go`](https://github.com/fatih/vim-go) or
+[`govim`](https://github.com/govim/govim).
+
 ## License
 
 [MIT © Josa Gesell](LICENSE)
