@@ -2,7 +2,7 @@ import path from 'path'
 import {LanguageClient, workspace} from 'coc.nvim'
 import {installGoBin} from './utils/tools'
 
-import {GOPLS, GOMODIFYTAGS, GOTESTS} from './binaries'
+import {GOPLS, GOMODIFYTAGS, GOTESTS, GOPLAY} from './binaries'
 
 export async function version(): Promise<void> {
   const v = require(path.resolve(__dirname, '..', 'package.json')).version
@@ -24,5 +24,9 @@ export async function installGomodifytags(): Promise<void> {
 
 export async function installGotests(): Promise<void> {
   await installGoBin(GOTESTS, true)
+}
+
+export async function installGoplay(): Promise<void> {
+  await installGoBin(GOPLAY, true)
 }
 

@@ -33,8 +33,9 @@
   },
   "activationEvents": [
     "onLanguage:go",
-    "onCommand:go.install.gopls",
     "onCommand:go.install.gomodifytags",
+    "onCommand:go.install.goplay",
+    "onCommand:go.install.gopls",
     "onCommand:go.install.gotests",
     "onCommand:go.version"
   ],
@@ -187,6 +188,11 @@
       }
     },
     "commands": [
+      {
+        "title": "Install / update goplay",
+        "category": "Go",
+        "command": "go.install.goplay"
+      },
       {
         "title": "Install / update gopls",
         "category": "Go",

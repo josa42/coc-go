@@ -21,6 +21,7 @@ Additional to commands provided by gopls, this extensions provides these command
 
 | Key                             | Description                                        |
 |---------------------------------|----------------------------------------------------|
+| **`go.install.goplay`**         | Install / update goplay                            |
 | **`go.install.gopls`**          | Install / update gopls                             |
 | **`go.install.gomodifytags`**   | Install / update gomodifytags                      |
 | **`go.install.gotests`**        | Install / update gotests                           |
