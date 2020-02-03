@@ -29,19 +29,67 @@ export interface GoTestsConfig {
 // https://github.com/golang/tools/blob/master/gopls/doc/settings.md
 
 export interface GoplsOptions {
+
+  /**
+   * Default: []
+   */
   buildFlags: string[]
+
+  /**
+   * Default: {}
+   */
   env: { string: string }
-  hoverKind: "NoDocumentation" | "SynopsisDocumentation" | "FullDocumentation" | "SingleLine" | "Structured"
-  usePlaceholders: boolean
+
+  /**
+   * Default: "SynopsisDocumentation"
+   */
+  hoverKind: "NoDocumentation" | "SynopsisDocumentation" | "FullDocumentation"
+
+  /**
+   * Default: "pkg.go.dev"
+   */
   linkTarget: string
 
-  // experimental
-  experimentalDisabledAnalyses: string[]
-  staticcheck: boolean
-  completionDocumentation: boolean
+  /**
+   * Default: false
+   */
+  usePlaceholders: boolean
+
+  /**
+   * Experimental!
+   * Default: false
+   */
   completeUnimported: boolean
+
+  /**
+   * Experimental!
+   * Default: true
+   */
+  completionDocumentation: boolean
+
+  /**
+   * Experimental!
+   * Default: true
+   */
   deepCompletion: boolean
+
+  /**
+   * Experimental!
+   * Default: []
+   */
+  experimentalDisabledAnalyses: string[]
+
+  /**
+   * Experimental!
+   * Default: true
+   */
   fuzzyMatching: boolean
+
+  /**
+   * Experimental!
+   * Default: false
+   */
+  staticcheck: boolean
 }
 
 export function setStoragePath(dir: string): void {

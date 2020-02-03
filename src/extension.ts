@@ -10,8 +10,6 @@ import { openPlayground } from './utils/playground'
 
 export async function activate(context: ExtensionContext): Promise<void> {
 
-  workspace.showMessage("LOCAL VERSION")
-
   setStoragePath(context.storagePath)
 
   const config = workspace.getConfiguration().get('go', {}) as GoConfig
