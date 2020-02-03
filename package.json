@@ -85,7 +85,7 @@
               "items": {
                 "type": "string"
               },
-              "description": "This is the set of flags passed on to the build system when invoked. It is applied to queries like go list, which is used when discovering files. The most common use is to set -tags."
+              "description": "This is the set of flags passed on to the build system when invoked. It is applied to queries like `go list`, which is used when discovering files. The most common use is to set `-tags`."
             },
             "env": {
               "type": "object",
@@ -98,18 +98,23 @@
             },
             "hoverKind": {
               "type": "string",
+              "default": "SynopsisDocumentation",
               "enum": [
                 "NoDocumentation",
                 "SynopsisDocumentation",
                 "FullDocumentation"
               ],
-              "default": "SynopsisDocumentation",
               "description": "This controls the information that appears in the hover text."
             },
             "usePlaceholders": {
               "type": "boolean",
               "default": false,
-              "description": "If `true`, then completion responses may contain placeholders for function parameters or struct fields."
+              "description": "If true, then completion responses may contain placeholders for function parameters or struct fields."
+            },
+            "linkTarget": {
+              "type": "string",
+              "default": "pkg.go.dev",
+              "description": "This controls where points documentation for given package in `textDocument/documentLink`."
             },
             "experimentalDisabledAnalyses": {
               "type": "array",
@@ -120,31 +125,27 @@
             },
             "staticcheck": {
               "type": "boolean",
-              "description": "[EXPERIMENTAL] If `true`, it enables the use of the staticcheck.io analyzers."
+              "description": "[EXPERIMENTAL] If true, it enables the use of the staticcheck.io analyzers."
             },
             "completionDocumentation": {
               "type": "boolean",
               "default": true,
-              "description": "[EXPERIMENTAL] If `false`, indicates that the user does not want documentation with completion results."
+              "description": "[EXPERIMENTAL] If false, indicates that the user does not want documentation with completion results."
             },
             "completeUnimported": {
               "type": "boolean",
               "default": false,
-              "description": "[EXPERIMENTAL] If `true`, the completion engine is allowed to make suggestions for packages that you do not currently import."
+              "description": "[EXPERIMENTAL] If true, the completion engine is allowed to make suggestions for packages that you do not currently import."
             },
             "deepCompletion": {
               "type": "boolean",
-              "description": "[EXPERIMENTAL] If `true`, this turns on the ability to return completions from deep inside relevant entities, rather than just the locally accessible ones."
+              "default": true,
+              "description": "[EXPERIMENTAL] If true, this turns on the ability to return completions from deep inside relevant entities, rather than just the locally accessible ones."
             },
             "fuzzyMatching": {
               "type": "boolean",
               "default": true,
-              "description": "If true, this enables server side fuzzy matching of completion candidates."
-            },
-            "linkTarget": {
-              "type": "string",
-              "default": "pkg.go.dev",
-              "description": "This controls where points documentation for given package in textDocument/documentLink."
+              "description": "[EXPERIMENTAL] If true, this enables server side fuzzy matching of completion candidates."
             }
           }
         },
