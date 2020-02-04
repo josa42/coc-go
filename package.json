@@ -28,7 +28,11 @@
     "prepare": "yarn clean && yarn build",
     "link:add": "node ./scripts/link.js add",
     "link:remove": "node ./scripts/link.js remove",
-    "update-snippets": "node ./scripts/update-snippets.js",
+    "update": "yarn run update:snippets && yarn run update:options && yarn run update:readme && yarn run update:readme",
+    "update:snippets": "./scripts/update-snippets.js",
+    "update:options": "./scripts/update-options.sh && node ./scripts/update-options-interface.js",
+    "update:commands": "./scripts/update-commands.js",
+    "update:readme": "./scripts/update-tables.sh",
     "lint": "eslint . --ext .ts,.js"
   },
   "activationEvents": [
@@ -190,6 +194,11 @@
     },
     "commands": [
       {
+        "title": "Install / update gomodifytags",
+        "category": "Go",
+        "command": "go.install.gomodifytags"
+      },
+      {
         "title": "Install / update goplay",
         "category": "Go",
         "command": "go.install.goplay"
@@ -200,19 +209,14 @@
         "command": "go.install.gopls"
       },
       {
-        "title": "Install / update gomodifytags",
-        "category": "Go",
-        "command": "go.install.gomodifytags"
-      },
-      {
         "title": "Install / update gotests",
         "category": "Go",
         "command": "go.install.gotests"
       },
       {
-        "title": "Print extension version",
+        "title": "Run on go playground",
         "category": "Go",
-        "command": "go.version"
+        "command": "go.playground"
       },
       {
         "title": "Add tags to struct fields",
@@ -220,7 +224,7 @@
         "command": "go.tags.add"
       },
       {
-        "title": "Add tags to struct field at current line",
+        "title": "Add tags to struct field in current line",
         "category": "Go",
         "command": "go.tags.add.line"
       },
@@ -230,12 +234,22 @@
         "command": "go.tags.add.prompt"
       },
       {
+        "title": "Remove all tags from struct fields",
+        "category": "Go",
+        "command": "go.tags.clear"
+      },
+      {
+        "title": "Remove all tags from struct fields in current line",
+        "category": "Go",
+        "command": "go.tags.clear.line"
+      },
+      {
         "title": "Remove tags from struct fields",
         "category": "Go",
         "command": "go.tags.remove"
       },
       {
-        "title": "Remove tags from struct field at current line",
+        "title": "Remove tags from struct field in current line",
         "category": "Go",
         "command": "go.tags.remove.line"
       },
@@ -245,14 +259,9 @@
         "command": "go.tags.remove.prompt"
       },
       {
-        "title": "Remove all tags from struct fields",
+        "title": "Generate unit tests for exported functions in file",
         "category": "Go",
-        "command": "go.tags.clear"
-      },
-      {
-        "title": "Remove all tags from struct fields at current line",
-        "category": "Go",
-        "command": "go.tags.clear.line"
+        "command": "go.test.generate.exported"
       },
       {
         "title": "Generate unit tests for file",
@@ -260,19 +269,14 @@
         "command": "go.test.generate.file"
       },
       {
-        "title": "Generate unit tests for exported functions in file",
-        "category": "Go",
-        "command": "go.test.generate.exported"
-      },
-      {
         "title": "Toggle test file",
         "category": "Go",
         "command": "go.test.toggle"
       },
       {
-        "title": "Run on go playground",
+        "title": "Print extension version",
         "category": "Go",
-        "command": "go.playground"
+        "command": "go.version"
       }
     ],
     "snippets": [

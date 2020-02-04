@@ -13,7 +13,7 @@ In your vim/neovim, run command:
 
 ## Features
 
-See [`gopls`](https://github.com/golang/go/wiki/gopls)
+See [`gopls`](https://github.com/golang/tools/blob/master/gopls/README.md)
 
 ## Commands
 
@@ -21,23 +21,23 @@ Additional to commands provided by gopls, this extensions provides these command
 
 | Key                             | Description                                        |
 |---------------------------------|----------------------------------------------------|
+| **`go.install.gomodifytags`**   | Install / update gomodifytags                      |
 | **`go.install.goplay`**         | Install / update goplay                            |
 | **`go.install.gopls`**          | Install / update gopls                             |
-| **`go.install.gomodifytags`**   | Install / update gomodifytags                      |
 | **`go.install.gotests`**        | Install / update gotests                           |
-| **`go.version`**                | Print extension version                            |
-| **`go.tags.add`**               | Add tags to struct fields                          |
-| **`go.tags.add.line`**          | Add tags to struct field at current line           |
-| **`go.tags.add.prompt`**        | Add tags to struct fields (prompt)                 |
-| **`go.tags.remove`**            | Remove tags from struct fields                     |
-| **`go.tags.remove.line`**       | Remove tags from struct field at current line      |
-| **`go.tags.remove.prompt`**     | Remove tags from struct fields (prompt)            |
-| **`go.tags.clear`**             | Remove all tags from struct fields                 |
-| **`go.tags.clear.line`**        | Remove all tags from struct fields at current line |
-| **`go.test.generate.file`**     | Generate unit tests for file                       |
-| **`go.test.generate.exported`** | Generate unit tests for exported functions in file |
-| **`go.test.toggle`**            | Toggle test file                                   |
 | **`go.playground`**             | Run on go playground                               |
+| **`go.tags.add`**               | Add tags to struct fields                          |
+| **`go.tags.add.line`**          | Add tags to struct field in current line           |
+| **`go.tags.add.prompt`**        | Add tags to struct fields (prompt)                 |
+| **`go.tags.clear`**             | Remove all tags from struct fields                 |
+| **`go.tags.clear.line`**        | Remove all tags from struct fields in current line |
+| **`go.tags.remove`**            | Remove tags from struct fields                     |
+| **`go.tags.remove.line`**       | Remove tags from struct field in current line      |
+| **`go.tags.remove.prompt`**     | Remove tags from struct fields (prompt)            |
+| **`go.test.generate.exported`** | Generate unit tests for exported functions in file |
+| **`go.test.generate.file`**     | Generate unit tests for file                       |
+| **`go.test.toggle`**            | Toggle test file                                   |
+| **`go.version`**                | Print extension version                            |
 
 ### Examples
 
@@ -113,6 +113,8 @@ Trigger completion in `coc-settings.json` to get complete list.
 2. Run `yarn run link:add` to link extension
 
 ## TODO
+
+- Check for tool updates and prompt the the user
 
 - Add [`goimpl`](https://github.com/sasha-s/goimpl) command
 
