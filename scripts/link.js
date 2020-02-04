@@ -1,3 +1,5 @@
+#!/usr/bin/env node
+
 const path = require('path')
 const os = require('os')
 const fs = require('fs')
@@ -8,7 +10,7 @@ const extensionsPath = path.join(home, '.config', 'coc', 'extensions')
 const pkgPath = path.join(extensionsPath, 'package.json')
 
 const main = async (action) => {
-  switch(action) {
+  switch (action) {
     case 'add': return await add()
     case 'remove': return await remove()
     default:
@@ -17,14 +19,14 @@ const main = async (action) => {
 }
 
 const remove = async () => {
-  await run('.', 'yarn','unlink')
-  await run(extensionsPath, 'yarn','unlink', 'coc-go')
+  await run('.', 'yarn', 'unlink')
+  await run(extensionsPath, 'yarn', 'unlink', 'coc-go')
 
   const pkg = await readJSON(pkgPath)
   delete pkg.dependencies['coc-go']
   await writeJSON(pkgPath, pkg)
 
-  await run(extensionsPath, 'yarn','add', 'coc-go')
+  await run(extensionsPath, 'yarn', 'add', 'coc-go')
 }
 
 const add = async () => {
@@ -32,12 +34,12 @@ const add = async () => {
   pkg.dependencies['coc-go'] = '*'
   await writeJSON(pkgPath, pkg)
 
-  await run('.', 'yarn','link')
-  await run(extensionsPath, 'yarn','link', 'coc-go')
+  await run('.', 'yarn', 'link')
+  await run(extensionsPath, 'yarn', 'link', 'coc-go')
 }
 
 const readJSON = async (p) => new Promise(resolve => fs.readFile(p, (_, d) => resolve(JSON.parse(d))))
-const writeJSON = async (p, c) => new Promise(resolve => fs.writeFile(p,  JSON.stringify(c, '', '  '), () => resolve()))
+const writeJSON = async (p, c) => new Promise(resolve => fs.writeFile(p, JSON.stringify(c, '', '  '), () => resolve()))
 
 const run = async (p, cmd, ...a) => {
   return new Promise(resolve => {

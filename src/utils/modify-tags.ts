@@ -150,7 +150,7 @@ async function offsetArgs(document: TextDocument, seletion: "struct" | "line"): 
     case "struct":
       return ['-offset', byteOffsetAt(document, cursor)]
     case "line":
-      return ['-line', String(cursor.line+1)]
+      return ['-line', String(cursor.line + 1)]
   }
 
   return []

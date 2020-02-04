@@ -1,8 +1,8 @@
 import path from 'path'
-import {LanguageClient, workspace} from 'coc.nvim'
-import {installGoBin} from './utils/tools'
+import { LanguageClient, workspace } from 'coc.nvim'
+import { installGoBin } from './utils/tools'
 
-import {GOPLS, GOMODIFYTAGS, GOTESTS, GOPLAY} from './binaries'
+import { GOPLS, GOMODIFYTAGS, GOTESTS, GOPLAY } from './binaries'
 
 export async function version(): Promise<void> {
   const v = require(path.resolve(__dirname, '..', 'package.json')).version
