@@ -283,6 +283,10 @@
       {
         "language": "go",
         "path": "./snippets/go.json"
+      },
+      {
+        "language": "gomod",
+        "path": "./snippets/gomod.json"
       }
     ]
   },
