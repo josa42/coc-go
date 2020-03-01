@@ -293,10 +293,11 @@
   "devDependencies": {
     "@types/node": "^12.12.8",
     "@types/which": "^1.3.2",
-    "@typescript-eslint/eslint-plugin": "^2.8.0",
-    "@typescript-eslint/parser": "^2.8.0",
+    "@typescript-eslint/eslint-plugin": "^2.21.0",
+    "@typescript-eslint/parser": "^2.21.0",
     "coc.nvim": "0.0.74",
-    "eslint": "^6.6.0",
+    "eslint": "^6.8.0",
+    "eslint-config-josa-typescript": "^0.1.2",
     "rimraf": "^3.0.0",
     "typescript": "3.6.2"
   },
