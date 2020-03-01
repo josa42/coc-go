@@ -11,8 +11,7 @@ jobs:
         node: [10, 12, 13]
     steps:
       - uses: actions/checkout@v2
-      - name: Setup node ${{ matrix.node }}
-        uses: actions/setup-node@v1
+      - uses: actions/setup-node@v1
         with: { node-version: "${{ matrix.node }}" }
       - run: yarn --frozen-lockfile
       - run: yarn build
