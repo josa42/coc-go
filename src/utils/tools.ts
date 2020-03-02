@@ -35,9 +35,16 @@ export async function goBinPath(source: string): Promise<string> {
   return path.join(await configDir('bin'), name)
 }
 
-export async function runGoTool(name: string, args: string[] = []): Promise<number> {
+export async function runGoTool(name: string, args: string[] = []): Promise<[number, string]> {
   const bin = await goBinPath(name)
-  return new Promise((resolve): void => { spawn(bin, args).on('close', (code) => resolve(code)) })
+  return new Promise((resolve): void => {
+    const p = spawn(bin, args)
+
+    let out = ""
+    p.stdout.on('data', (data) => out += data)
+
+    p.on("close", code => resolve([code, out]))
+  })
 }
 
 export async function commandExists(command: string): Promise<boolean> {
