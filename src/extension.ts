@@ -51,7 +51,11 @@ async function registerGopls(context: ExtensionContext): Promise<void> {
     }
   }
 
-  const serverOptions: ServerOptions = { command }
+  const serverOptions: ServerOptions = {
+    command,
+    args: config.goplsArgs
+  }
+
   const clientOptions: LanguageClientOptions = {
     documentSelector: ['go'],
     initializationOptions: () => getConfig().goplsOptions

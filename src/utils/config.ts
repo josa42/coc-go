@@ -23,6 +23,7 @@ export function getConfig(): GoConfig {
 export interface GoConfig {
   enable: boolean
   goplsPath: string
+  goplsArgs: string[]
   goplsOptions: GoplsOptions
   commandPath: string
   tags: GoTestsConfig

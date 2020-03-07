@@ -78,7 +78,14 @@
         },
         "go.goplsPath": {
           "type": "string",
-          "description": "Path to `gopls` bin"
+          "description": "Path to `gopls` bin (Change requires `:CocRestart`)"
+        },
+        "go.goplsArgs": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "description": "Arguments passed to `gopls` (Change requires `:CocRestart`)"
         },
         "go.goplsOptions": {
           "type": "object",
