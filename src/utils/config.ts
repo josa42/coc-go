@@ -28,6 +28,7 @@ export interface GoConfig {
   commandPath: string
   tags: GoTagsConfig
   tests: GoTestsConfig
+  autoCheckGoplsUpdates: boolean
 }
 
 export interface GoTagsConfig {

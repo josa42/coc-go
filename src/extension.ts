@@ -1,6 +1,6 @@
 import { commands, ExtensionContext, LanguageClient, ServerOptions, workspace, services, LanguageClientOptions } from 'coc.nvim'
 import { installGoBin, goBinPath, commandExists } from './utils/tools'
-import { installGopls, installGomodifytags, installGotests, version, installGoplay } from './commands'
+import { installGopls, installGomodifytags, installGotests, version, installGoplay, checkGopls } from './commands'
 import { addTags, removeTags, clearTags } from './utils/modify-tags'
 import { setStoragePath, getConfig } from './utils/config'
 import { activeTextDocument } from './editor'
@@ -49,6 +49,10 @@ async function registerGopls(context: ExtensionContext): Promise<void> {
     if (!await installGoBin(GOPLS)) {
       return
     }
+  }
+
+  if (config.autoCheckGoplsUpdates) {
+    await checkGopls()
   }
 
   const serverOptions: ServerOptions = {

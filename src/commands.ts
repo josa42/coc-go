@@ -1,6 +1,7 @@
 import path from 'path'
 import { LanguageClient, workspace } from 'coc.nvim'
 import { installGoBin, runGoTool } from './utils/tools'
+import checkLatestTag from './utils/checktag'
 
 import { GOPLS, GOMODIFYTAGS, GOTESTS, GOPLAY } from './binaries'
 
@@ -23,6 +24,25 @@ export async function installGopls(client: LanguageClient): Promise<void> {
   if (client.needsStop()) {
     await client.stop()
     client.restart()
+  }
+}
+
+export async function checkGopls(): Promise<void> {
+  const latest = await checkLatestTag("golang/tools", /^gopls\//)
+  const [, versionOut] = await runGoTool("gopls", ["version"])
+
+  let current = ''
+  const m = versionOut.match(/^golang\.org\/x\/tools\/gopls (v\d+\.\d+\.\d+)/)
+  if (m) {
+    current = m[1]
+  }
+
+  if (!current || !latest) {
+    workspace.showMessage(`[gopls] current: ${current} | latest: ${latest}`)
+  } else if (current === latest) {
+    workspace.showMessage(`[gopls] up-to-date: ${current}`)
+  } else {
+    workspace.showMessage(`[gopls] update available: ${current} => ${latest}`)
   }
 }
 
