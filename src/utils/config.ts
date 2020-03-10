@@ -1,6 +1,7 @@
-import fs from 'fs'
-import path from 'path'
-import { workspace } from 'coc.nvim'
+import fs from "fs"
+import path from "path"
+import os from "os"
+import { workspace } from "coc.nvim"
 
 interface State {
   storagePath?: string
@@ -9,23 +10,14 @@ interface State {
 const state: State = {}
 
 export function getConfig(): GoConfig {
-  const config = workspace.getConfiguration().get('go') as GoConfig
-
-  if (config.commandPath) {
-    workspace.showMessage("Go: Configuration 'go.commandPath' is deprected, use 'go.goplsPath' instead!", "warning")
-    config.goplsPath = config.commandPath
-  }
-
-  return workspace.getConfiguration().get('go') as GoConfig
+  return workspace.getConfiguration().get("go") as GoConfig
 }
-
 
 export interface GoConfig {
   enable: boolean
   goplsPath: string
   goplsArgs: string[]
   goplsOptions: GoplsOptions
-  commandPath: string
   tags: GoTagsConfig
   tests: GoTestsConfig
   autoCheckGoplsUpdates: boolean
@@ -45,7 +37,6 @@ export interface GoTestsConfig {
 // https://github.com/golang/tools/blob/master/gopls/doc/settings.md
 
 export interface GoplsOptions {
-
   /**
    * Default: []
    */
@@ -113,11 +104,8 @@ export function setStoragePath(dir: string): void {
 }
 
 export async function configDir(...names: string[]): Promise<string> {
-
-  const storage = state.storagePath || ((): string => {
-    const home = require('os').homedir()
-    return path.join(home, '.config', 'coc', 'go')
-  })()
+  const storage =
+    state.storagePath || path.join(os.homedir(), ".config", "coc", "go")
 
   const dir = path.join(storage, ...names)
 

@@ -72,10 +72,6 @@
           ],
           "description": "Trace level of gopls"
         },
-        "go.commandPath": {
-          "type": "string",
-          "description": "[DEPRECATED] Use go.goplsPath"
-        },
         "go.goplsPath": {
           "type": "string",
           "description": "Path to `gopls` bin (Change requires `:CocRestart`)"

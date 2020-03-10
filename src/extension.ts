@@ -36,15 +36,7 @@ async function registerGeneral(context: ExtensionContext): Promise<void> {
 async function registerGopls(context: ExtensionContext): Promise<void> {
   const config = getConfig()
 
-  const getGoplsPath = (): string => {
-    if (config.commandPath) {
-      workspace.showMessage("Go: Configuration 'go.commandPath' is deprected, use 'go.goplsPath' instead!", "warning")
-      return config.commandPath
-    }
-    return config.goplsPath
-  }
-
-  const command = getGoplsPath() || await goBinPath(GOPLS)
+  const command = config.goplsPath || await goBinPath(GOPLS)
   if (!await commandExists(command)) {
     if (!await installGoBin(GOPLS)) {
       return
