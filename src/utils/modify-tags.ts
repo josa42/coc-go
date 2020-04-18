@@ -28,6 +28,7 @@ export async function addTags(document: TextDocument, params: Params = {}): Prom
     ? config.options
     : 'json=omitempty'
   const transform = (config.transform || "snakecase")
+  const skipUnexported = config.skipUnexported
 
   if (params.prompt) {
     tags = await workspace.requestInput('Enter comma separated tag names', tags)
@@ -38,13 +39,17 @@ export async function addTags(document: TextDocument, params: Params = {}): Prom
     options = await workspace.requestInput('Enter comma separated options', options)
   }
 
-  await runGomodifytags(document, [
+  const args = [
     '-add-tags', tags.replace(/ +/g, ''),
     '-override',
     '-add-options', (options || ""),
     '-transform', transform,
     ...(await offsetArgs(document, (params.selection || "struct")))
-  ])
+  ]
+  if (skipUnexported) {
+    args.push('--skip-unexported')
+  }
+  await runGomodifytags(document, args)
 }
 
 export async function removeTags(document: TextDocument, params: Params = {}): Promise<void> {
