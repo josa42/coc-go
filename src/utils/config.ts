@@ -26,7 +26,7 @@ export interface GoConfig {
   goplsArgs: string[]
   goplsOptions: GoplsOptions
   commandPath: string
-  tags: GoTestsConfig
+  tags: GoTagsConfig
   tests: GoTestsConfig
 }
 
