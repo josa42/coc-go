@@ -4,6 +4,7 @@ import { spawn } from 'child_process'
 import { workspace } from 'coc.nvim'
 import which from 'which'
 import { configDir } from './config'
+import os from 'os'
 
 ////////////////////////////////////////////////////////////////////////////////
 
@@ -62,7 +63,12 @@ async function goBinExists(source: string): Promise<boolean> {
 async function goRun(args: string): Promise<boolean> {
   const gopath = await configDir('tools')
   const gobin = await configDir('bin')
-  const cmd = `env GOBIN=${gobin} GOPATH=${gopath} GO111MODULE=on go ${args}`
+  const platform = os.platform()
+  let cmd = `env GOBIN=${gobin} GOPATH=${gopath} GO111MODULE=on go ${args}`
+
+  if (platform === 'win32') {
+     cmd = `set GOBIN=${gobin}&set GOPATH=${gopath}&set GO111MODULE=on& go ${args}`;
+  }
 
   try {
     await workspace.runCommand(cmd, gopath)
