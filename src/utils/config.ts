@@ -34,6 +34,7 @@ export interface GoTagsConfig {
   tags?: string
   options?: string
   transform?: string
+  skipUnexported?: boolean
 }
 
 export interface GoTestsConfig {

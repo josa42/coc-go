@@ -181,6 +181,11 @@
               ],
               "default": "snakecase",
               "description": "Transformation rule used by `go.tags.add` command to add tags"
+            },
+            "skipUnexported": {
+              "type": "boolean",
+              "default": false,
+              "description": "If true, skip unexported fields"
             }
           }
         },
