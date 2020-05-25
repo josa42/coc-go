@@ -4,7 +4,7 @@ import { installGopls, installGomodifytags, installGotests, version, installGopl
 import { addTags, removeTags, clearTags } from './utils/modify-tags'
 import { setStoragePath, getConfig } from './utils/config'
 import { activeTextDocument } from './editor'
-import { GOPLS, GOMODIFYTAGS, GOTESTS, IMPL } from './binaries'
+import { GOPLS } from './binaries'
 import { generateTestsAll, generateTestsExported, toogleTests } from './utils/tests'
 import { openPlayground } from './utils/playground'
 import { generateImplStubs } from './utils/impl'
@@ -39,10 +39,8 @@ async function registerGopls(context: ExtensionContext): Promise<void> {
   const config = getConfig()
 
   const command = config.goplsPath || await goBinPath(GOPLS)
-  if (!await commandExists(command)) {
-    if (!await installGoBin(GOPLS)) {
-      return
-    }
+  if (!await commandExists(command) && !await installGoBin(GOPLS)) {
+    return
   }
 
   const serverOptions: ServerOptions = {
@@ -80,10 +78,6 @@ async function registerGopls(context: ExtensionContext): Promise<void> {
 }
 
 async function registerGoImpl(context: ExtensionContext): Promise<void> {
-  if (!await installGoBin(IMPL)) {
-    return
-  }
-
   context.subscriptions.push(
     commands.registerCommand(
       "go.install.impl",
@@ -98,11 +92,6 @@ async function registerGoImpl(context: ExtensionContext): Promise<void> {
 }
 
 async function registerTest(context: ExtensionContext): Promise<void> {
-
-  if (!await installGoBin(GOTESTS)) {
-    return
-  }
-
   context.subscriptions.push(
     commands.registerCommand(
       "go.install.gotests",
@@ -124,10 +113,6 @@ async function registerTest(context: ExtensionContext): Promise<void> {
 }
 
 async function registerTags(context: ExtensionContext): Promise<void> {
-  if (!await installGoBin(GOMODIFYTAGS)) {
-    return
-  }
-
   context.subscriptions.push(
     commands.registerCommand(
       "go.install.gomodifytags",
