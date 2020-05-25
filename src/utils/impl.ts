@@ -34,7 +34,7 @@ async function runGoImpl(document: TextDocument, args: string[]): Promise<TextEd
   return new Promise((resolve, reject) => {
     const p = cp.execFile(impl, args, { cwd: workspace.cwd }, async (err, stdout, stderr) => {
       if (err && (err as any).code === "ENOENT") {
-        return reject(`Error: Command impl not found! Run "CocCommand go.install.goimpl" to install it and try again.`)
+        return reject(`Error: Command impl not found! Run "CocCommand go.install.impl" to install it and try again.`)
       }
 
       if (err) {

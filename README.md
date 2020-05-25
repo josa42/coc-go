@@ -38,8 +38,8 @@ Additional to commands provided by gopls, this extensions provides these command
 | **`go.test.generate.exported`** | Generate unit tests for exported functions in file |
 | **`go.test.generate.file`**     | Generate unit tests for file                       |
 | **`go.test.toggle`**            | Toggle test file                                   |
-| **`go.impl.cursor`**            | Generate interface stubs                           |
 | **`go.version`**                | Print extension version                            |
+| **`go.impl.cursor`**            | Generate interface stubs                           |
 
 ### Examples
 
