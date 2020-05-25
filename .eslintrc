@@ -1,4 +1,7 @@
 {
   "root": true,
-  "extends": ["josa-typescript"]
+  "extends": ["josa-typescript"],
+  "env": {
+    "mocha": true
+  }
 }

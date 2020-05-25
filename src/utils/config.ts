@@ -20,7 +20,7 @@ export interface GoConfig {
   goplsOptions: GoplsOptions
   tags: GoTagsConfig
   tests: GoTestsConfig
-  autoCheckGoplsUpdates: boolean
+  checkForUpdates: "disabled" | "inform" | "ask" | "install"
 }
 
 export interface GoTagsConfig {

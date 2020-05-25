@@ -73,6 +73,7 @@ installed.
 
 | Key                         | Description                                                                                                                                                                                | Default               |
 |-----------------------------|--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|-----------------------|
+| **`go.checkForUpdates`**    | **EXPERIMENTAL** Check for gopls updates on start.                                                                                                                                         |                       |
 | **`go.enable`**             | Enable Go extension                                                                                                                                                                        |                       |
 | **`go.goplsArgs`**          | Arguments passed to `gopls` (Change requires `:CocRestart`)                                                                                                                                |                       |
 | **`go.goplsOptions`**       | See [`gopls` documentation](https://github.com/golang/tools/blob/master/gopls/doc/settings.md)                                                                                             |                       |

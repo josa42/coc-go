@@ -43,10 +43,6 @@ async function registerGopls(context: ExtensionContext): Promise<void> {
     }
   }
 
-  if (config.autoCheckGoplsUpdates) {
-    await checkGopls()
-  }
-
   const serverOptions: ServerOptions = {
     command,
     args: config.goplsArgs
@@ -58,6 +54,10 @@ async function registerGopls(context: ExtensionContext): Promise<void> {
   }
 
   const client = new LanguageClient('go', 'gopls', serverOptions, clientOptions)
+
+  if (config.checkForUpdates !== 'disabled') {
+    await checkGopls(client, config.checkForUpdates)
+  }
 
   context.subscriptions.push(
     services.registLanguageClient(client),

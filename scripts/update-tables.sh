@@ -52,7 +52,7 @@ optionsTable() {
   kl=0
   vl=0
   dl=0
-  for k in $(query '.contributes.configuration.properties | keys[]'); do
+  for k in $(query '.contributes.configuration.properties | keys[]' | sort); do
     desc="$(desc "$k")"
     def="$(defaultVal "$k")"
     if [[ "$desc" = *"DEPRECATED"* ]]; then
@@ -63,7 +63,7 @@ optionsTable() {
     vl=$(max ${#desc} $vl)
     dl=$(max ${#def} $dl)
 
-    for sk in $(query '.contributes.configuration.properties["'$k'"].properties | keys[]'); do
+    for sk in $(query '.contributes.configuration.properties["'$k'"].properties | keys[]' | sort); do
       desc="$(desc "$k" "$sk")"
       def="$(defaultVal "$k" "$sk")"
       kl=$(max $((${#sk} + 4)) $kl)
@@ -74,7 +74,7 @@ optionsTable() {
 
   head $kl $vl $dl
 
-  for k in $(query '.contributes.configuration.properties | keys[]'); do
+  for k in $(query '.contributes.configuration.properties | keys[]' | sort); do
     desc="$(desc "$k")"
     if [[ "$desc" = *"DEPRECATED"* ]]; then
       continue
@@ -82,7 +82,7 @@ optionsTable() {
 
     printf "| %-${kl}s | %-${vl}s | %-${dl}s |\n" "**\`$k\`**" "$desc"
 
-    for sk in $(query '.contributes.configuration.properties["'$k'"].properties | keys[]'); do
+    for sk in $(query '.contributes.configuration.properties["'$k'"].properties | keys[]' | sort); do
       desc="$(desc "$k" "$sk")"
       def="$(defaultVal "$k" "$sk")"
       printf "| ‣ %-$(($kl - 2))s | %-${vl}s | %-${dl}s |\n" "\`$sk\`" "$desc" "$def"
@@ -93,7 +93,7 @@ optionsTable() {
 commandsTable() {
   kl=0
   vl=0
-  for k in $(query '.contributes.commands[].command'); do
+  for k in $(query '.contributes.commands[].command' | sort); do
     desc="$(query '.contributes.commands[] | select(.command == "'$k'") | .title')"
     if [[ "$desc" = *"DEPRECATED"* ]]; then
       continue

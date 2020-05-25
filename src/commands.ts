@@ -4,18 +4,13 @@ import { installGoBin, runGoTool } from './utils/tools'
 import checkLatestTag from './utils/checktag'
 
 import { GOPLS, GOMODIFYTAGS, GOTESTS, GOPLAY } from './binaries'
+import { compareVersions, isValidVersion } from './utils/versions'
 
 export async function version(): Promise<void> {
-  const v = require(path.resolve(__dirname, '..', 'package.json')).version
+  const v1 = require(path.resolve(__dirname, '..', 'package.json')).version
+  const v2 = await goplsVersion() || 'unknown'
 
-  let v2 = "unknown"
-  const [, goplsOut] = await runGoTool("gopls", ["version"])
-  const m = goplsOut.match(/golang\.org\/x\/tools\/gopls (v.*)/)
-  if (m) {
-    v2 = m[1]
-  }
-
-  workspace.showMessage(`Version: coc-go ${v}; gopls ${v2}`, 'more')
+  workspace.showMessage(`Version: coc-go ${v1}; gopls ${v2}`, 'more')
 }
 
 export async function installGopls(client: LanguageClient): Promise<void> {
@@ -27,23 +22,56 @@ export async function installGopls(client: LanguageClient): Promise<void> {
   }
 }
 
-export async function checkGopls(): Promise<void> {
-  const latest = await checkLatestTag("golang/tools", /^gopls\//)
+export async function checkGopls(client: LanguageClient, mode: 'ask' | 'inform' | 'install'): Promise<void> {
+
+  const [latest, current] = await Promise.all([
+    checkLatestTag("golang/tools", /^gopls\//),
+    goplsVersion()
+  ])
+
+  try {
+    let install = false
+    switch (compareVersions(latest, current)) {
+      case 0:
+        workspace.showMessage(`[gopls] up-to-date: ${current}`)
+        break
+      case 1:
+        switch (mode) {
+          case 'install':
+            install = true
+            break
+          case 'ask':
+            install = await workspace.showPrompt(`[gopls] Install update? ${current} => ${latest}`)
+            break
+          case 'inform':
+            workspace.showMessage(`[gopls] update available: ${current} => ${latest}`)
+            break
+        }
+
+        break
+      case -1:
+        workspace.showMessage(`[gopls] current: ${current} | latest: ${latest}`)
+        break
+    }
+
+    if (install) {
+      await installGopls(client)
+    }
+  } catch (e) {
+    workspace.showMessage(e.toString())
+  }
+}
+
+async function goplsVersion() {
   const [, versionOut] = await runGoTool("gopls", ["version"])
 
-  let current = ''
-  const m = versionOut.match(/^golang\.org\/x\/tools\/gopls (v\d+\.\d+\.\d+)/)
-  if (m) {
-    current = m[1]
+  const m = versionOut.trim().match(/^golang\.org\/x\/tools\/gopls (v?\d+\.\d+\.\d+)/)
+  if (m && isValidVersion(m[1])) {
+    return m[1]
   }
 
-  if (!current || !latest) {
-    workspace.showMessage(`[gopls] current: ${current} | latest: ${latest}`)
-  } else if (current === latest) {
-    workspace.showMessage(`[gopls] up-to-date: ${current}`)
-  } else {
-    workspace.showMessage(`[gopls] update available: ${current} => ${latest}`)
-  }
+  return ''
+
 }
 
 export async function installGomodifytags(): Promise<void> {
