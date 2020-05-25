@@ -10,7 +10,8 @@
     "url": "https://github.com/josa42/coc-go.git"
   },
   "engines": {
-    "coc": "^0.0.73"
+    "coc": "^0.0.73",
+    "node": ">=10"
   },
   "keywords": [
     "coc.nvim",
