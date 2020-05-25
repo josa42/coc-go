@@ -67,7 +67,7 @@ async function goRun(args: string): Promise<boolean> {
   let cmd = `env GOBIN=${gobin} GOPATH=${gopath} GO111MODULE=on go ${args}`
 
   if (platform === 'win32') {
-     cmd = `set GOBIN=${gobin}&set GOPATH=${gopath}&set GO111MODULE=on& go ${args}`;
+     cmd = `set GOBIN=${gobin}&set GOPATH=${gopath}&set GO111MODULE=on& go ${args}`
   }
 
   try {

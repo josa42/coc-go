@@ -9,5 +9,6 @@
   "javascript.format.insertSpaceAfterOpeningAndBeforeClosingNonemptyBraces": true,
 
   "eslint.autoFix": true,
-  "eslint.autoFixOnSave": true
+  "eslint.autoFixOnSave": true,
+  "prettier.disableLanguages": ["typescript"]
 }
