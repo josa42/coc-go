@@ -25,6 +25,7 @@ Additional to commands provided by gopls, this extensions provides these command
 | **`go.install.goplay`**         | Install / update goplay                            |
 | **`go.install.gopls`**          | Install / update gopls                             |
 | **`go.install.gotests`**        | Install / update gotests                           |
+| **`go.install.impl`**           | Install / update gotests                           |
 | **`go.playground`**             | Run on go playground                               |
 | **`go.tags.add`**               | Add tags to struct fields                          |
 | **`go.tags.add.line`**          | Add tags to struct field in current line           |
@@ -37,6 +38,7 @@ Additional to commands provided by gopls, this extensions provides these command
 | **`go.test.generate.exported`** | Generate unit tests for exported functions in file |
 | **`go.test.generate.file`**     | Generate unit tests for file                       |
 | **`go.test.toggle`**            | Toggle test file                                   |
+| **`go.impl.cursor`**            | Generate interface stubs                           |
 | **`go.version`**                | Print extension version                            |
 
 ### Examples
@@ -123,15 +125,6 @@ Trigger completion in `coc-settings.json` to get complete list.
 
 - Check for tool updates and prompt the the user
 
-- Add [`goimpl`](https://github.com/sasha-s/goimpl) command
-
-  ```
-  {
-    "command": "go.impl.cursor",
-    "title": "Generate Interface Stubs"
-  }
-  ```
-
 - Add [`godoctor`](https://github.com/godoctor/godoctor) refactor commands
 
   ```
@@ -160,6 +153,7 @@ Trigger completion in `coc-settings.json` to get complete list.
 - [`goplay`](http://github.com/haya14busa/goplay) - [MIT](https://github.com/haya14busa/goplay/blob/master/LICENSE)
 - [`gopls`](https://golang.org/x/tools/cmd/gopls)
 - [`gotests`](http://github.com/cweill/gotests) - [Apache](https://github.com/cweill/gotests/blob/develop/LICENSE)
+- [`impl`](https://github.com/josharian/impl) - [MIT](https://github.com/josharian/impl/blob/master/LICENSE.txt)
 
 ## FAQ
 
