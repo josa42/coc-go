@@ -157,7 +157,5 @@ async function offsetArgs(document: TextDocument, seletion: "struct" | "line"): 
     case "line":
       return ['-line', String(cursor.line + 1)]
   }
-
-  return []
 }
 

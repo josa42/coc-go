@@ -299,20 +299,20 @@
     ]
   },
   "devDependencies": {
-    "@types/node": "^13.7.7",
-    "@types/node-fetch": "^2.5.5",
+    "@types/node": "^14.0.5",
+    "@types/node-fetch": "^2.5.7",
     "@types/which": "^1.3.2",
-    "@typescript-eslint/eslint-plugin": "^2.21.0",
-    "@typescript-eslint/parser": "^2.21.0",
-    "coc.nvim": "0.0.75",
-    "eslint": "^6.8.0",
+    "@typescript-eslint/eslint-plugin": "^3.0.0",
+    "@typescript-eslint/parser": "^3.0.0",
+    "coc.nvim": "0.0.77",
+    "eslint": "^7.1.0",
     "eslint-config-josa-typescript": "^0.1.2",
     "rimraf": "^3.0.2",
-    "typescript": "~3.6.5"
+    "typescript": "~3.9.3"
   },
   "dependencies": {
     "node-fetch": "^2.6.0",
-    "tslib": "^1.11.1",
+    "tslib": "^2.0.0",
     "which": "^2.0.2"
   }
 }
