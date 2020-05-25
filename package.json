@@ -44,7 +44,7 @@
     "onCommand:go.install.goplay",
     "onCommand:go.install.gopls",
     "onCommand:go.install.gotests",
-    "onCommand:go.install.goimpl",
+    "onCommand:go.install.impl",
     "onCommand:go.version"
   ],
   "contributes": {
