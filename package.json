@@ -423,6 +423,11 @@
         "command": "go.install.gotests"
       },
       {
+        "title": "Install / update impl",
+        "category": "Go",
+        "command": "go.install.impl"
+      },
+      {
         "title": "Run on go playground",
         "category": "Go",
         "command": "go.playground"
