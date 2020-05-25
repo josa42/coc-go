@@ -8,7 +8,7 @@ const interfaceRegex = /^(\w+ \*?\w+ )?([\w./]+)$/
 
 export async function generateImplStubs(document: TextDocument): Promise<void> {
   try {
-    const implInput = await workspace.requestInput("Enter receiver and interface")
+    const implInput = await workspace.requestInput("Enter receiver and interface [f *File io.Closer]")
 
     if (implInput == null) {
       workspace.showMessage("No input detected! Aborting.", "warning")
@@ -20,7 +20,7 @@ export async function generateImplStubs(document: TextDocument): Promise<void> {
       throw Error(`Cannot parse input: ${implInput}`)
     }
 
-    const edit = await runGoImpl([matches[1], matches[2]])
+    const edit = await runGoImpl(document, [matches[1], matches[2]])
 
     await workspace.applyEdit({ changes: { [document.uri]: [edit] } })
   } catch (error) {
@@ -28,7 +28,7 @@ export async function generateImplStubs(document: TextDocument): Promise<void> {
   }
 }
 
-async function runGoImpl(args: string[]): Promise<TextEdit> {
+async function runGoImpl(document: TextDocument, args: string[]): Promise<TextEdit> {
   const impl = await goBinPath(IMPL)
 
   return new Promise((resolve, reject) => {
@@ -41,14 +41,20 @@ async function runGoImpl(args: string[]): Promise<TextEdit> {
         return reject(`Error: ${stderr}`)
       }
 
-      const curPos = await workspace.getCursorPosition()
+      const { line } = await workspace.getCursorPosition()
+      const insertPos = { line: line + 1, character: 0 }
+
+      const lineText = await workspace.getLine(document.uri, line)
+      const newText = lineText.trim() === ''
+        ? stdout
+        : `\n${stdout}`
 
       return resolve({
         range: {
-          start: curPos,
-          end: { line: curPos.line + 1, character: curPos.character }
+          start: insertPos,
+          end: insertPos
         },
-        newText: "\n" + stdout
+        newText
       })
     }
     )
