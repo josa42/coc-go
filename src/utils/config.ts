@@ -37,6 +37,7 @@ export interface GoTestsConfig {
 // https://github.com/golang/tools/blob/master/gopls/doc/settings.md
 
 export interface GoplsOptions {
+
   /**
    * Default: []
    */
@@ -55,12 +56,29 @@ export interface GoplsOptions {
   /**
    * Default: "pkg.go.dev"
    */
-  linkTarget: string
+  linkTarget: "godoc.org" | "pkg.go.dev"
+
+  /**
+   * Default: ""
+   */
+  local: string
 
   /**
    * Default: false
    */
   usePlaceholders: boolean
+
+  /**
+   * Experimental!
+   * Default: {}
+   */
+  analyses: { string: boolean }
+
+  /**
+   * Experimental!
+   * Default: {}
+   */
+  codelens: { string: boolean }
 
   /**
    * Experimental!
@@ -82,21 +100,27 @@ export interface GoplsOptions {
 
   /**
    * Experimental!
-   * Default: []
-   */
-  experimentalDisabledAnalyses: string[]
-
-  /**
-   * Experimental!
    * Default: true
    */
   fuzzyMatching: boolean
 
   /**
    * Experimental!
+   * Default: "caseInsensitive"
+   */
+  matcher: "fuzzy" | "caseSensitive" | "caseInsensitive"
+
+  /**
+   * Experimental!
    * Default: false
    */
   staticcheck: boolean
+
+  /**
+   * Experimental!
+   * Default: "caseInsensitive"
+   */
+  symbolMatcher: "fuzzy" | "caseSensitive" | "caseInsensitive"
 }
 
 export function setStoragePath(dir: string): void {

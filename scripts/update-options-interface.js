@@ -1,14 +1,13 @@
 #!/usr/bin/env node
 
-const fs = require('fs')
+const fs = require("fs")
 
 async function run() {
-  let contents = fs.readFileSync('src/utils/config.ts', 'utf8').split('\n')
+  let contents = fs.readFileSync("src/utils/config.ts", "utf8").split("\n")
 
   let inside = false
 
   contents = contents.reduce((lines, line) => {
-
     let isGplsoptions = line.match(/^export interface GoplsOptions/)
 
     if (isGplsoptions) {
@@ -17,56 +16,67 @@ async function run() {
     }
 
     if (inside) {
-      inside = line !== '}'
+      inside = line !== "}"
       return lines
     }
 
     return [...lines, line]
   }, [])
 
-  fs.writeFileSync('src/utils/config.ts', contents.join('\n'))
+  fs.writeFileSync("src/utils/config.ts", contents.join("\n"))
 }
 
 function generate() {
-  const pkg = JSON.parse(fs.readFileSync('./package.json', 'utf8'))
-  let lines = ['export interface GoplsOptions {']
+  const pkg = JSON.parse(fs.readFileSync("./package.json", "utf8"))
+  let lines = ["export interface GoplsOptions {"]
 
-  const opts = pkg.contributes.configuration.properties['go.goplsOptions'].properties
+  const opts =
+    pkg.contributes.configuration.properties["go.goplsOptions"].properties
 
-  Object.keys(opts).filter(k => !opts[k].description.match(/EXPERIMENTAL/)).sort().forEach(k => {
-    lines.push(
-      '',
-      `  /**`,
-      `   * Default: ${getDefault(opts[k])}`,
-      `   */`,
-      `  ${k}: ${getType(opts[k])}`
-    )
-  })
+  Object.keys(opts)
+    .filter(k => !opts[k].description.match(/EXPERIMENTAL/))
+    .sort()
+    .forEach(k => {
+      lines.push(
+        "",
+        `  /**`,
+        `   * Default: ${getDefault(opts[k])}`,
+        `   */`,
+        `  ${k}: ${getType(opts[k])}`
+      )
+    })
 
-  Object.keys(opts).filter(k => opts[k].description.match(/EXPERIMENTAL/)).sort().forEach(k => {
-    lines.push(
-      '',
-      `  /**`,
-      `   * Experimental!`,
-      `   * Default: ${getDefault(opts[k])}`,
-      `   */`,
-      `  ${k}: ${getType(opts[k])}`
-    )
-  })
+  Object.keys(opts)
+    .filter(k => opts[k].description.match(/EXPERIMENTAL/))
+    .sort()
+    .forEach(k => {
+      lines.push(
+        "",
+        `  /**`,
+        `   * Experimental!`,
+        `   * Default: ${getDefault(opts[k])}`,
+        `   */`,
+        `  ${k}: ${getType(opts[k])}`
+      )
+    })
 
-  lines.push('}')
-
+  lines.push("}")
   return lines
 }
 
 function getType(o) {
-
   switch (o.type) {
-    case 'array':
+    case "array":
       return `${o.items.type}[]`
 
-    case 'object':
-      return `{ string: ${o.patternProperties['.+'].type} }`
+    case "object":
+      if (o.patternProperties) {
+        return `{ string: ${o.patternProperties[".+"].type} }`
+      }
+      return `{ string: ${Object.keys(o.properties)
+        .map(k => o.properties[k].type)
+        .reduce((ts, t) => (ts.includes(t) ? ts : [...ts, t]), [])
+        .join("|")} }`
 
     default:
       if (o.enum) {
@@ -77,22 +87,19 @@ function getType(o) {
 }
 
 function getDefault(o) {
-
   switch (o.type) {
-    case 'array':
-      return o.default || '[]'
+    case "array":
+      return o.default || "[]"
 
-    case 'object':
-      return o.default || '{}'
+    case "object":
+      return o.default || "{}"
 
-    case 'boolean':
-      return o.default || 'false'
+    case "boolean":
+      return o.default || "false"
 
-
-    case 'string':
-      return `"${o.default || ''}"`
+    case "string":
+      return `"${o.default || ""}"`
   }
-
 
   return o.default
 }

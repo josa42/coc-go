@@ -1,7 +1,12 @@
 #!/bin/bash
 
-
 run() {
+  updateOptions
+  updateAnalysis
+  updateCodelenses
+}
+
+updateOptions() {
   local experPre=""
   local option=""
   local is_enum=0
@@ -23,7 +28,8 @@ run() {
 
     elif [[ "$l" =~ '###' ]]; then
       o="$(echo $l | sed 's/^### \*\*//' | sed 's/\*\*.*//')"
-      t=$(echo $l | sed 's/^### \*\*[^\*]*\*\* \*\([^\*]*\)\*/\1/')
+      t=$(echo $l | sed 's/^### \*\*[^\*]*\*\* \*\([^\*]*\)\*/\1/' | sed 's/^.* \(string\)$/\1/')
+
 
       local type=""$(parseType $t)""
 
@@ -50,29 +56,66 @@ run() {
       option="$o"
       is_enum=0
 
-    elif [[ "$option" != "" ]] && [[ "$l" =~ 'Default:' ]] || [[ "$l" =~ 'Default value:' ]]; then
-      setOptionProp "$o" "default" "$(echo $l | sed 's/^Default: `\(.*\)`\./\1/' | sed 's/^Default value: `\(.*\)`\./\1/')"
+    elif [[ "$option" != "" ]]; then
+      if [[ "$l" =~ 'Default:' ]] || [[ "$l" =~ 'Default value:' ]]; then
+        setOptionProp "$o" "default" "$(echo $l | sed 's/^Default: `\(.*\)`\./\1/' | sed 's/^Default value: `\(.*\)`\./\1/')"
 
-    elif [[ "$option" != "" ]] && [[ "$(getOptionsDescription "$option")" == "" ]] && [[ "$(echo $l | grep '\.$')" != '' ]]; then
-      setOptionPropString "$option" "description" "${experPre}${l}"
+      elif [[ "$(getOptionsDescription "$option")" == "" ]] && [[ "$(echo $l | grep '\.$')" != '' ]]; then
+        setOptionPropString "$option" "description" "${experPre}${l}"
 
-    elif [[ "$option" != "" ]] && [[ "$(echo $l | grep ':$')" != '' ]]; then
-      if [[ "$l" == "It must be one of:" ]]; then
+      elif [[ "$l" == *"be one of:" ]]; then
         is_enum=1
-      fi
 
-    elif [[ "$option" != "" ]] && [[ "$(echo $l | grep '^\*')" != '' ]]; then
-      if [[ $is_enum -eq 1 ]]; then
-        local item="$(echo $l | sed 's/[\*`" ]*//g')"
-        if ! [[ " ${ignoreEnums[@]} " =~ " ${option}##${item} " ]]; then
-          appendOptionProp "$option" 'enum' "$item"
+      elif [[ "$(echo $l | grep '^\*')" != '' ]]; then
+        if [[ $is_enum -eq 1 ]]; then
+          local item="$(echo $l | sed 's/[\*`" ]*//g')"
+          if ! [[ " ${ignoreEnums[@]} " =~ " ${option}##${item} " ]]; then
+            appendOptionProp "$option" 'enum' "$item"
+          fi
         fi
       fi
-    fi
 
-    if [[ "$option" != "" ]]; then
       sortOptionProps "$option"
     fi
+  done
+}
+
+updateAnalysis() {
+  jqUpdate '.contributes.configuration.properties["go.goplsOptions"].properties.analyses.type="object"'
+  jqUpdate '.contributes.configuration.properties["go.goplsOptions"].properties.analyses.required=[]'
+  jqUpdate '.contributes.configuration.properties["go.goplsOptions"].properties.analyses.additionalProperties=false'
+  jqUpdate '.contributes.configuration.properties["go.goplsOptions"].properties.analyses.properties={}'
+
+  IFS=$'\n'; for l in $(curl -sS 'https://raw.githubusercontent.com/golang/tools/master/gopls/doc/analyzers.md'); do
+
+    if [[ "$l" == '### '* ]]; then
+      o="$(echo $l | sed 's/^### \*\*//' | sed 's/\*\*.*//')"
+      jqUpdate '.contributes.configuration.properties["go.goplsOptions"].properties.analyses.properties["'$o'"] = { "type": "boolean" }'
+
+
+    elif [[ "$o" != "" ]]; then
+      if [[ "$l" =~ 'Default:' ]] || [[ "$l" =~ 'Default value:' ]]; then
+        jqUpdate '.contributes.configuration.properties["go.goplsOptions"].properties.analyses.properties["'$o'"].default = '"$(echo $l | sed 's/^Default: `\(.*\)`\./\1/' | sed 's/^Default value: `\(.*\)`\./\1/')"
+
+      fi
+    fi
+  done
+}
+
+updateCodelenses() {
+  jqUpdate '.contributes.configuration.properties["go.goplsOptions"].properties.codelens.description="[EXPERIMENTAL]"'
+  jqUpdate '.contributes.configuration.properties["go.goplsOptions"].properties.codelens.type="object"'
+  jqUpdate '.contributes.configuration.properties["go.goplsOptions"].properties.codelens.required=[]'
+  jqUpdate '.contributes.configuration.properties["go.goplsOptions"].properties.codelens.additionalProperties=false'
+  jqUpdate '.contributes.configuration.properties["go.goplsOptions"].properties.codelens.properties={}'
+
+  declare -a options=("generate:true" "upgrade.dependency:true" "test:false")
+
+  for e in ${options[@]}; do
+    k="$(echo $e | sed 's/:.*//')"
+    v="$(echo $e | sed 's/.*://')"
+    jqUpdate '.contributes.configuration.properties["go.goplsOptions"].properties.codelens.properties["'$k'"].type="boolean"'
+    jqUpdate '.contributes.configuration.properties["go.goplsOptions"].properties.codelens.properties["'$k'"].default='$v
   done
 }
 

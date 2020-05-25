@@ -121,18 +121,180 @@
             "linkTarget": {
               "type": "string",
               "default": "pkg.go.dev",
+              "enum": [
+                "godoc.org",
+                "pkg.go.dev"
+              ],
               "description": "This controls where points documentation for given package in `textDocument/documentLink`."
             },
-            "experimentalDisabledAnalyses": {
-              "type": "array",
-              "items": {
-                "type": "string"
-              },
-              "description": "[EXPERIMENTAL] A list of the names of analysis passes that should be disabled. You can use this to turn off analyses that you feel are not useful in the editor."
+            "local": {
+              "type": "string",
+              "default": "",
+              "description": "This is the equivalent of the `goimports -local` flag, which puts imports beginning with this string after 3rd-party packages."
             },
-            "staticcheck": {
-              "type": "boolean",
-              "description": "[EXPERIMENTAL] If true, it enables the use of the staticcheck.io analyzers."
+            "analyses": {
+              "description": "[EXPERIMENTAL] Analyses specify analyses that the user would like to enable or disable.",
+              "type": "object",
+              "required": [],
+              "additionalProperties": false,
+              "properties": {
+                "asmdecl": {
+                  "type": "boolean",
+                  "default": true
+                },
+                "assign": {
+                  "type": "boolean",
+                  "default": true
+                },
+                "atomic": {
+                  "type": "boolean",
+                  "default": true
+                },
+                "atomicalign": {
+                  "type": "boolean",
+                  "default": true
+                },
+                "bools": {
+                  "type": "boolean",
+                  "default": true
+                },
+                "buildtag": {
+                  "type": "boolean",
+                  "default": true
+                },
+                "cgocall": {
+                  "type": "boolean",
+                  "default": true
+                },
+                "composite": {
+                  "type": "boolean",
+                  "default": true
+                },
+                "copylock": {
+                  "type": "boolean",
+                  "default": true
+                },
+                "errorsas": {
+                  "type": "boolean",
+                  "default": true
+                },
+                "httpresponse": {
+                  "type": "boolean",
+                  "default": true
+                },
+                "loopclosure": {
+                  "type": "boolean",
+                  "default": true
+                },
+                "lostcancel": {
+                  "type": "boolean",
+                  "default": true
+                },
+                "nilfunc": {
+                  "type": "boolean",
+                  "default": true
+                },
+                "printf": {
+                  "type": "boolean",
+                  "default": true
+                },
+                "shift": {
+                  "type": "boolean",
+                  "default": true
+                },
+                "stdmethods": {
+                  "type": "boolean",
+                  "default": true
+                },
+                "structtag": {
+                  "type": "boolean",
+                  "default": true
+                },
+                "tests": {
+                  "type": "boolean",
+                  "default": true
+                },
+                "unmarshal": {
+                  "type": "boolean",
+                  "default": true
+                },
+                "unreachable": {
+                  "type": "boolean",
+                  "default": true
+                },
+                "unsafeptr": {
+                  "type": "boolean",
+                  "default": true
+                },
+                "unusedresult": {
+                  "type": "boolean",
+                  "default": true
+                },
+                "deepequalerrors": {
+                  "type": "boolean",
+                  "default": true
+                },
+                "fillreturns": {
+                  "type": "boolean",
+                  "default": false
+                },
+                "nonewvars": {
+                  "type": "boolean",
+                  "default": false
+                },
+                "noresultvalues": {
+                  "type": "boolean",
+                  "default": true
+                },
+                "simplifycompositelit": {
+                  "type": "boolean",
+                  "default": true
+                },
+                "simplifyrange": {
+                  "type": "boolean",
+                  "default": true
+                },
+                "simplifyslice": {
+                  "type": "boolean",
+                  "default": true
+                },
+                "sortslice": {
+                  "type": "boolean",
+                  "default": true
+                },
+                "testinggoroutine": {
+                  "type": "boolean",
+                  "default": true
+                },
+                "undeclaredname": {
+                  "type": "boolean",
+                  "default": false
+                },
+                "unusedparams": {
+                  "type": "boolean",
+                  "default": false
+                }
+              }
+            },
+            "codelens": {
+              "description": "[EXPERIMENTAL]",
+              "type": "object",
+              "required": [],
+              "additionalProperties": false,
+              "properties": {
+                "generate": {
+                  "type": "boolean",
+                  "default": true
+                },
+                "upgrade.dependency": {
+                  "type": "boolean",
+                  "default": true
+                },
+                "test": {
+                  "type": "boolean",
+                  "default": false
+                }
+              }
             },
             "completionDocumentation": {
               "type": "boolean",
@@ -153,6 +315,30 @@
               "type": "boolean",
               "default": true,
               "description": "[EXPERIMENTAL] If true, this enables server side fuzzy matching of completion candidates."
+            },
+            "staticcheck": {
+              "type": "boolean",
+              "description": "[EXPERIMENTAL] If true, it enables the use of the staticcheck.io analyzers."
+            },
+            "matcher": {
+              "type": "string",
+              "default": "caseInsensitive",
+              "enum": [
+                "fuzzy",
+                "caseSensitive",
+                "caseInsensitive"
+              ],
+              "description": "[EXPERIMENTAL] "
+            },
+            "symbolMatcher": {
+              "type": "string",
+              "default": "caseInsensitive",
+              "enum": [
+                "fuzzy",
+                "caseSensitive",
+                "caseInsensitive"
+              ],
+              "description": "[EXPERIMENTAL] "
             }
           }
         },
