@@ -1,7 +1,6 @@
 import { workspace } from 'coc.nvim'
 import { TextDocument } from 'vscode-languageserver-protocol'
-import cp = require('child_process')
-import { goBinPath } from './tools'
+import { execTool } from './tools'
 import { GOTESTS } from '../binaries'
 import { GoTestsConfig } from './config'
 
@@ -54,19 +53,14 @@ async function runGotests(document: TextDocument, args: string[]): Promise<boole
   const config = workspace.getConfiguration().get('go.tests', {}) as GoTestsConfig
 
   args.push(...(config.generateFlags || []), '-w', document.uri.replace(/^file:\/\//, ''))
+  try {
+    const stdout = await execTool(GOTESTS, args)
+    workspace.showMessage(stdout || "")
 
-  const gotests = await goBinPath(GOTESTS)
+    return true
 
-  return new Promise<boolean>((resolve, reject): void => {
-    cp.execFile(gotests, args, { env: {} }, async (err, stdout, stderr) => {
-      if (err) {
-        workspace.showMessage(`Error: ${stderr}`, "error")
-        return reject()
-      }
-
-      workspace.showMessage(stdout || "")
-
-      resolve(true)
-    })
-  })
+  } catch (err) {
+    workspace.showMessage(`Error: ${err}`, "error")
+    return false
+  }
 }

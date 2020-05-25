@@ -6,6 +6,7 @@ import { workspace } from 'coc.nvim'
 import which from 'which'
 import { configDir } from './config'
 import os from 'os'
+import cp from 'child_process'
 
 ////////////////////////////////////////////////////////////////////////////////
 
@@ -77,6 +78,45 @@ async function goRun(args: string): Promise<boolean> {
 
   return true
 }
+
+interface execError {
+  code?: string
+}
+
+export async function execTool(source: string, args: string[], input?: string): Promise<string> {
+
+  const [bin, name] = await Promise.all([
+    goBinPath(source),
+    goBinName(source)
+  ])
+
+  if (!await commandExists(bin)) {
+    await installGoBin(source)
+  }
+
+  return new Promise((resolve, reject) => {
+    const p = cp.execFile(bin, args, { cwd: workspace.cwd }, async (err: Error, stdout: Buffer, stderr: Buffer) => {
+      if (err && (err as execError).code === "ENOENT") {
+        return reject(`Error: Command ${name} not found! Run "CocCommand go.install.${name}" to install it and try again.`)
+      }
+
+      if (err) {
+        return reject(stderr.toString())
+      }
+
+      return resolve(stdout.toString())
+    })
+
+    if (p.pid) {
+      p.stdin.end(input)
+    }
+  })
+
+}
+
+
+////////////////////////////////////////////////////////////////////////////////
+
 
 export function formatCmd(env: { [key: string]: string }, cmd: string): string {
 

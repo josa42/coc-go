@@ -1,9 +1,8 @@
-import cp = require('child_process')
 import { TextDocument, Position, TextEdit } from 'vscode-languageserver-protocol'
 import { workspace } from 'coc.nvim'
 
 import { GoTagsConfig } from './config'
-import { goBinPath } from './tools'
+import { execTool } from './tools'
 import { GOMODIFYTAGS } from '../binaries'
 
 interface Params {
@@ -109,31 +108,22 @@ interface GomodifytagsOutput {
 
 async function execGomodifytags(args: string[], input: string): Promise<TextEdit> {
 
-  const gomodifytags = await goBinPath(GOMODIFYTAGS)
+  try {
+    const stdout = await execTool(GOMODIFYTAGS, args, input)
+    const mods = JSON.parse(stdout) as GomodifytagsOutput
 
-  return new Promise((resolve, reject): void => {
-    const p = cp.execFile(gomodifytags, args, { env: {} }, async (err, stdout, stderr) => {
-      if (err) {
-        workspace.showMessage(`Cannot modify tags: ${stderr}`)
-
-        return reject()
-      }
-
-      const mods = JSON.parse(stdout) as GomodifytagsOutput
-
-      resolve({
-        range: {
-          start: { line: mods.start - 1, character: 0 },
-          end: { line: mods.end, character: 0 }
-        },
-        newText: mods.lines.join("\n") + "\n"
-      })
-    })
-
-    if (p.pid) {
-      p.stdin.end(input)
+    return {
+      range: {
+        start: { line: mods.start - 1, character: 0 },
+        end: { line: mods.end, character: 0 }
+      },
+      newText: mods.lines.join("\n") + "\n"
     }
-  })
+
+  } catch (err) {
+    workspace.showMessage(`Cannot modify tags: ${err}`, 'error')
+    throw err
+  }
 }
 
 function fileArchive(fileName: string, fileContents: string): string {

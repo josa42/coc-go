@@ -1,8 +1,7 @@
 import { workspace } from 'coc.nvim'
 import { TextDocument, TextEdit } from 'vscode-languageserver-protocol'
 import { IMPL } from '../binaries'
-import { goBinPath } from './tools'
-import cp = require('child_process')
+import {execTool } from './tools'
 
 const interfaceRegex = /^(\w+ \*?\w+ )?([\w./]+)$/
 
@@ -29,38 +28,23 @@ export async function generateImplStubs(document: TextDocument): Promise<void> {
 }
 
 async function runGoImpl(document: TextDocument, args: string[]): Promise<TextEdit> {
-  const impl = await goBinPath(IMPL)
 
-  return new Promise((resolve, reject) => {
-    const p = cp.execFile(impl, args, { cwd: workspace.cwd }, async (err, stdout, stderr) => {
-      if (err && (err as any).code === "ENOENT") {
-        return reject(`Error: Command impl not found! Run "CocCommand go.install.impl" to install it and try again.`)
-      }
+  const stdout = await execTool(IMPL, args)
 
-      if (err) {
-        return reject(`Error: ${stderr}`)
-      }
+  const { line } = await workspace.getCursorPosition()
+  const insertPos = { line: line + 1, character: 0 }
 
-      const { line } = await workspace.getCursorPosition()
-      const insertPos = { line: line + 1, character: 0 }
+  const lineText = await workspace.getLine(document.uri, line)
+  const newText = lineText.trim() === ''
+    ? stdout
+    : `\n${stdout}`
 
-      const lineText = await workspace.getLine(document.uri, line)
-      const newText = lineText.trim() === ''
-        ? stdout
-        : `\n${stdout}`
-
-      return resolve({
-        range: {
-          start: insertPos,
-          end: insertPos
-        },
-        newText
-      })
-    }
-    )
-    if (p.pid) {
-      p.stdin.end()
-    }
-  })
+  return {
+    range: {
+      start: insertPos,
+      end: insertPos
+    },
+    newText
+  }
 }
 

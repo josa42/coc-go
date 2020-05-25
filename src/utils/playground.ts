@@ -1,7 +1,6 @@
 import { TextDocument } from 'vscode-languageserver-protocol'
 import { workspace } from 'coc.nvim'
-import { execFile } from 'child_process'
-import { goBinPath, installGoBin, commandExists } from './tools'
+import { execTool } from './tools'
 import { GOPLAY } from '../binaries'
 
 export async function openPlayground(document: TextDocument): Promise<boolean> {
@@ -11,26 +10,15 @@ export async function openPlayground(document: TextDocument): Promise<boolean> {
 
 async function runGoplay(code: string): Promise<boolean> {
 
-  const bin = await goBinPath(GOPLAY)
+  try {
+    const stdout = await execTool(GOPLAY, ['-'], code)
+    workspace.showMessage(stdout)
+    return true
 
-  if (!await commandExists(bin)) {
-    await installGoBin(GOPLAY)
+  } catch (err) {
+    workspace.showMessage(`${err}`, "error")
+    return false
   }
 
-  return new Promise<boolean>((resolve, reject): void => {
-    const p = execFile(bin, ['-'], {}, async (err, stdout, stderr) => {
-      workspace.showMessage(stdout)
-
-      if (err) {
-        workspace.showMessage(`${stderr}`, "error")
-        return reject(err)
-      }
-
-      resolve(true)
-    })
-    if (p.pid) {
-      p.stdin.end(code)
-    }
-  })
 }
 
