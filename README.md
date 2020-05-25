@@ -25,7 +25,7 @@ Additional to commands provided by gopls, this extensions provides these command
 | **`go.install.goplay`**         | Install / update goplay                            |
 | **`go.install.gopls`**          | Install / update gopls                             |
 | **`go.install.gotests`**        | Install / update gotests                           |
-| **`go.install.impl`**           | Install / update gotests                           |
+| **`go.install.impl`**           | Install / update impl                              |
 | **`go.playground`**             | Run on go playground                               |
 | **`go.tags.add`**               | Add tags to struct fields                          |
 | **`go.tags.add.line`**          | Add tags to struct field in current line           |
