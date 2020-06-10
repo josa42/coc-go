@@ -403,6 +403,11 @@
     },
     "commands": [
       {
+        "title": "Generate interface stubs",
+        "category": "Go",
+        "command": "go.impl.cursor"
+      },
+      {
         "title": "Install / update gomodifytags",
         "category": "Go",
         "command": "go.install.gomodifytags"
@@ -491,11 +496,6 @@
         "title": "Print extension version",
         "category": "Go",
         "command": "go.version"
-      },
-      {
-        "title": "Generate interface stubs",
-        "category": "Go",
-        "command": "go.impl.cursor"
       }
     ],
     "snippets": [

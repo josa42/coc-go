@@ -21,6 +21,7 @@ Additional to commands provided by gopls, this extensions provides these command
 
 | Key                             | Description                                        |
 |---------------------------------|----------------------------------------------------|
+| **`go.impl.cursor`**            | Generate interface stubs                           |
 | **`go.install.gomodifytags`**   | Install / update gomodifytags                      |
 | **`go.install.goplay`**         | Install / update goplay                            |
 | **`go.install.gopls`**          | Install / update gopls                             |
@@ -39,7 +40,6 @@ Additional to commands provided by gopls, this extensions provides these command
 | **`go.test.generate.file`**     | Generate unit tests for file                       |
 | **`go.test.toggle`**            | Toggle test file                                   |
 | **`go.version`**                | Print extension version                            |
-| **`go.impl.cursor`**            | Generate interface stubs                           |
 
 ### Examples
 
