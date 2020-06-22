@@ -2,7 +2,7 @@ import path from 'path'
 import fs from 'fs'
 import { format } from 'util'
 import { spawn } from 'child_process'
-import { workspace } from 'coc.nvim'
+import { workspace, runCommand } from 'coc.nvim'
 import which from 'which'
 import { configDir } from './config'
 import os from 'os'
@@ -67,10 +67,14 @@ async function goRun(args: string): Promise<boolean> {
   const gobin = await configDir('bin')
 
   const env = { GOBIN: gobin, GOPATH: gopath, GO111MODULE: 'on' }
-  const cmd = `${formatCmd(env, `go ${args}`)}`
+  const cmd = `go ${args}`
+  const opts = {
+    env: Object.assign({}, process.env, env),
+    cwd: gopath
+  }
 
   try {
-    await workspace.runCommand(cmd, gopath)
+    await runCommand(cmd, opts)
   } catch (ex) {
     workspace.showMessage(ex)
     return false
