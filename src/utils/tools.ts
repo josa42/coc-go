@@ -122,23 +122,6 @@ export async function execTool(source: string, args: string[], input?: string): 
 ////////////////////////////////////////////////////////////////////////////////
 
 
-export function formatCmd(env: { [key: string]: string }, cmd: string): string {
-
-  const keys = Object.keys(env)
-  if (keys.length > 0) {
-    const isWin = os.platform() === 'win32'
-
-    const tpl = isWin ? `set %s=%s &` : `%s=%s`
-    const pre = isWin ? `` : `env `
-
-    const setEnv = keys.map(k => format(tpl, k, env[k])).join(' ')
-
-    return `${pre}${setEnv} ${cmd}`
-  }
-
-  return cmd
-}
-
 function goBinName(source: string): string {
   return source.replace(/\/\.\.\.$/, '').split('/').pop()
 }
