@@ -170,7 +170,7 @@
                   "type": "boolean",
                   "default": true
                 },
-                "composite": {
+                "composites": {
                   "type": "boolean",
                   "default": true
                 },
