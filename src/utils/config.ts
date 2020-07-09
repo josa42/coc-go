@@ -1,7 +1,7 @@
-import fs from "fs"
 import path from "path"
 import os from "os"
 import { workspace } from "coc.nvim"
+import { createDir } from "./fs"
 
 interface State {
   storagePath?: string
@@ -143,9 +143,7 @@ export async function configDir(...names: string[]): Promise<string> {
   const dir = path.join(storage, ...names)
 
   return new Promise((resolve): void => {
-    if (!fs.existsSync(dir)) {
-      fs.mkdirSync(dir, { recursive: true })
-    }
+    createDir(dir)
     resolve(dir)
   })
 }
