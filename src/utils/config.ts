@@ -21,6 +21,15 @@ export interface GoConfig {
   tags: GoTagsConfig
   tests: GoTestsConfig
   checkForUpdates: "disabled" | "inform" | "ask" | "install"
+  disable: DisableConfig
+}
+
+export interface DisableConfig {
+  workspaceFolders: boolean
+  // TODO add if released: snippetCompletion: false,
+  // dynamicRegister: boolean
+  diagnostics: boolean
+  completion: boolean
 }
 
 export interface GoTagsConfig {

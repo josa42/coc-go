@@ -87,6 +87,27 @@
           },
           "description": "Arguments passed to `gopls` (Change requires `:CocRestart`)"
         },
+        "go.disable": {
+          "type": "object",
+          "description": "Disable gopls features",
+          "properties": {
+            "workspaceFolders": {
+              "type": "boolean",
+              "default": false,
+              "description": "Disable workspaceFolders feature (Change requires `:CocRestart`)"
+            },
+            "diagnostics": {
+              "type": "boolean",
+              "default": false,
+              "description": "Disable handle diagnostics (Change requires `:CocRestart`)"
+            },
+            "completion": {
+              "type": "boolean",
+              "default": false,
+              "description": "Disable completion feature (Change requires `:CocRestart`)"
+            }
+          }
+        },
         "go.goplsOptions": {
           "type": "object",
           "description": "See `gopls` documentation: https://github.com/golang/tools/blob/master/gopls/doc/settings.md",
