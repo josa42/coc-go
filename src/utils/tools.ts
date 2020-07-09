@@ -1,11 +1,9 @@
 import path from 'path'
 import fs from 'fs'
-import { format } from 'util'
 import { spawn } from 'child_process'
 import { workspace, runCommand } from 'coc.nvim'
 import which from 'which'
 import { configDir } from './config'
-import os from 'os'
 import cp from 'child_process'
 
 ////////////////////////////////////////////////////////////////////////////////
