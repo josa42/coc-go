@@ -52,9 +52,9 @@ async function registerGopls(context: ExtensionContext): Promise<void> {
   const clientOptions: LanguageClientOptions = {
     documentSelector: ['go'],
     initializationOptions: () => getConfig().goplsOptions,
-    disableWorkspaceFolders: config.disable.workspaceFolders,
-    disableDiagnostics: config.disable.diagnostics,
-    disableCompletion: config.disable.completion,
+    disableWorkspaceFolders: config.disableWorkspaceFolders,
+    disableDiagnostics: config.disableDiagnostics,
+    disableCompletion: config.disableCompletion,
     // TODO disableSnippetCompletion: config.disable.snippetCompletion,
   }
 
