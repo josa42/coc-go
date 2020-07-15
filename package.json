@@ -90,6 +90,7 @@
         "go.disable": {
           "type": "object",
           "description": "Disable gopls features",
+          "default": {},
           "properties": {
             "workspaceFolders": {
               "type": "boolean",
