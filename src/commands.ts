@@ -1,4 +1,5 @@
 import path from 'path'
+import fs from 'fs'
 import { LanguageClient, workspace } from 'coc.nvim'
 import { installGoBin, runGoTool } from './utils/tools'
 import checkLatestTag from './utils/checktag'
@@ -7,7 +8,7 @@ import { GOPLS, GOMODIFYTAGS, GOTESTS, GOPLAY, IMPL } from './binaries'
 import { compareVersions, isValidVersion } from './utils/versions'
 
 export async function version(): Promise<void> {
-  const v1 = require(path.resolve(__dirname, '..', 'package.json')).version
+  const v1 = await pkgVersion()
   const v2 = await goplsVersion() || 'unknown'
 
   workspace.showMessage(`Version: coc-go ${v1}; gopls ${v2}`, 'more')
@@ -62,7 +63,20 @@ export async function checkGopls(client: LanguageClient, mode: 'ask' | 'inform' 
   }
 }
 
-async function goplsVersion() {
+async function pkgVersion(): Promise<string> {
+  try {
+    const pkgPath = path.resolve(__dirname, '..', 'package.json')
+    const pkgContent = await fs.promises.readFile(pkgPath, 'utf8')
+    return JSON.parse(pkgContent).version
+  } catch (err) {
+    console.error(err)
+  }
+
+  return ''
+}
+
+
+async function goplsVersion(): Promise<string> {
   const [, versionOut] = await runGoTool("gopls", ["version"])
 
   const m = versionOut.trim().match(/^golang\.org\/x\/tools\/gopls (v?\d+\.\d+\.\d+)/)
