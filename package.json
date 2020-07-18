@@ -532,7 +532,7 @@
     ]
   },
   "devDependencies": {
-    "@types/mocha": "^7.0.2",
+    "@types/mocha": "^8.0.0",
     "@types/node": "^14.0.5",
     "@types/node-fetch": "^2.5.7",
     "@types/tmp": "^0.2.0",
@@ -542,7 +542,7 @@
     "coc.nvim": "0.0.77",
     "eslint": "^7.1.0",
     "eslint-config-josa-typescript": "^0.1.2",
-    "mocha": "^7.2.0",
+    "mocha": "^8.0.1",
     "rimraf": "^3.0.2",
     "tmp": "^0.2.1",
     "ts-node": "^8.10.1",
