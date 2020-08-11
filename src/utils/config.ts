@@ -58,6 +58,11 @@ export interface GoplsOptions {
   env: { string: string }
 
   /**
+   * Default: true
+   */
+  expandWorkspaceToModule: boolean
+
+  /**
    * Default: "SynopsisDocumentation"
    */
   hoverKind: "NoDocumentation" | "SynopsisDocumentation" | "FullDocumentation"
@@ -82,6 +87,12 @@ export interface GoplsOptions {
    * Default: {}
    */
   analyses: { string: boolean }
+
+  /**
+   * Experimental!
+   * Default: {}
+   */
+  annotations: { string: boolean }
 
   /**
    * Experimental!

@@ -4,6 +4,7 @@ run() {
   updateOptions
   updateAnalysis
   updateCodelenses
+  updateAnnotations
 }
 
 updateOptions() {
@@ -54,14 +55,18 @@ updateOptions() {
       delOptionProp "$o" "enum"
 
       option="$o"
+      desc_done=0
       is_enum=0
 
-    elif [[ "$option" != "" ]]; then
-      if [[ "$l" =~ 'Default:' ]] || [[ "$l" =~ 'Default value:' ]]; then
-        setOptionProp "$o" "default" "$(echo $l | sed 's/^Default: `\(.*\)`\./\1/' | sed 's/^Default value: `\(.*\)`\./\1/')"
+      echo "[$option]"
 
-      elif [[ "$(getOptionsDescription "$option")" == "" ]] && [[ "$(echo $l | grep '\.$')" != '' ]]; then
-        setOptionPropString "$option" "description" "${experPre}${l}"
+
+    elif [[ "$option" != "" ]]; then
+
+      # set default
+      if [[ "$l" =~ 'Default:' ]] || [[ "$l" =~ 'Default value:' ]]; then
+        setOptionProp "$o" "default" "$(echo $l | sed 's/^Default:  *//' | sed 's/^Default value:  *//' | sed 's/\.$//'| sed 's/^`\(.*\)`$/\1/')"
+
 
       elif [[ "$l" == *"be one of:" ]]; then
         is_enum=1
@@ -73,6 +78,31 @@ updateOptions() {
             appendOptionProp "$option" 'enum' "$item"
           fi
         fi
+
+      # Find description end
+      elif [[ "$(echo $l | grep '^```')" != '' ]] || [[ "$(echo $l | grep "Example Usage")" != '' ]]; then
+        desc_done=1
+
+      # Set description
+      elif [[ $desc_done -eq 0 ]] && [[ "$l" != '' ]]; then
+        desc_start=$(getOptionsDescription "$option")
+
+        if [[ "$desc_start" != "" ]]; then
+          desc="${desc_start} ${l}"
+
+        else
+          desc="${l}"
+        fi
+
+        if [[ "$(echo $desc | grep '\.')" != '' ]]; then
+          desc=$(echo $desc | sed 's/\..*/./')
+          desc_done=1
+        fi
+
+        setOptionPropString "$option" "description" "${experPre}${desc}"
+        echo "=> ${experPre}${desc}"
+
+
       fi
 
       sortOptionProps "$option"
@@ -82,9 +112,9 @@ updateOptions() {
 
 updateAnalysis() {
   jqUpdate '.contributes.configuration.properties["go.goplsOptions"].properties.analyses.type="object"'
-  jqUpdate '.contributes.configuration.properties["go.goplsOptions"].properties.analyses.required=[]'
   jqUpdate '.contributes.configuration.properties["go.goplsOptions"].properties.analyses.additionalProperties=false'
   jqUpdate '.contributes.configuration.properties["go.goplsOptions"].properties.analyses.properties={}'
+  jqUpdate 'del(.contributes.configuration.properties["go.goplsOptions"].properties.analyses.patternProperties)'
 
   IFS=$'\n'; for l in $(curl -sS 'https://raw.githubusercontent.com/golang/tools/master/gopls/doc/analyzers.md'); do
 
@@ -103,19 +133,36 @@ updateAnalysis() {
 }
 
 updateCodelenses() {
-  jqUpdate '.contributes.configuration.properties["go.goplsOptions"].properties.codelens.description="[EXPERIMENTAL]"'
+  # jqUpdate '.contributes.configuration.properties["go.goplsOptions"].properties.codelens.description="[EXPERIMENTAL]"'
   jqUpdate '.contributes.configuration.properties["go.goplsOptions"].properties.codelens.type="object"'
-  jqUpdate '.contributes.configuration.properties["go.goplsOptions"].properties.codelens.required=[]'
   jqUpdate '.contributes.configuration.properties["go.goplsOptions"].properties.codelens.additionalProperties=false'
   jqUpdate '.contributes.configuration.properties["go.goplsOptions"].properties.codelens.properties={}'
+  jqUpdate 'del(.contributes.configuration.properties["go.goplsOptions"].properties.codelens.patternProperties)'
 
-  declare -a options=("generate:true" "upgrade.dependency:true" "test:false")
+  declare -a options=("generate:true" "upgrade.dependency:true" "test:false" "gc_details:false")
 
   for e in ${options[@]}; do
     k="$(echo $e | sed 's/:.*//')"
     v="$(echo $e | sed 's/.*://')"
     jqUpdate '.contributes.configuration.properties["go.goplsOptions"].properties.codelens.properties["'$k'"].type="boolean"'
     jqUpdate '.contributes.configuration.properties["go.goplsOptions"].properties.codelens.properties["'$k'"].default='$v
+  done
+}
+
+updateAnnotations() {
+  jqUpdate '.contributes.configuration.properties["go.goplsOptions"].properties.annotations.description="[EXPERIMENTAL]"'
+  jqUpdate '.contributes.configuration.properties["go.goplsOptions"].properties.annotations.type="object"'
+  jqUpdate '.contributes.configuration.properties["go.goplsOptions"].properties.annotations.additionalProperties=false'
+  jqUpdate '.contributes.configuration.properties["go.goplsOptions"].properties.annotations.properties={}'
+  jqUpdate 'del(.contributes.configuration.properties["go.goplsOptions"].properties.annotations.patternProperties)'
+
+  declare -a options=("noBounds:false" "noEscape:false" "noInline:false" "noNilcheck:false")
+
+  for e in ${options[@]}; do
+    k="$(echo $e | sed 's/:.*//')"
+    v="$(echo $e | sed 's/.*://')"
+    jqUpdate '.contributes.configuration.properties["go.goplsOptions"].properties.annotations.properties["'$k'"].type="boolean"'
+    jqUpdate '.contributes.configuration.properties["go.goplsOptions"].properties.annotations.properties["'$k'"].default='$v
   done
 }
 
@@ -172,6 +219,7 @@ sortOptionProps() {
   local default="$(getOptionProp "$key" "default")"
   local items="$(getOptionProp "$key" "items")"
   local patternProperties="$(getOptionProp "$key" "patternProperties")"
+  local properties="$(getOptionProp "$key" "properties")"
   local enum="$(getOptionProp "$key" "enum")"
 
   jqUpdate '.contributes.configuration.properties["go.goplsOptions"].properties["'$key'"] = {}'
@@ -179,7 +227,9 @@ sortOptionProps() {
   [[ "$type" != "" ]]              && setOptionPropString "$key" 'type' "$type"
   [[ "$default" != "" ]]           && setOptionProp       "$key" 'default' "$default"
   [[ "$items" != "" ]]             && setOptionProp       "$key" 'items' "$items"
-  [[ "$patternProperties" != "" ]] && setOptionProp       "$key" 'patternProperties' "$patternProperties"
+  [[ "$patternProperties" != "" ]] && \
+  [[ "$properties" = "" ]]         && setOptionProp       "$key" 'patternProperties' "$patternProperties"
+  [[ "$properties" != "" ]]        && setOptionProp       "$key" 'properties' "$properties"
   [[ "$enum" != "" ]]              && setOptionProp       "$key" 'enum' "$enum"
   [[ "$desc" != "" ]]              && setOptionPropString "$key" 'description' "$desc"
 }
@@ -209,6 +259,7 @@ parseType() {
     string|boolean)   echo $str ;;
     'array of strings') echo 'array' ;;
     'map of string to value') echo "object" ;;
+    'map[string]bool') echo 'object' ;;
   esac
 }
 
@@ -217,6 +268,7 @@ parseItemType() {
   case $str in
     'map of string to value') echo 'string' ;;
     'array of strings') echo 'string' ;;
+    "map[string]bool") echo 'bool' ;;
   esac
 }
 
