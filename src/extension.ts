@@ -45,7 +45,10 @@ async function registerGopls(context: ExtensionContext): Promise<void> {
 
   const serverOptions: ServerOptions = {
     command,
-    args: config.goplsArgs
+    args: config.goplsArgs,
+    options: {
+      env: config.goplsEnv
+    }
   }
 
   // https://github.com/neoclide/coc.nvim/blob/master/src/language-client/client.ts#L684

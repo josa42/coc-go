@@ -87,6 +87,15 @@
           },
           "description": "Arguments passed to `gopls` (Change requires `:CocRestart`)"
         },
+        "go.goplsEnv": {
+          "type": "object",
+          "patternProperties": {
+            "^.+$": {
+              "type": "string"
+            }
+          },
+          "description": "ENV passed to `gopls` (Change requires `:CocRestart`)"
+        },
         "go.disable": {
           "type": "object",
           "description": "Disable gopls features",

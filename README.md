@@ -82,6 +82,7 @@ installed.
 | ‣ `workspaceFolders`        | Disable workspaceFolders feature (Change requires `:CocRestart`)                                                                                            | false                 |
 | **`go.enable`**             | Enable Go extension                                                                                                                                         |                       |
 | **`go.goplsArgs`**          | Arguments passed to `gopls` (Change requires `:CocRestart`)                                                                                                 |                       |
+| **`go.goplsEnv`**           | ENV passed to `gopls` (Change requires `:CocRestart`)                                                                                                       |                       |
 | **`go.goplsOptions`**       | See [`gopls` documentation](https://github.com/golang/tools/blob/master/gopls/doc/settings.md)                                                              |                       |
 | ‣ `analyses`                | **EXPERIMENTAL** Analyses specify analyses that the user would like to enable or disable.                                                                   |                       |
 | ‣ `annotations`             | **EXPERIMENTAL**                                                                                                                                            |                       |
@@ -163,7 +164,7 @@ Trigger completion in `coc-settings.json` to get complete list.
 
 ## FAQ
 
-### How does `coc-go` compare to `vim-go`?**
+### How does `coc-go` compare to `vim-go`?
 
 With `coc-go` I do not aim to recreate the features of `vim-go`. For now, the
 main goal is to provide a convenient way to install `gopls` and use it with
@@ -173,6 +174,19 @@ If you need more than the features provided by `gopls`, you are probably better
 of with [`vim-go`](https://github.com/fatih/vim-go) or
 [`govim`](https://github.com/govim/govim).
 
+### How to use `coc-go` with wasm?
+
+Add this to you (local) `coc-settings.json` (run `:CocLocalConfig`).
+
+```json
+{
+  "go.goplsEnv": {
+    "GOOS": "js",
+    "GOARCH": "wasm",
+  }
+}
+```
+
 ## License
 
-[MIT © Josa Gesell](LICENSE)
+[MIT © Josa Gesell](LICENSE).
