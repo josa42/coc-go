@@ -1,6 +1,6 @@
 import { commands, ExtensionContext, LanguageClient, ServerOptions, workspace, services, LanguageClientOptions } from 'coc.nvim'
 import { installGoBin, goBinPath, commandExists } from './utils/tools'
-import { installGopls, installGomodifytags, installGotests, version, installGoplay, checkGopls, installImpl } from './commands'
+import { installGopls, installGomodifytags, installGotests, version, installGoplay, checkGopls, installImpl, installTools } from './commands'
 import { addTags, removeTags, clearTags } from './utils/modify-tags'
 import { setStoragePath, getConfig } from './utils/config'
 import { activeTextDocument } from './editor'
@@ -24,6 +24,7 @@ export async function activate(context: ExtensionContext): Promise<void> {
   registerTags(context)
   registerPlaygroud(context)
   registerGoImpl(context)
+  registerTools(context)
 }
 
 async function registerGeneral(context: ExtensionContext): Promise<void> {
@@ -170,6 +171,15 @@ async function registerPlaygroud(context: ExtensionContext): Promise<void> {
     commands.registerCommand(
       "go.playground",
       async () => openPlayground(await activeTextDocument())
+    )
+  )
+}
+
+async function registerTools(context: ExtensionContext): Promise<void> {
+  context.subscriptions.push(
+    commands.registerCommand(
+      "go.install.tools",
+      () => installTools()
     )
   )
 }

@@ -45,6 +45,7 @@
     "onCommand:go.install.gopls",
     "onCommand:go.install.gotests",
     "onCommand:go.install.impl",
+    "onCommand:go.install.tools",
     "onCommand:go.version"
   ],
   "contributes": {
@@ -492,6 +493,11 @@
         "title": "Install / update impl",
         "category": "Go",
         "command": "go.install.impl"
+      },
+      {
+        "title": "Install / update all tools",
+        "category": "Go",
+        "command": "go.install.tools"
       },
       {
         "title": "Run on go playground",
