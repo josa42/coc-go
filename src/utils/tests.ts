@@ -22,6 +22,29 @@ export async function generateTestsExported(document: TextDocument): Promise<voi
   await runGotests(document, ["-exported"]) && await openTests(document)
 }
 
+export async function generateTestsFunction(document: TextDocument): Promise<void> {
+  if (isTest(document)) {
+    workspace.showMessage("Document is a test file", "error")
+    return
+  }
+
+  const { line } = await workspace.getCursorPosition()
+  const text = await document.getText({
+    start: { line, character: 0 },
+    end: { line, character: Infinity },
+  })
+
+  workspace.showMessage(text)
+
+  const funcName = extractFunctionName(text)
+  if (!funcName) {
+    workspace.showMessage("No function found", "error")
+    return
+  }
+
+  await runGotests(document, ["-only", `^${funcName}$`]) && await openTests(document)
+}
+
 export async function toogleTests(document: TextDocument): Promise<void> {
   const targetURI = isTest(document)
     ? sourceURI(document)
@@ -62,5 +85,14 @@ async function runGotests(document: TextDocument, args: string[]): Promise<boole
   } catch (err) {
     workspace.showMessage(`Error: ${err}`, "error")
     return false
+  }
+}
+
+////////////////////////////////////////////////////////////////////////////////
+
+export function extractFunctionName(line: string): string | null {
+  const m = /^func +(\([^)]+\) +)?([^\s(]+)/.exec(line)
+  if (m) {
+    return m[2]
   }
 }

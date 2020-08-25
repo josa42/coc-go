@@ -39,6 +39,7 @@ Additional to commands provided by gopls, this extensions provides these command
 | **`go.tags.remove.prompt`**     | Remove tags from struct fields (prompt)            |
 | **`go.test.generate.exported`** | Generate unit tests for exported functions in file |
 | **`go.test.generate.file`**     | Generate unit tests for file                       |
+| **`go.test.generate.function`** | Generate unit tests for current function           |
 | **`go.test.toggle`**            | Toggle test file                                   |
 | **`go.version`**                | Print extension version                            |
 

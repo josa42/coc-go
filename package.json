@@ -555,6 +555,11 @@
         "command": "go.test.generate.file"
       },
       {
+        "title": "Generate unit tests for current function",
+        "category": "Go",
+        "command": "go.test.generate.function"
+      },
+      {
         "title": "Toggle test file",
         "category": "Go",
         "command": "go.test.toggle"

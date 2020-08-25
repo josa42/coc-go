@@ -5,7 +5,7 @@ import { addTags, removeTags, clearTags } from './utils/modify-tags'
 import { setStoragePath, getConfig } from './utils/config'
 import { activeTextDocument } from './editor'
 import { GOPLS } from './binaries'
-import { generateTestsAll, generateTestsExported, toogleTests } from './utils/tests'
+import { generateTestsAll, generateTestsExported, toogleTests, generateTestsFunction } from './utils/tests'
 import { openPlayground } from './utils/playground'
 import { generateImplStubs } from './utils/impl'
 
@@ -113,6 +113,10 @@ async function registerTest(context: ExtensionContext): Promise<void> {
     commands.registerCommand(
       "go.test.generate.exported",
       async () => generateTestsExported(await activeTextDocument())
+    ),
+    commands.registerCommand(
+      "go.test.generate.function",
+      async () => generateTestsFunction(await activeTextDocument())
     ),
     commands.registerCommand(
       "go.test.toggle",
