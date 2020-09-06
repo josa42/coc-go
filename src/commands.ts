@@ -34,7 +34,7 @@ export async function checkGopls(client: LanguageClient, mode: 'ask' | 'inform' 
     let install = false
     switch (compareVersions(latest, current)) {
       case 0:
-        workspace.showMessage(`[gopls] up-to-date: ${current}`)
+        workspace.showMessage(`[gopls] up-to-date: ${current}`, 'more')
         break
       case 1:
         switch (mode) {
@@ -51,7 +51,7 @@ export async function checkGopls(client: LanguageClient, mode: 'ask' | 'inform' 
 
         break
       case -1:
-        workspace.showMessage(`[gopls] current: ${current} | latest: ${latest}`)
+        workspace.showMessage(`[gopls] current: ${current} | latest: ${latest}`, 'more')
         break
     }
 
@@ -59,7 +59,7 @@ export async function checkGopls(client: LanguageClient, mode: 'ask' | 'inform' 
       await installGopls(client)
     }
   } catch (e) {
-    workspace.showMessage(e.toString())
+    workspace.showMessage(e.toString(), 'error')
   }
 }
 

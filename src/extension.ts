@@ -1,4 +1,5 @@
 import { commands, ExtensionContext, LanguageClient, ServerOptions, workspace, services, LanguageClientOptions } from 'coc.nvim'
+import { spawn, ChildProcess, SpawnOptionsWithoutStdio } from 'child_process'
 import { installGoBin, goBinPath, commandExists } from './utils/tools'
 import { installGopls, installGomodifytags, installGotests, version, installGoplay, checkGopls, installImpl, installTools } from './commands'
 import { addTags, removeTags, clearTags } from './utils/modify-tags'
@@ -50,12 +51,24 @@ async function registerGopls(context: ExtensionContext): Promise<void> {
     return
   }
 
-  const serverOptions: ServerOptions = {
-    command,
-    args: config.goplsArgs,
-    options: {
-      env: config.goplsEnv
-    }
+  const args = config.goplsArgs ? [...config.goplsArgs] : []
+
+  if (!args.find(arg => arg.startsWith('-remote'))) {
+    // Use daemon by default
+    args.push('-remote=auto')
+  }
+
+  // TMPDIR needs to be resetted, because its altered by coc.nvim, which breaks
+  // the automatic deamon launching of gopls.
+  // See: https://github.com/neoclide/coc.nvim/commit/bdd9a9e1401fe6fdd57a9bd078e3651ecf1e0202
+
+  const server = (): Promise<ChildProcess> => {
+    return new Promise(resolve => {
+      resolve(spawn(command, args, {
+        cwd: workspace.cwd,
+        env: { ...process.env, TMPDIR: '', ...config.goplsEnv },
+      }))
+    })
   }
 
   // https://github.com/neoclide/coc.nvim/blob/master/src/language-client/client.ts#L684
@@ -68,7 +81,7 @@ async function registerGopls(context: ExtensionContext): Promise<void> {
     // TODO disableSnippetCompletion: config.disable.snippetCompletion,
   }
 
-  const client = new LanguageClient('go', 'gopls', serverOptions, clientOptions)
+  const client = new LanguageClient('go', 'gopls', server, clientOptions)
 
   if (config.checkForUpdates !== 'disabled' && !config.goplsPath) {
     await checkGopls(client, config.checkForUpdates)
