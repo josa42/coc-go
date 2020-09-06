@@ -25,9 +25,9 @@ export async function installGopls(client: LanguageClient): Promise<void> {
 
 export async function checkGopls(client: LanguageClient, mode: 'ask' | 'inform' | 'install'): Promise<void> {
 
-  const [latest, current] = await Promise.all([
+  const [current, latest] = await Promise.all([
+    goplsVersion(),
     checkLatestTag("golang/tools", /^gopls\//),
-    goplsVersion()
   ])
 
   try {
@@ -81,7 +81,7 @@ async function goplsVersion(): Promise<string> {
 
   const m = versionOut.trim().match(/^golang\.org\/x\/tools\/gopls (v?\d+\.\d+\.\d+)/)
   if (m && isValidVersion(m[1])) {
-    return m[1]
+    return m[1].replace(/^v/, '')
   }
 
   return ''

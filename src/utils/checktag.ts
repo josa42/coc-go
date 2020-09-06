@@ -30,6 +30,6 @@ export default async function checkLatestTag(repo: string, prefixFilter?: RegExp
 
 
   return tags.length > 0
-    ? tags[0]
+    ? tags[0].replace(/^v/, '')
     : ''
 }

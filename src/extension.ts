@@ -39,8 +39,8 @@ async function registerGeneral(context: ExtensionContext): Promise<void> {
 async function registerGopls(context: ExtensionContext): Promise<void> {
   const config = getConfig()
 
-  const command = config.goplsPath || await goBinPath(GOPLS)
-  if (!await commandExists(command) && !await installGoBin(GOPLS)) {
+  const command = await goplsPath(config.goplsPath)
+  if (!command) {
     return
   }
 
@@ -64,7 +64,7 @@ async function registerGopls(context: ExtensionContext): Promise<void> {
 
   const client = new LanguageClient('go', 'gopls', serverOptions, clientOptions)
 
-  if (config.checkForUpdates !== 'disabled') {
+  if (config.checkForUpdates !== 'disabled' && !config.goplsPath) {
     await checkGopls(client, config.checkForUpdates)
   }
 
@@ -84,6 +84,23 @@ async function registerGopls(context: ExtensionContext): Promise<void> {
       () => installGopls(client)
     )
   )
+}
+
+async function goplsPath(goplsPath: string): Promise<string | null> {
+  if (goplsPath) {
+    if (!await commandExists(goplsPath)) {
+      workspace.showMessage(`goplsPath is configured ("${goplsPath}"), but does not exist!`, 'error')
+      return null
+    }
+
+    return goplsPath
+  }
+
+  if (!await installGoBin(GOPLS)) {
+    return
+  }
+
+  return goBinPath(GOPLS)
 }
 
 async function registerGoImpl(context: ExtensionContext): Promise<void> {

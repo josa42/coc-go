@@ -1,10 +1,14 @@
 import path from 'path'
 import fs from 'fs'
-import { spawn } from 'child_process'
-import { workspace, runCommand } from 'coc.nvim'
+import util from 'util'
+import { spawn, exec, execFile, ExecOptions } from 'child_process'
+import { workspace } from 'coc.nvim'
 import which from 'which'
 import { configDir } from './config'
-import cp from 'child_process'
+
+const runExec = util.promisify(exec)
+
+const isWin = process.platform === 'win32'
 
 ////////////////////////////////////////////////////////////////////////////////
 
@@ -19,7 +23,7 @@ export async function installGoBin(source: string, force = false): Promise<boole
   statusItem.text = `Installing '${name}'`
   statusItem.show()
 
-  const success = await goRun(`get ${source}@latest`)
+  const success = await goRun(`get ${source}@latest`) && await goBinExists(name)
 
   if (success) {
     workspace.showMessage(`Installed '${name}'`)
@@ -49,6 +53,9 @@ export async function runGoTool(name: string, args: string[] = []): Promise<[num
 }
 
 export async function commandExists(command: string): Promise<boolean> {
+  if (path.isAbsolute(command)) {
+    return fileExists(command)
+  }
   return new Promise((resolve): void => { which(command, (err) => resolve(err == null)) })
 }
 
@@ -57,24 +64,38 @@ export async function commandExists(command: string): Promise<boolean> {
 async function goBinExists(source: string): Promise<boolean> {
   const name = goBinName(source)
   const bin = await goBinPath(name)
-  return new Promise((resolve): void => fs.open(bin, 'r', (err) => resolve(err === null)))
+  return fileExists(bin)
+}
+
+async function fileExists(path: string): Promise<boolean> {
+  return new Promise((resolve): void => fs.open(path, 'r', (err) => resolve(err === null)))
 }
 
 async function goRun(args: string): Promise<boolean> {
   const gopath = await configDir('tools')
   const gobin = await configDir('bin')
 
-  const env = { GOBIN: gobin, GOPATH: gopath, GO111MODULE: 'on' }
-  const cmd = `go ${args}`
-  const opts = {
+  const env = {
+    GO111MODULE: 'on',
+    GOBIN: gobin,
+    GOPATH: gopath,
+    GOROOT: '',
+    GOTOOLDIR: '',
+  }
+  const cmd = isWin
+    ? `go ${args}`
+    : `GOBIN=${gobin} go ${args}`
+  const opts: ExecOptions = {
     env: Object.assign({}, process.env, env),
-    cwd: gopath
+    cwd: gopath,
+    shell: isWin ? undefined : process.env.SHELL,
+    windowsHide: true,
   }
 
   try {
-    await runCommand(cmd, opts)
+    await runExec(cmd, opts)
   } catch (ex) {
-    workspace.showMessage(ex)
+    workspace.showMessage(ex, 'error')
     return false
   }
 
@@ -89,7 +110,7 @@ export async function execTool(source: string, args: string[], input?: string): 
 
   const [bin, name] = await Promise.all([
     goBinPath(source),
-    goBinName(source)
+    goBinName(source),
   ])
 
   if (!await commandExists(bin)) {
@@ -97,7 +118,7 @@ export async function execTool(source: string, args: string[], input?: string): 
   }
 
   return new Promise((resolve, reject) => {
-    const p = cp.execFile(bin, args, { cwd: workspace.cwd }, async (err: Error, stdout: Buffer, stderr: Buffer) => {
+    const p = execFile(bin, args, { cwd: workspace.cwd }, async (err: Error, stdout: Buffer, stderr: Buffer) => {
       if (err && (err as execError).code === "ENOENT") {
         return reject(`Error: Command ${name} not found! Run "CocCommand go.install.${name}" to install it and try again.`)
       }
