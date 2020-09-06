@@ -18,6 +18,7 @@ export interface GoConfig {
   goplsPath: string
   goplsArgs: string[]
   goplsEnv: { string: string }
+  goplsUseDaemon: boolean
   goplsOptions: GoplsOptions
   tags: GoTagsConfig
   tests: GoTestsConfig

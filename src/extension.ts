@@ -14,6 +14,7 @@ const restartConfigs = [
   'go.goplsArgs',
   'go.goplsOptions',
   'go.goplsPath',
+  'go.goplsUseDaemon',
 ]
 
 export async function activate(context: ExtensionContext): Promise<void> {
@@ -53,7 +54,7 @@ async function registerGopls(context: ExtensionContext): Promise<void> {
 
   const args = config.goplsArgs ? [...config.goplsArgs] : []
 
-  if (!args.find(arg => arg.startsWith('-remote'))) {
+  if (config.goplsUseDaemon !== false && !args.find(arg => arg.startsWith('-remote'))) {
     // Use daemon by default
     args.push('-remote=auto')
   }

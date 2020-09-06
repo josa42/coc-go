@@ -96,6 +96,11 @@
           },
           "description": "ENV passed to `gopls` (Change requires `:CocRestart`)"
         },
+        "go.goplsUseDaemon": {
+          "type": "boolean",
+          "default": true,
+          "description": "Run gopls as daemon"
+        },
         "go.disable": {
           "type": "object",
           "description": "Disable gopls features",

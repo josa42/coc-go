@@ -104,6 +104,7 @@ installed.
 | ‣ `symbolMatcher`           | **EXPERIMENTAL**                                                                                                                                            | caseInsensitive       |
 | ‣ `usePlaceholders`         | If true, then completion responses may contain placeholders for function parameters or struct fields.                                                       | false                 |
 | **`go.goplsPath`**          | Path to `gopls` bin (Change requires `:CocRestart`)                                                                                                         |                       |
+| **`go.goplsUseDaemon`**     | Run gopls as daemon                                                                                                                                         | true                  |
 | **`go.tags`**               |                                                                                                                                                             |                       |
 | ‣ `options`                 | Comma separated tag=options pairs to be used by `go.tags.add` command                                                                                       | json=omitempty        |
 | ‣ `skipUnexported`          | If true, skip unexported fields                                                                                                                             | false                 |
@@ -188,6 +189,13 @@ Add this to you (local) `coc-settings.json` (run `:CocLocalConfig`).
   }
 }
 ```
+
+### Running gopls as a daemon
+
+`coc-go` runs `gopls` as shared daemon by passing `-remote=auto` to `gopls`. To
+disable this behavior set `go.goplsUseDaemon` to `false`.
+
+See [Running gopls as a daemon](https://github.com/golang/tools/blob/master/gopls/doc/daemon.md) for more information.
 
 ## License
 
