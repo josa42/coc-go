@@ -53,8 +53,7 @@
       {
         "filetype": "go",
         "patterns": [
-          "go.mod",
-          "glide.yaml"
+          "go.mod"
         ]
       }
     ],
