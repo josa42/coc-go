@@ -9,6 +9,12 @@ import { generateTestsAll, generateTestsExported, toogleTests, generateTestsFunc
 import { openPlayground } from './utils/playground'
 import { generateImplStubs } from './utils/impl'
 
+const restartConfigs = [
+  'go.goplsArgs',
+  'go.goplsOptions',
+  'go.goplsPath',
+]
+
 export async function activate(context: ExtensionContext): Promise<void> {
 
   setStoragePath(context.storagePath)
@@ -73,7 +79,7 @@ async function registerGopls(context: ExtensionContext): Promise<void> {
 
     // restart gopls if options changed
     workspace.onDidChangeConfiguration(async (e) => {
-      if (e.affectsConfiguration('go.goplsOptions')) {
+      if (restartConfigs.find(k => e.affectsConfiguration(k))) {
         await client.stop()
         client.restart()
       }
