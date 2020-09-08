@@ -1,5 +1,5 @@
-import { commands, ExtensionContext, LanguageClient, ServerOptions, workspace, services, LanguageClientOptions } from 'coc.nvim'
-import { spawn, ChildProcess, SpawnOptionsWithoutStdio } from 'child_process'
+import { commands, ExtensionContext, LanguageClient, workspace, services, LanguageClientOptions } from 'coc.nvim'
+import { spawn, ChildProcess } from 'child_process'
 import { installGoBin, goBinPath, commandExists } from './utils/tools'
 import { installGopls, installGomodifytags, installGotests, version, installGoplay, checkGopls, installImpl, installTools } from './commands'
 import { addTags, removeTags, clearTags } from './utils/modify-tags'
