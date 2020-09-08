@@ -5,7 +5,7 @@ for [`coc.nvim`](https://github.com/neoclide/coc.nvim).
 
 ## Install
 
-In your vim/neovim, run command:
+In your vim/neovim, run this command:
 
 ```
 :CocInstall coc-go
@@ -55,13 +55,13 @@ Additional to commands provided by gopls, this extensions provides these command
 
 - **Add missing imports on save**
 
-  ```
+  ```viml
   autocmd BufWritePre *.go :call CocAction('organizeImport')
   ```
 
 - **Map Keys to command**
 
-  ```
+  ```viml
   autocmd FileType go nmap gtj :CocCommand go.tags.add json<cr>
   autocmd FileType go nmap gty :CocCommand go.tags.add yaml<cr>
   autocmd FileType go nmap gtx :CocCommand go.tags.clear<cr>
@@ -190,7 +190,7 @@ Add this to you (local) `coc-settings.json` (run `:CocLocalConfig`).
 }
 ```
 
-### Running gopls as a daemon
+### Running `gopls` as a daemon
 
 `coc-go` runs `gopls` as shared daemon by passing `-remote=auto` to `gopls`. To
 disable this behavior set `go.goplsUseDaemon` to `false`.

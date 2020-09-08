@@ -9,8 +9,7 @@
       "error",
       {
         "ignoreCase": false,
-        "ignoreDeclarationSort": true,
-        "ignoreMemberSort": false
+        "ignoreDeclarationSort": true
       }
     ]
   }
