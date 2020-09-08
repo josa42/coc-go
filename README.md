@@ -77,12 +77,12 @@ installed.
 
 | Key                         | Description                                                                                                                                                 | Default               |
 |-----------------------------|-------------------------------------------------------------------------------------------------------------------------------------------------------------|-----------------------|
-| **`go.checkForUpdates`**    | **EXPERIMENTAL** Check for gopls updates on start.                                                                                                          |                       |
-| **`go.disable`**            | Disable gopls features                                                                                                                                      |                       |
+| **`go.checkForUpdates`**    | **EXPERIMENTAL** Check for gopls updates on start.                                                                                                          | disabled              |
+| **`go.disable`**            | Disable gopls features                                                                                                                                      | {}                    |
 | ‣ `completion`              | Disable completion feature (Change requires `:CocRestart`)                                                                                                  | false                 |
 | ‣ `diagnostics`             | Disable handle diagnostics (Change requires `:CocRestart`)                                                                                                  | false                 |
 | ‣ `workspaceFolders`        | Disable workspaceFolders feature (Change requires `:CocRestart`)                                                                                            | false                 |
-| **`go.enable`**             | Enable Go extension                                                                                                                                         |                       |
+| **`go.enable`**             | Enable Go extension                                                                                                                                         | true                  |
 | **`go.goplsArgs`**          | Arguments passed to `gopls` (Change requires `:CocRestart`)                                                                                                 |                       |
 | **`go.goplsEnv`**           | ENV passed to `gopls` (Change requires `:CocRestart`)                                                                                                       |                       |
 | **`go.goplsOptions`**       | See [`gopls` documentation](https://github.com/golang/tools/blob/master/gopls/doc/settings.md)                                                              |                       |
@@ -101,7 +101,7 @@ installed.
 | ‣ `local`                   | This is the equivalent of the `goimports -local` flag, which puts imports beginning with this string after 3rd-party packages.                              |                       |
 | ‣ `matcher`                 | **EXPERIMENTAL**                                                                                                                                            | caseInsensitive       |
 | ‣ `staticcheck`             | **EXPERIMENTAL** If true, it enables the use of the staticcheck.                                                                                            |                       |
-| ‣ `symbolMatcher`           | **EXPERIMENTAL**                                                                                                                                            | caseInsensitive       |
+| ‣ `symbolMatcher`           | **EXPERIMENTAL**                                                                                                                                            | fuzzy                 |
 | ‣ `usePlaceholders`         | If true, then completion responses may contain placeholders for function parameters or struct fields.                                                       | false                 |
 | **`go.goplsPath`**          | Path to `gopls` bin (Change requires `:CocRestart`)                                                                                                         |                       |
 | **`go.goplsUseDaemon`**     | Run gopls as daemon                                                                                                                                         | true                  |
@@ -112,7 +112,7 @@ installed.
 | ‣ `transform`               | Transformation rule used by `go.tags.add` command to add tags                                                                                               | snakecase             |
 | **`go.tests`**              |                                                                                                                                                             |                       |
 | ‣ `generateFlags`           | Additional command line flags to pass to `gotests` for generating tests.                                                                                    | []                    |
-| **`go.trace.server`**       | Trace level of gopls                                                                                                                                        |                       |
+| **`go.trace.server`**       | Trace level of gopls                                                                                                                                        | off                   |
 
 Trigger completion in `coc-settings.json` to get complete list.
 

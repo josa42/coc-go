@@ -140,7 +140,7 @@ export interface GoplsOptions {
 
   /**
    * Experimental!
-   * Default: "caseInsensitive"
+   * Default: "fuzzy"
    */
   symbolMatcher: "fuzzy" | "caseSensitive" | "caseInsensitive"
 }

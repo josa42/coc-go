@@ -409,7 +409,7 @@
             },
             "symbolMatcher": {
               "type": "string",
-              "default": "caseInsensitive",
+              "default": "fuzzy",
               "enum": [
                 "fuzzy",
                 "caseSensitive",

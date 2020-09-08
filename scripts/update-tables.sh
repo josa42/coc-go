@@ -76,11 +76,12 @@ optionsTable() {
 
   for k in $(query '.contributes.configuration.properties | keys[]' | sort); do
     desc="$(desc "$k")"
+    def="$(defaultVal "$k")"
     if [[ "$desc" = *"DEPRECATED"* ]]; then
       continue
     fi
 
-    printf "| %-${kl}s | %-${vl}s | %-${dl}s |\n" "**\`$k\`**" "$desc"
+    printf "| %-${kl}s | %-${vl}s | %-${dl}s |\n" "**\`$k\`**" "$desc" "$def"
 
     for sk in $(query '.contributes.configuration.properties["'$k'"].properties | keys[]' | sort); do
       desc="$(desc "$k" "$sk")"
