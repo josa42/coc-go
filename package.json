@@ -40,6 +40,7 @@
   },
   "activationEvents": [
     "onLanguage:go",
+    "onLanguage:gomod",
     "onCommand:go.install.gomodifytags",
     "onCommand:go.install.goplay",
     "onCommand:go.install.gopls",
@@ -52,6 +53,12 @@
     "rootPatterns": [
       {
         "filetype": "go",
+        "patterns": [
+          "go.mod"
+        ]
+      },
+      {
+        "filetype": "gomod",
         "patterns": [
           "go.mod"
         ]

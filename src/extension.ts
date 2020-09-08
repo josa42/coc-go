@@ -74,7 +74,7 @@ async function registerGopls(context: ExtensionContext): Promise<void> {
 
   // https://github.com/neoclide/coc.nvim/blob/master/src/language-client/client.ts#L684
   const clientOptions: LanguageClientOptions = {
-    documentSelector: ['go'],
+    documentSelector: ['go', 'gomod'],
     initializationOptions: () => getConfig().goplsOptions,
     disableWorkspaceFolders: config.disable.workspaceFolders,
     disableDiagnostics: config.disable.diagnostics,
