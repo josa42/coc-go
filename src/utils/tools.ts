@@ -23,6 +23,12 @@ export async function installGoBin(source: string, force = false): Promise<boole
   statusItem.text = `Installing '${name}'`
   statusItem.show()
 
+  if (!await goModExists() && !await goRun(`mod init coc-go-data`)) {
+    workspace.showMessage('Failed to initialize go.mod', 'error')
+    statusItem.hide()
+    return false
+  }
+
   const success = await goRun(`get ${source}@latest`) && await goBinExists(name)
 
   if (success) {
@@ -65,6 +71,12 @@ async function goBinExists(source: string): Promise<boolean> {
   const name = goBinName(source)
   const bin = await goBinPath(name)
   return fileExists(bin)
+}
+
+async function goModExists(): Promise<boolean> {
+  const gopath = await configDir('tools')
+  const name = path.join(gopath, 'go.mod')
+  return fileExists(name)
 }
 
 async function fileExists(path: string): Promise<boolean> {
