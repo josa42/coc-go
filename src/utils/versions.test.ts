@@ -1,5 +1,5 @@
 import assert from 'assert'
-import { version, parseVersion, compareVersions, isValidVersion } from './versions'
+import { compareVersions, isValidVersion, parseVersion, version } from './versions'
 
 const v0: version = [0, 0, 0]
 const v1: version = [1, 0, 0]

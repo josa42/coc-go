@@ -3,5 +3,15 @@
   "extends": ["josa-typescript"],
   "env": {
     "mocha": true
+  },
+  "rules": {
+    "sort-imports": [
+      "error",
+      {
+        "ignoreCase": false,
+        "ignoreDeclarationSort": true,
+        "ignoreMemberSort": false
+      }
+    ]
   }
 }

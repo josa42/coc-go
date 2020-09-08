@@ -1,7 +1,7 @@
 import path from 'path'
 import fs from 'fs'
 import util from 'util'
-import { spawn, exec, execFile, ExecOptions } from 'child_process'
+import { ExecOptions, exec, execFile, spawn } from 'child_process'
 import { workspace } from 'coc.nvim'
 import which from 'which'
 import { configDir } from './config'

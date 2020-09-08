@@ -1,4 +1,4 @@
-import { TextDocument, Position, TextEdit } from 'vscode-languageserver-protocol'
+import { Position, TextDocument, TextEdit } from 'vscode-languageserver-protocol'
 import { workspace } from 'coc.nvim'
 
 import { GoTagsConfig } from './config'
