@@ -1,5 +1,6 @@
 import { Position, TextDocument, TextEdit } from 'vscode-languageserver-protocol'
 import { workspace } from 'coc.nvim'
+import { URI } from 'vscode-uri'
 
 import { GoTagsConfig } from './config'
 import { execTool } from './tools'
@@ -84,7 +85,7 @@ export async function clearTags(document: TextDocument, params: ClearParams = {}
 
 async function runGomodifytags(document: TextDocument, args: string[]): Promise<void> {
 
-  const fileName = document.uri.replace(/^file:\/\//, '')
+  const fileName = URI.parse(document.uri).fsPath
 
   args.push(
     '-modified',
