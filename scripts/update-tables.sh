@@ -12,9 +12,11 @@ desc() {
   q="${q}.description"
 
   query "${q}" 2> /dev/null \
+    | tr '\n' ' ' \
     | grep -v null \
     | sed 's/\[\(EXPERIMENTAL\)\]/**\1**/' \
-    | sed 's/See \(.*\): \(https.*\)/See [\1](\2)/'
+    | sed 's/See \(.*\): \(https.*\)/See [\1](\2)/' \
+    | sed 's/\. .*$/./'
 }
 
 defaultVal() {
