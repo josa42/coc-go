@@ -55,24 +55,24 @@ export interface GoplsOptions {
   buildFlags: string[]
 
   /**
-   * Default: {}
+   * Default: []
    */
-  env: { string: string }
+  env: string[]
 
   /**
-   * Default: true
+   * Default: false
    */
-  expandWorkspaceToModule: boolean
+  gofumpt: boolean
 
   /**
-   * Default: "SynopsisDocumentation"
+   * Default: "FullDocumentation"
    */
-  hoverKind: "NoDocumentation" | "SynopsisDocumentation" | "FullDocumentation"
+  hoverKind: "NoDocumentation" | "SynopsisDocumentation" | "FullDocumentation" | "SingleLine" | "Structured"
 
   /**
    * Default: "pkg.go.dev"
    */
-  linkTarget: "godoc.org" | "pkg.go.dev"
+  linkTarget: string
 
   /**
    * Default: ""
@@ -94,7 +94,7 @@ export interface GoplsOptions {
    * Experimental!
    * Default: {}
    */
-  annotations: { string: boolean }
+  annotations: { string: string }
 
   /**
    * Experimental!
@@ -104,7 +104,7 @@ export interface GoplsOptions {
 
   /**
    * Experimental!
-   * Default: false
+   * Default: true
    */
   completeUnimported: boolean
 
@@ -124,11 +124,29 @@ export interface GoplsOptions {
    * Experimental!
    * Default: true
    */
-  fuzzyMatching: boolean
+  expandWorkspaceToModule: boolean
 
   /**
    * Experimental!
-   * Default: "caseInsensitive"
+   * Default: false
+   */
+  experimentalWorkspaceModule: boolean
+
+  /**
+   * Experimental!
+   * Default: "Both"
+   */
+  importShortcut: "both" | "link" | "definition"
+
+  /**
+   * Experimental!
+   * Default: true
+   */
+  linksInHover: boolean
+
+  /**
+   * Experimental!
+   * Default: "Fuzzy"
    */
   matcher: "fuzzy" | "caseSensitive" | "caseInsensitive"
 
@@ -140,9 +158,27 @@ export interface GoplsOptions {
 
   /**
    * Experimental!
-   * Default: "fuzzy"
+   * Default: "SymbolFuzzy"
    */
   symbolMatcher: "fuzzy" | "caseSensitive" | "caseInsensitive"
+
+  /**
+   * Experimental!
+   * Default: "PackageQualifiedSymbols"
+   */
+  symbolStyle: "full" | "dynamic" | "package"
+
+  /**
+   * Experimental!
+   * Default: true
+   */
+  tempModfile: boolean
+
+  /**
+   * Experimental!
+   * Default: false
+   */
+  verboseWorkDoneProgress: boolean
 }
 
 export function setStoragePath(dir: string): void {

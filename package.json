@@ -139,54 +139,51 @@
               "items": {
                 "type": "string"
               },
-              "description": "This is the set of flags passed on to the build system when invoked."
+              "description": "buildFlags is the set of flags passed on to the build system when invoked.\nIt is applied to queries like `go list`, which is used when discovering files.\nThe most common use is to set `-tags`.\n"
             },
             "env": {
-              "type": "object",
-              "patternProperties": {
-                ".+": {
-                  "type": "string"
-                }
+              "type": "array",
+              "items": {
+                "type": "string"
               },
-              "description": "This can be used to add environment variables."
+              "description": "env adds environment variables to external commands run by `gopls`, most notably `go list`.\n"
             },
             "hoverKind": {
               "type": "string",
-              "default": "SynopsisDocumentation",
               "enum": [
                 "NoDocumentation",
                 "SynopsisDocumentation",
-                "FullDocumentation"
+                "FullDocumentation",
+                "SingleLine",
+                "Structured"
               ],
-              "description": "This controls the information that appears in the hover text."
+              "default": "FullDocumentation",
+              "description": "hoverKind controls the information that appears in the hover text.\nIt must be one of:\n* `\"NoDocumentation\"`\n* `\"SynopsisDocumentation\"`\n* `\"FullDocumentation\"`\n\nAuthors of editor clients may wish to handle hover text differently, and so might use different settings. The options below are not intended for use by anyone other than the authors of editor plugins.\n\n* `\"SingleLine\"`\n* `\"Structured\"`\n"
             },
             "usePlaceholders": {
               "type": "boolean",
               "default": false,
-              "description": "If true, then completion responses may contain placeholders for function parameters or struct fields."
+              "description": "placeholders enables placeholders for function parameters or struct fields in completion responses.\n"
             },
             "linkTarget": {
               "type": "string",
               "default": "pkg.go.dev",
-              "enum": [
-                "godoc.org",
-                "pkg.go.dev"
-              ],
-              "description": "This controls where points documentation for given package in `textDocument/documentLink`."
+              "description": "linkTarget controls where documentation links go.\nIt might be one of:\n\n* `\"godoc.org\"`\n* `\"pkg.go.dev\"`\n\nIf company chooses to use its own `godoc.org`, its address can be used as well.\n"
             },
             "local": {
               "type": "string",
               "default": "",
-              "description": "This is the equivalent of the `goimports -local` flag, which puts imports beginning with this string after 3rd-party packages."
+              "description": "local is the equivalent of the `goimports -local` flag, which puts imports beginning with this string after 3rd-party packages.\nIt should be the prefix of the import path whose imports should be grouped separately.\n"
             },
-            "expandWorkspaceToModule": {
+            "gofumpt": {
               "type": "boolean",
-              "default": true,
-              "description": "This is true if `gopls` should expand the scope of the workspace to include the modules containing the workspace folders."
+              "default": false,
+              "description": "gofumpt indicates if we should run gofumpt formatting.\n"
             },
             "analyses": {
               "type": "object",
-              "description": "[EXPERIMENTAL] Analyses specify analyses that the user would like to enable or disable.",
+              "default": null,
+              "description": "[EXPERIMENTAL] analyses specify analyses that the user would like to enable or disable.\nA map of the names of analysis passes that should be enabled/disabled.\nA full list of analyzers that gopls uses can be found [here](analyzers.md)\n\nExample Usage:\n```json5\n...\n\"analyses\": {\n  \"unreachable\": false, // Disable the unreachable analyzer.\n  \"unusedparams\": true  // Enable the unusedparams analyzer.\n}\n...\n```\n",
               "additionalProperties": false,
               "properties": {
                 "asmdecl": {
@@ -329,93 +326,129 @@
             },
             "codelens": {
               "type": "object",
-              "description": "[EXPERIMENTAL] Overrides the enabled/disabled state of various code lenses.",
+              "description": "[EXPERIMENTAL] overrides the enabled/disabled state of various code lenses. Currently, we\nsupport several code lenses:\n\n* `generate`: run `go generate` as specified by a `//go:generate` directive.\n* `upgrade_dependency`: upgrade a dependency listed in a `go.mod` file.\n* `test`: run `go test -run` for a test func.\n* `gc_details`: Show the gc compiler's choices for inline analysis and escaping.\n\nExample Usage:\n```json5\n\"gopls\": {\n...\n  \"codelens\": {\n    \"generate\": false,  // Don't run `go generate`.\n    \"gc_details\": true  // Show a code lens toggling the display of gc's choices.\n  }\n...\n}\n```\n",
               "additionalProperties": false,
               "properties": {
+                "gc_details": {
+                  "type": "boolean",
+                  "default": false
+                },
                 "generate": {
                   "type": "boolean",
                   "default": true
                 },
-                "upgrade.dependency": {
+                "regenerate_cgo": {
                   "type": "boolean",
                   "default": true
                 },
-                "test": {
+                "tidy": {
                   "type": "boolean",
-                  "default": false
+                  "default": true
                 },
-                "gc_details": {
+                "upgrade_dependency": {
                   "type": "boolean",
-                  "default": false
+                  "default": true
+                },
+                "vendor": {
+                  "type": "boolean",
+                  "default": true
                 }
               }
             },
             "completionDocumentation": {
               "type": "boolean",
               "default": true,
-              "description": "[EXPERIMENTAL] If false, indicates that the user does not want documentation with completion results."
+              "description": "[EXPERIMENTAL] completionDocumentation enables documentation with completion results.\n"
             },
             "completeUnimported": {
               "type": "boolean",
-              "default": false,
-              "description": "[EXPERIMENTAL] If true, the completion engine is allowed to make suggestions for packages that you do not currently import."
+              "default": true,
+              "description": "[EXPERIMENTAL] completeUnimported enables completion for packages that you do not currently import.\n"
             },
             "deepCompletion": {
               "type": "boolean",
               "default": true,
-              "description": "[EXPERIMENTAL] If true, this turns on the ability to return completions from deep inside relevant entities, rather than just the locally accessible ones."
-            },
-            "fuzzyMatching": {
-              "type": "boolean",
-              "default": true,
-              "description": "[EXPERIMENTAL] If true, this enables server side fuzzy matching of completion candidates."
+              "description": "[EXPERIMENTAL] deepCompletion If true, this turns on the ability to return completions from deep inside relevant entities, rather than just the locally accessible ones.\n\nConsider this example:\n\n```go\npackage main\n\nimport \"fmt\"\n\ntype wrapString struct {\n    str string\n}\n\nfunc main() {\n    x := wrapString{\"hello world\"}\n    fmt.Printf(<>)\n}\n```\n\nAt the location of the `<>` in this program, deep completion would suggest the result `x.str`.\n"
             },
             "matcher": {
               "type": "string",
-              "default": "caseInsensitive",
               "enum": [
                 "fuzzy",
                 "caseSensitive",
                 "caseInsensitive"
               ],
-              "description": "[EXPERIMENTAL] "
+              "default": "Fuzzy",
+              "description": "[EXPERIMENTAL] matcher sets the algorithm that is used when calculating completion candidates. Must be one of:\n\n* `\"fuzzy\"`\n* `\"caseSensitive\"`\n* `\"caseInsensitive\"`\n"
             },
             "annotations": {
               "type": "object",
-              "description": "[EXPERIMENTAL]",
-              "additionalProperties": false,
-              "properties": {
-                "noBounds": {
-                  "type": "boolean",
-                  "default": false
-                },
-                "noEscape": {
-                  "type": "boolean",
-                  "default": false
-                },
-                "noInline": {
-                  "type": "boolean",
-                  "default": false
-                },
-                "noNilcheck": {
-                  "type": "boolean",
-                  "default": false
+              "patternProperties": {
+                ".+": {
+                  "type": "string"
                 }
-              }
+              },
+              "default": null,
+              "description": "[EXPERIMENTAL] annotations suppress various kinds of optimization diagnostics\nthat would be reported by the gc_details command.\n  noNilcheck suppresses display of nilchecks.\n  noEscape suppresses escape choices.\n  noInline suppresses inlining choices.\n  noBounds suppresses bounds checking diagnositcs.\n"
             },
             "staticcheck": {
               "type": "boolean",
-              "description": "[EXPERIMENTAL] If true, it enables the use of the staticcheck."
+              "default": false,
+              "description": "[EXPERIMENTAL] staticcheck enables additional analyses from staticcheck.io.\n"
             },
             "symbolMatcher": {
               "type": "string",
-              "default": "fuzzy",
               "enum": [
                 "fuzzy",
                 "caseSensitive",
                 "caseInsensitive"
               ],
-              "description": "[EXPERIMENTAL] "
+              "default": "SymbolFuzzy",
+              "description": "[EXPERIMENTAL] symbolMatcher sets the algorithm that is used when finding workspace symbols. Must be one of:\n\n* `\"fuzzy\"`\n* `\"caseSensitive\"`\n* `\"caseInsensitive\"`\n"
+            },
+            "symbolStyle": {
+              "type": "string",
+              "enum": [
+                "full",
+                "dynamic",
+                "package"
+              ],
+              "default": "PackageQualifiedSymbols",
+              "description": "[EXPERIMENTAL] symbolStyle specifies what style of symbols to return in symbol requests. Must be one of:\n\n* `\"full\"`\n* `\"dynamic\"`\n* `\"package\"`\n"
+            },
+            "linksInHover": {
+              "type": "boolean",
+              "default": true,
+              "description": "[EXPERIMENTAL] linksInHover toggles the presence of links to documentation in hover.\n"
+            },
+            "tempModfile": {
+              "type": "boolean",
+              "default": true,
+              "description": "[EXPERIMENTAL] tempModfile controls the use of the -modfile flag in Go 1.14.\n"
+            },
+            "importShortcut": {
+              "type": "string",
+              "enum": [
+                "both",
+                "link",
+                "definition"
+              ],
+              "default": "Both",
+              "description": "[EXPERIMENTAL] importShortcut specifies whether import statements should link to\ndocumentation or go to definitions. Must be one of:\n\n* `\"both\"`\n* `\"link\"`\n* `\"definition\"`\n"
+            },
+            "verboseWorkDoneProgress": {
+              "type": "boolean",
+              "default": false,
+              "description": "[EXPERIMENTAL] verboseWorkDoneProgress controls whether the LSP server should send\nprogress reports for all work done outside the scope of an RPC.\n"
+            },
+            "expandWorkspaceToModule": {
+              "type": "boolean",
+              "default": true,
+              "description": "[EXPERIMENTAL] expandWorkspaceToModule instructs `gopls` to expand the scope of the workspace to include the\nmodules containing the workspace folders. Set this to false to avoid loading\nyour entire module. This is particularly useful for those working in a monorepo.\n"
+            },
+            "experimentalWorkspaceModule": {
+              "type": "boolean",
+              "default": false,
+              "description": "[EXPERIMENTAL] experimentalWorkspaceModule opts a user into the experimental support\nfor multi-module workspaces.\n"
             }
           }
         },
@@ -593,26 +626,27 @@
     ]
   },
   "devDependencies": {
-    "@types/mocha": "^8.0.0",
-    "@types/node": "^14.0.5",
+    "@types/mocha": "^8.0.3",
+    "@types/node": "^14.11.1",
     "@types/node-fetch": "^2.5.7",
     "@types/tmp": "^0.2.0",
     "@types/which": "^1.3.2",
-    "@typescript-eslint/eslint-plugin": "^3.0.0",
-    "@typescript-eslint/parser": "^3.0.0",
-    "coc.nvim": "0.0.77",
-    "eslint": "^7.1.0",
+    "@typescript-eslint/eslint-plugin": "^4.1.1",
+    "@typescript-eslint/parser": "^4.1.1",
+    "coc.nvim": "0.0.79",
+    "eslint": "^7.9.0",
     "eslint-config-josa-typescript": "^0.1.2",
-    "mocha": "^8.0.1",
+    "mocha": "^8.1.3",
     "rimraf": "^3.0.2",
     "tmp": "^0.2.1",
-    "ts-node": "^8.10.1",
-    "typescript": "~3.9.3"
+    "ts-node": "^9.0.0",
+    "typescript": "~4.0.3"
   },
   "dependencies": {
-    "node-fetch": "^2.6.0",
+    "node-fetch": "^2.6.1",
     "tslib": "^2.0.0",
     "vscode-uri": "^2.1.2",
     "which": "^2.0.2"
   }
 }
+
