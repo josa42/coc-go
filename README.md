@@ -135,33 +135,7 @@ Trigger completion in `coc-settings.json` to get complete list.
 ## Development
 
 1. Run `yarn build` or `yarn build:watch`
-2. Run `yarn run link:add` to link extension
-
-## TODO
-
-- Check for tool updates and prompt the the user
-
-- Add [`godoctor`](https://github.com/godoctor/godoctor) refactor commands
-
-  ```
-  {
-    "command": "go.godoctor.extract",
-    "title": "Extract to function"
-  },
-  {
-    "command": "go.godoctor.variable",
-    "title": "Extract to variable"
-  }
-  ```
-
-- Add [`fillstruct`](https://github.com/davidrjenni/reftools/tree/master/cmd/fillstruct) command
-
-  ```
-  {
-    "command": "go.fill.struct",
-    "title": "Fill struct"
-  }
-  ```
+2. Link extension: `yarn run link` / `yarn run unlink`
 
 ## Tools
 
