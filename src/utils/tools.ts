@@ -37,7 +37,7 @@ export async function installGoBin(source: string, force = false): Promise<boole
 
 export async function goBinPath(source: string): Promise<string> {
   const name = goBinName(source)
-  return path.join(await configDir('bin'), name + isWin ? ".exe" : "")
+  return path.join(await configDir('bin'), name + (isWin ? ".exe" : ""))
 }
 
 export async function runGoTool(name: string, args: string[] = []): Promise<[number, string]> {
