@@ -62,12 +62,13 @@ async function registerGopls(context: ExtensionContext): Promise<void> {
   // TMPDIR needs to be resetted, because its altered by coc.nvim, which breaks
   // the automatic deamon launching of gopls.
   // See: https://github.com/neoclide/coc.nvim/commit/bdd9a9e1401fe6fdd57a9bd078e3651ecf1e0202
+  const tmpdir = await workspace.nvim.eval('$TMPDIR') as string
 
   const server = (): Promise<ChildProcess> => {
     return new Promise(resolve => {
       resolve(spawn(command, args, {
         cwd: workspace.cwd,
-        env: { ...process.env, TMPDIR: '', ...config.goplsEnv },
+        env: { ...process.env, TMPDIR: tmpdir, ...config.goplsEnv },
       }))
     })
   }
