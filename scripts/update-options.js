@@ -98,7 +98,7 @@ const run = async () => {
 
   pkg.contributes.configuration.properties["go.goplsOptions"].properties = props
 
-  fs.writeFileSync("package.json", JSON.stringify(pkg, null, "  "))
+  fs.writeFileSync("package.json", JSON.stringify(pkg, null, "  ") + "\n")
 }
 
 const parseType = (str, doc) => {
