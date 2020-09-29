@@ -651,6 +651,7 @@
   "dependencies": {
     "node-fetch": "^2.6.1",
     "tslib": "^2.0.0",
+    "vscode-uri": "^2.1.2",
     "which": "^2.0.2"
   }
 }

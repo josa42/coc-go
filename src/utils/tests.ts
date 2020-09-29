@@ -1,4 +1,5 @@
 import { workspace } from 'coc.nvim'
+import { URI } from 'vscode-uri'
 import { TextDocument } from 'vscode-languageserver-protocol'
 import { execTool } from './tools'
 import { GOTESTS } from '../binaries'
@@ -75,7 +76,7 @@ async function runGotests(document: TextDocument, args: string[]): Promise<boole
 
   const config = workspace.getConfiguration().get('go.tests', {}) as GoTestsConfig
 
-  args.push(...(config.generateFlags || []), '-w', document.uri.replace(/^file:\/\//, ''))
+  args.push(...(config.generateFlags || []), '-w', URI.parse(document.uri).fsPath)
   try {
     const stdout = await execTool(GOTESTS, args)
     workspace.showMessage(stdout || "")
