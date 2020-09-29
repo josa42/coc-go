@@ -67,7 +67,7 @@ export interface GoplsOptions {
   /**
    * Default: "FullDocumentation"
    */
-  hoverKind: "NoDocumentation" | "SynopsisDocumentation" | "FullDocumentation" | "SingleLine" | "Structured"
+  hoverKind: "FullDocumentation" | "NoDocumentation" | "SingleLine" | "Structured" | "SynopsisDocumentation"
 
   /**
    * Default: "pkg.go.dev"
@@ -136,7 +136,7 @@ export interface GoplsOptions {
    * Experimental!
    * Default: "Both"
    */
-  importShortcut: "both" | "link" | "definition"
+  importShortcut: "Both" | "Definition" | "Link"
 
   /**
    * Experimental!
@@ -146,9 +146,15 @@ export interface GoplsOptions {
 
   /**
    * Experimental!
+   * Default: true
+   */
+  literalCompletions: boolean
+
+  /**
+   * Experimental!
    * Default: "Fuzzy"
    */
-  matcher: "fuzzy" | "caseSensitive" | "caseInsensitive"
+  matcher: "CaseInsensitive" | "CaseSensitive" | "Fuzzy"
 
   /**
    * Experimental!
@@ -158,15 +164,15 @@ export interface GoplsOptions {
 
   /**
    * Experimental!
-   * Default: "SymbolFuzzy"
+   * Default: "Fuzzy"
    */
-  symbolMatcher: "fuzzy" | "caseSensitive" | "caseInsensitive"
+  symbolMatcher: "CaseInsensitive" | "CaseSensitive" | "Fuzzy"
 
   /**
    * Experimental!
-   * Default: "PackageQualifiedSymbols"
+   * Default: "Package"
    */
-  symbolStyle: "full" | "dynamic" | "package"
+  symbolStyle: "Dynamic" | "Full" | "Package"
 
   /**
    * Experimental!

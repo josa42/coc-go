@@ -153,14 +153,14 @@
             "hoverKind": {
               "type": "string",
               "enum": [
-                "NoDocumentation",
-                "SynopsisDocumentation",
                 "FullDocumentation",
+                "NoDocumentation",
                 "SingleLine",
-                "Structured"
+                "Structured",
+                "SynopsisDocumentation"
               ],
               "default": "FullDocumentation",
-              "description": "hoverKind controls the information that appears in the hover text.\nIt must be one of:\n* `\"NoDocumentation\"`\n* `\"SynopsisDocumentation\"`\n* `\"FullDocumentation\"`\n\nAuthors of editor clients may wish to handle hover text differently, and so might use different settings. The options below are not intended for use by anyone other than the authors of editor plugins.\n\n* `\"SingleLine\"`\n* `\"Structured\"`\n"
+              "description": "hoverKind controls the information that appears in the hover text.\nSingleLine and Structured are intended for use only by authors of editor plugins.\nMust be one of:\n\n * `\"FullDocumentation\"`\n * `\"NoDocumentation\"`\n * `\"SingleLine\"`\n * `\"Structured\"`\n * `\"SynopsisDocumentation\"`\n"
             },
             "usePlaceholders": {
               "type": "boolean",
@@ -184,7 +184,6 @@
             },
             "analyses": {
               "type": "object",
-              "default": null,
               "description": "[EXPERIMENTAL] analyses specify analyses that the user would like to enable or disable.\nA map of the names of analysis passes that should be enabled/disabled.\nA full list of analyzers that gopls uses can be found [here](analyzers.md)\n\nExample Usage:\n```json5\n...\n\"analyses\": {\n  \"unreachable\": false, // Disable the unreachable analyzer.\n  \"unusedparams\": true  // Enable the unusedparams analyzer.\n}\n...\n```\n",
               "additionalProperties": false,
               "properties": {
@@ -328,7 +327,7 @@
             },
             "codelens": {
               "type": "object",
-              "description": "[EXPERIMENTAL] overrides the enabled/disabled state of various code lenses. Currently, we\nsupport several code lenses:\n\n* `generate`: run `go generate` as specified by a `//go:generate` directive.\n* `upgrade_dependency`: upgrade a dependency listed in a `go.mod` file.\n* `test`: run `go test -run` for a test func.\n* `gc_details`: Show the gc compiler's choices for inline analysis and escaping.\n\nExample Usage:\n```json5\n\"gopls\": {\n...\n  \"codelens\": {\n    \"generate\": false,  // Don't run `go generate`.\n    \"gc_details\": true  // Show a code lens toggling the display of gc's choices.\n  }\n...\n}\n```\n",
+              "description": "[EXPERIMENTAL] codelens overrides the enabled/disabled state of code lenses. See the \"Code Lenses\"\nsection of settings.md for the list of supported lenses.\n\nExample Usage:\n```json5\n\"gopls\": {\n...\n  \"codelens\": {\n    \"generate\": false,  // Don't show the `go generate` lens.\n    \"gc_details\": true  // Show a code lens toggling the display of gc's choices.\n  }\n...\n}\n```\n",
               "additionalProperties": false,
               "properties": {
                 "gc_details": {
@@ -370,17 +369,17 @@
             "deepCompletion": {
               "type": "boolean",
               "default": true,
-              "description": "[EXPERIMENTAL] deepCompletion If true, this turns on the ability to return completions from deep inside relevant entities, rather than just the locally accessible ones.\n\nConsider this example:\n\n```go\npackage main\n\nimport \"fmt\"\n\ntype wrapString struct {\n    str string\n}\n\nfunc main() {\n    x := wrapString{\"hello world\"}\n    fmt.Printf(<>)\n}\n```\n\nAt the location of the `<>` in this program, deep completion would suggest the result `x.str`.\n"
+              "description": "[EXPERIMENTAL] deepCompletion enables the ability to return completions from deep inside relevant entities, rather than just the locally accessible ones.\n\nConsider this example:\n\n```go\npackage main\n\nimport \"fmt\"\n\ntype wrapString struct {\n    str string\n}\n\nfunc main() {\n    x := wrapString{\"hello world\"}\n    fmt.Printf(<>)\n}\n```\n\nAt the location of the `<>` in this program, deep completion would suggest the result `x.str`.\n"
             },
             "matcher": {
               "type": "string",
               "enum": [
-                "fuzzy",
-                "caseSensitive",
-                "caseInsensitive"
+                "CaseInsensitive",
+                "CaseSensitive",
+                "Fuzzy"
               ],
               "default": "Fuzzy",
-              "description": "[EXPERIMENTAL] matcher sets the algorithm that is used when calculating completion candidates. Must be one of:\n\n* `\"fuzzy\"`\n* `\"caseSensitive\"`\n* `\"caseInsensitive\"`\n"
+              "description": "[EXPERIMENTAL] matcher sets the algorithm that is used when calculating completion candidates.\nMust be one of:\n\n * `\"CaseInsensitive\"`\n * `\"CaseSensitive\"`\n * `\"Fuzzy\"`\n"
             },
             "annotations": {
               "type": "object",
@@ -389,8 +388,7 @@
                   "type": "string"
                 }
               },
-              "default": null,
-              "description": "[EXPERIMENTAL] annotations suppress various kinds of optimization diagnostics\nthat would be reported by the gc_details command.\n  noNilcheck suppresses display of nilchecks.\n  noEscape suppresses escape choices.\n  noInline suppresses inlining choices.\n  noBounds suppresses bounds checking diagnositcs.\n"
+              "description": "[EXPERIMENTAL] annotations suppress various kinds of optimization diagnostics\nthat would be reported by the gc_details command.\n * noNilcheck suppresses display of nilchecks.\n * noEscape suppresses escape choices.\n * noInline suppresses inlining choices.\n * noBounds suppresses bounds checking diagnostics.\n"
             },
             "staticcheck": {
               "type": "boolean",
@@ -400,22 +398,22 @@
             "symbolMatcher": {
               "type": "string",
               "enum": [
-                "fuzzy",
-                "caseSensitive",
-                "caseInsensitive"
+                "CaseInsensitive",
+                "CaseSensitive",
+                "Fuzzy"
               ],
-              "default": "SymbolFuzzy",
-              "description": "[EXPERIMENTAL] symbolMatcher sets the algorithm that is used when finding workspace symbols. Must be one of:\n\n* `\"fuzzy\"`\n* `\"caseSensitive\"`\n* `\"caseInsensitive\"`\n"
+              "default": "Fuzzy",
+              "description": "[EXPERIMENTAL] symbolMatcher sets the algorithm that is used when finding workspace symbols.\nMust be one of:\n\n * `\"CaseInsensitive\"`\n * `\"CaseSensitive\"`\n * `\"Fuzzy\"`\n"
             },
             "symbolStyle": {
               "type": "string",
               "enum": [
-                "full",
-                "dynamic",
-                "package"
+                "Dynamic",
+                "Full",
+                "Package"
               ],
-              "default": "PackageQualifiedSymbols",
-              "description": "[EXPERIMENTAL] symbolStyle specifies what style of symbols to return in symbol requests. Must be one of:\n\n* `\"full\"`\n* `\"dynamic\"`\n* `\"package\"`\n"
+              "default": "Package",
+              "description": "[EXPERIMENTAL] symbolStyle specifies what style of symbols to return in symbol requests.\nMust be one of:\n\n * `\"Dynamic\"`\n * `\"Full\"`\n * `\"Package\"`\n"
             },
             "linksInHover": {
               "type": "boolean",
@@ -430,12 +428,12 @@
             "importShortcut": {
               "type": "string",
               "enum": [
-                "both",
-                "link",
-                "definition"
+                "Both",
+                "Definition",
+                "Link"
               ],
               "default": "Both",
-              "description": "[EXPERIMENTAL] importShortcut specifies whether import statements should link to\ndocumentation or go to definitions. Must be one of:\n\n* `\"both\"`\n* `\"link\"`\n* `\"definition\"`\n"
+              "description": "[EXPERIMENTAL] importShortcut specifies whether import statements should link to\ndocumentation or go to definitions.\nMust be one of:\n\n * `\"Both\"`\n * `\"Definition\"`\n * `\"Link\"`\n"
             },
             "verboseWorkDoneProgress": {
               "type": "boolean",
@@ -451,6 +449,11 @@
               "type": "boolean",
               "default": false,
               "description": "[EXPERIMENTAL] experimentalWorkspaceModule opts a user into the experimental support\nfor multi-module workspaces.\n"
+            },
+            "literalCompletions": {
+              "type": "boolean",
+              "default": true,
+              "description": "[EXPERIMENTAL] literalCompletions controls whether literal candidates such as\n\"&someStruct{}\" are offered. Tests disable this flag to simplify\ntheir expected values.\n"
             }
           }
         },

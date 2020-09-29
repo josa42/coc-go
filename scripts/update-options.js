@@ -1,32 +1,58 @@
 #!/usr/bin/env node
 
 const fs = require("fs")
+
 const run = async () => {
-  const opts = JSON.parse(
-    JSON.parse(
-      (
-        await get(
-          "https://raw.githubusercontent.com/golang/tools/master/internal/lsp/source/options_json.go"
-        )
-      )
-        .split(/\n/)
-        .filter(l => l.includes("OptionsJson"))
-        .join("")
-        .replace(/^const OptionsJson = /, "")
-    )
+  const source = await get(
+    "https://raw.githubusercontent.com/golang/tools/master/gopls/doc/settings.md"
   )
+
+  const opts = {}
+
+  let section
+  let m
+  let item
+
+  source.split("\n").forEach((line) => {
+    if (line.match(/^<!-- BEGIN/)) {
+      section = line.replace(
+        /<!-- BEGIN (.*): DO NOT MANUALLY EDIT THIS SECTION -->/,
+        `$1`
+      )
+      opts[section] = []
+    }
+
+    if (section) {
+      if ((m = line.match(/^### \*\*(.*)\*\* \*(.*)\*$/))) {
+        const [, Name, Type] = m
+        item = { Name, Type, Doc: "", Default: null }
+        opts[section].push(item)
+      } else if ((m = line.match(/^Default: `(.*)`\.$/))) {
+        const [, Default] = m
+        item.Default = Default
+        item.Doc = item.Doc.trim() + "\n"
+        item = null
+      } else if (item) {
+        item.Doc = `${item.Doc || ""}\n${line}`
+      }
+    }
+
+    if (line.match(/^<!-- END/)) {
+      section = ""
+    }
+  })
 
   const pkg = require("../package.json")
 
   const data = {}
 
   let props = {}
-  ;["User", "Experimental"].forEach(k => {
+  ;["User", "Experimental"].forEach((k) => {
     props = opts[k].reduce((props, { Name, Type, Doc, Default }) => {
       props[Name] = {
         ...parseType(Type, Doc),
         default: parseDefault(Default),
-        description: parseDescription(Doc, k)
+        description: parseDescription(Doc, k),
       }
 
       data[Name] = { Name, Type, Doc, Default }
@@ -88,30 +114,26 @@ const parseType = (str, doc) => {
         type: "object",
         patternProperties: {
           ".+": {
-            type: "string"
-          }
-        }
+            type: "string",
+          },
+        },
       }
-    case "golang.org/x/tools/internal/lsp/source.HoverKind":
-    case "golang.org/x/tools/internal/lsp/source.Matcher":
-    case "golang.org/x/tools/internal/lsp/source.ImportShortcut":
-    case "golang.org/x/tools/internal/lsp/source.SymbolMatcher":
-    case "golang.org/x/tools/internal/lsp/source.SymbolStyle":
+    case "enum":
       return {
         type: "string",
-        enum: parseEnum(doc)
+        enum: parseEnum(doc),
       }
   }
 }
 
-const parseEnum = str => {
+const parseEnum = (str) => {
   return str
     .split(/\n/)
-    .filter(l => l.match(/^\* `".*"`$/))
-    .map(l => l.replace(/^\* `"(.*)"`$/, "$1"))
+    .filter((l) => l.match(/^ *\* `".*"`$/))
+    .map((l) => l.replace(/^ *\* `"(.*)"`$/, "$1"))
 }
 
-const parseDefault = str => {
+const parseDefault = (str) => {
   if (str.match(/^".*"$/)) {
     return str.replace(/^"/, "").replace(/"$/, "")
   }
@@ -132,16 +154,16 @@ const parseDescription = (doc, key) =>
 
 const https = require("https")
 
-const get = async url =>
+const get = async (url) =>
   new Promise((resolve, reject) => {
     https
-      .get(url, resp => {
+      .get(url, (resp) => {
         let data = ""
 
-        resp.on("data", chunk => (data += chunk))
+        resp.on("data", (chunk) => (data += chunk))
         resp.on("end", () => resolve(data))
       })
-      .on("error", err => reject(err))
+      .on("error", (err) => reject(err))
   })
 
 run()
