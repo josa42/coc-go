@@ -144,10 +144,7 @@
               "description": "buildFlags is the set of flags passed on to the build system when invoked.\nIt is applied to queries like `go list`, which is used when discovering files.\nThe most common use is to set `-tags`.\n"
             },
             "env": {
-              "type": "array",
-              "items": {
-                "type": "string"
-              },
+              "type": "map[string]string",
               "description": "env adds environment variables to external commands run by `gopls`, most notably `go list`.\n"
             },
             "hoverKind": {
@@ -160,7 +157,7 @@
                 "SynopsisDocumentation"
               ],
               "default": "FullDocumentation",
-              "description": "hoverKind controls the information that appears in the hover text.\nSingleLine and Structured are intended for use only by authors of editor plugins.\nMust be one of:\n\n * `\"FullDocumentation\"`\n * `\"NoDocumentation\"`\n * `\"SingleLine\"`\n * `\"Structured\"`\n * `\"SynopsisDocumentation\"`\n"
+              "description": "hoverKind controls the information that appears in the hover text.\nSingleLine and Structured are intended for use only by authors of editor plugins.\nMust be one of:\n\n * `\"FullDocumentation\"`\n * `\"NoDocumentation\"`\n * `\"SingleLine\"`\n * `\"Structured\"` is an experimental setting that returns a structured hover format.\nThis format separates the signature from the documentation, so that the client\ncan do more manipulation of these fields.\\\nThis should only be used by clients that support this behavior.\n\n * `\"SynopsisDocumentation\"`\n"
             },
             "usePlaceholders": {
               "type": "boolean",
@@ -385,7 +382,7 @@
               "type": "object",
               "patternProperties": {
                 ".+": {
-                  "type": "string"
+                  "type": "boolean"
                 }
               },
               "description": "[EXPERIMENTAL] annotations suppress various kinds of optimization diagnostics\nthat would be reported by the gc_details command.\n * noNilcheck suppresses display of nilchecks.\n * noEscape suppresses escape choices.\n * noInline suppresses inlining choices.\n * noBounds suppresses bounds checking diagnostics.\n"
@@ -413,7 +410,7 @@
                 "Package"
               ],
               "default": "Package",
-              "description": "[EXPERIMENTAL] symbolStyle specifies what style of symbols to return in symbol requests.\nMust be one of:\n\n * `\"Dynamic\"`\n * `\"Full\"`\n * `\"Package\"`\n"
+              "description": "[EXPERIMENTAL] symbolStyle controls how symbols are qualified in symbol responses.\n\nExample Usage:\n```json5\n\"gopls\": {\n...\n  \"symbolStyle\": \"dynamic\",\n...\n}\n```\nMust be one of:\n\n * `\"Dynamic\"` uses whichever qualifier results in the highest scoring\nmatch for the given symbol query. Here a \"qualifier\" is any \"/\" or \".\"\ndelimited suffix of the fully qualified symbol. i.e. \"to/pkg.Foo.Field\" or\njust \"Foo.Field\".\n\n * `\"Full\"` is fully qualified symbols, i.e.\n\"path/to/pkg.Foo.Field\".\n\n * `\"Package\"` is package qualified symbols i.e.\n\"pkg.Foo.Field\".\n"
             },
             "linksInHover": {
               "type": "boolean",
@@ -440,6 +437,11 @@
               "default": false,
               "description": "[EXPERIMENTAL] verboseWorkDoneProgress controls whether the LSP server should send\nprogress reports for all work done outside the scope of an RPC.\n"
             },
+            "semanticTokens": {
+              "type": "boolean",
+              "default": false,
+              "description": "[EXPERIMENTAL] semanticTokens controls whether the LSP server will send\nsemantic tokens to the client.\n"
+            },
             "expandWorkspaceToModule": {
               "type": "boolean",
               "default": true,
@@ -450,10 +452,15 @@
               "default": false,
               "description": "[EXPERIMENTAL] experimentalWorkspaceModule opts a user into the experimental support\nfor multi-module workspaces.\n"
             },
-            "literalCompletions": {
+            "experimentalDiagnosticsDelay": {
+              "type": "time.Duration",
+              "default": "0s",
+              "description": "[EXPERIMENTAL] experimentalDiagnosticsDelay controls the amount of time that gopls waits\nafter the most recent file modification before computing deep diagnostics.\nSimple diagnostics (parsing and type-checking) are always run immediately\non recently modified packages.\n\nThis option must be set to a valid duration string, for example `\"250ms\"`.\n"
+            },
+            "experimentalPackageCacheKey": {
               "type": "boolean",
               "default": true,
-              "description": "[EXPERIMENTAL] literalCompletions controls whether literal candidates such as\n\"&someStruct{}\" are offered. Tests disable this flag to simplify\ntheir expected values.\n"
+              "description": "[EXPERIMENTAL] experimentalPackageCacheKey controls whether to use a coarser cache key\nfor package type information to increase cache hits. This setting removes\nthe user's environment, build flags, and working directory from the cache\nkey, which should be a safe change as all relevant inputs into the type\nchecking pass are already hashed into the key. This is temporarily guarded\nby an experiment because caching behavior is subtle and difficult to\ncomprehensively test.\n"
             }
           }
         },

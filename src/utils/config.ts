@@ -55,9 +55,9 @@ export interface GoplsOptions {
   buildFlags: string[]
 
   /**
-   * Default: []
+   * Default: undefined
    */
-  env: string[]
+  env: map[string]string
 
   /**
    * Default: false
@@ -94,7 +94,7 @@ export interface GoplsOptions {
    * Experimental!
    * Default: {}
    */
-  annotations: { string: string }
+  annotations: { string: boolean }
 
   /**
    * Experimental!
@@ -128,6 +128,18 @@ export interface GoplsOptions {
 
   /**
    * Experimental!
+   * Default: 0s
+   */
+  experimentalDiagnosticsDelay: time.Duration
+
+  /**
+   * Experimental!
+   * Default: true
+   */
+  experimentalPackageCacheKey: boolean
+
+  /**
+   * Experimental!
    * Default: false
    */
   experimentalWorkspaceModule: boolean
@@ -146,15 +158,15 @@ export interface GoplsOptions {
 
   /**
    * Experimental!
-   * Default: true
-   */
-  literalCompletions: boolean
-
-  /**
-   * Experimental!
    * Default: "Fuzzy"
    */
   matcher: "CaseInsensitive" | "CaseSensitive" | "Fuzzy"
+
+  /**
+   * Experimental!
+   * Default: false
+   */
+  semanticTokens: boolean
 
   /**
    * Experimental!

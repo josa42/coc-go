@@ -114,6 +114,15 @@ const parseType = (str, doc) => {
         type: "object",
         patternProperties: {
           ".+": {
+            type: "boolean",
+          },
+        },
+      }
+    case "map[string]script":
+      return {
+        type: "object",
+        patternProperties: {
+          ".+": {
             type: "string",
           },
         },
@@ -129,8 +138,8 @@ const parseType = (str, doc) => {
 const parseEnum = (str) => {
   return str
     .split(/\n/)
-    .filter((l) => l.match(/^ *\* `".*"`$/))
-    .map((l) => l.replace(/^ *\* `"(.*)"`$/, "$1"))
+    .filter((l) => l.match(/^ *\* `".*"`.*$/))
+    .map((l) => l.replace(/^ *\* `"(.*)"`.*$/, "$1"))
 }
 
 const parseDefault = (str) => {
