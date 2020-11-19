@@ -48,17 +48,19 @@ const run = async () => {
 
   let props = {}
   ;["User", "Experimental"].forEach((k) => {
-    props = opts[k].reduce((props, { Name, Type, Doc, Default }) => {
-      props[Name] = {
-        ...parseType(Type, Doc),
-        default: parseDefault(Default),
-        description: parseDescription(Doc, k),
-      }
+    props = opts[k]
+      .sort(({ Name: a }, { Name: b }) => a.localeCompare(b))
+      .reduce((props, { Name, Type, Doc, Default }) => {
+        props[Name] = {
+          ...parseType(Type, Doc),
+          default: parseDefault(Default),
+          description: parseDescription(Doc, k),
+        }
 
-      data[Name] = { Name, Type, Doc, Default }
+        data[Name] = { Name, Type, Doc, Default }
 
-      return props
-    }, props)
+        return props
+      }, props)
   })
 
   let k = ""

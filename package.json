@@ -147,6 +147,11 @@
               "type": "map[string]string",
               "description": "env adds environment variables to external commands run by `gopls`, most notably `go list`.\n"
             },
+            "gofumpt": {
+              "type": "boolean",
+              "default": false,
+              "description": "gofumpt indicates if we should run gofumpt formatting.\n"
+            },
             "hoverKind": {
               "type": "string",
               "enum": [
@@ -159,11 +164,6 @@
               "default": "FullDocumentation",
               "description": "hoverKind controls the information that appears in the hover text.\nSingleLine and Structured are intended for use only by authors of editor plugins.\nMust be one of:\n\n * `\"FullDocumentation\"`\n * `\"NoDocumentation\"`\n * `\"SingleLine\"`\n * `\"Structured\"` is an experimental setting that returns a structured hover format.\nThis format separates the signature from the documentation, so that the client\ncan do more manipulation of these fields.\\\nThis should only be used by clients that support this behavior.\n\n * `\"SynopsisDocumentation\"`\n"
             },
-            "usePlaceholders": {
-              "type": "boolean",
-              "default": false,
-              "description": "placeholders enables placeholders for function parameters or struct fields in completion responses.\n"
-            },
             "linkTarget": {
               "type": "string",
               "default": "pkg.go.dev",
@@ -174,10 +174,10 @@
               "default": "",
               "description": "local is the equivalent of the `goimports -local` flag, which puts imports beginning with this string after 3rd-party packages.\nIt should be the prefix of the import path whose imports should be grouped separately.\n"
             },
-            "gofumpt": {
+            "usePlaceholders": {
               "type": "boolean",
               "default": false,
-              "description": "gofumpt indicates if we should run gofumpt formatting.\n"
+              "description": "placeholders enables placeholders for function parameters or struct fields in completion responses.\n"
             },
             "analyses": {
               "type": "object",
@@ -322,6 +322,15 @@
                 }
               }
             },
+            "annotations": {
+              "type": "object",
+              "patternProperties": {
+                ".+": {
+                  "type": "boolean"
+                }
+              },
+              "description": "[EXPERIMENTAL] annotations suppress various kinds of optimization diagnostics\nthat would be reported by the gc_details command.\n * noNilcheck suppresses display of nilchecks.\n * noEscape suppresses escape choices.\n * noInline suppresses inlining choices.\n * noBounds suppresses bounds checking diagnostics.\n"
+            },
             "codelens": {
               "type": "object",
               "description": "[EXPERIMENTAL] codelens overrides the enabled/disabled state of code lenses. See the \"Code Lenses\"\nsection of settings.md for the list of supported lenses.\n\nExample Usage:\n```json5\n\"gopls\": {\n...\n  \"codelens\": {\n    \"generate\": false,  // Don't show the `go generate` lens.\n    \"gc_details\": true  // Show a code lens toggling the display of gc's choices.\n  }\n...\n}\n```\n",
@@ -353,20 +362,55 @@
                 }
               }
             },
-            "completionDocumentation": {
-              "type": "boolean",
-              "default": true,
-              "description": "[EXPERIMENTAL] completionDocumentation enables documentation with completion results.\n"
-            },
             "completeUnimported": {
               "type": "boolean",
               "default": true,
               "description": "[EXPERIMENTAL] completeUnimported enables completion for packages that you do not currently import.\n"
             },
+            "completionDocumentation": {
+              "type": "boolean",
+              "default": true,
+              "description": "[EXPERIMENTAL] completionDocumentation enables documentation with completion results.\n"
+            },
             "deepCompletion": {
               "type": "boolean",
               "default": true,
               "description": "[EXPERIMENTAL] deepCompletion enables the ability to return completions from deep inside relevant entities, rather than just the locally accessible ones.\n\nConsider this example:\n\n```go\npackage main\n\nimport \"fmt\"\n\ntype wrapString struct {\n    str string\n}\n\nfunc main() {\n    x := wrapString{\"hello world\"}\n    fmt.Printf(<>)\n}\n```\n\nAt the location of the `<>` in this program, deep completion would suggest the result `x.str`.\n"
+            },
+            "expandWorkspaceToModule": {
+              "type": "boolean",
+              "default": true,
+              "description": "[EXPERIMENTAL] expandWorkspaceToModule instructs `gopls` to expand the scope of the workspace to include the\nmodules containing the workspace folders. Set this to false to avoid loading\nyour entire module. This is particularly useful for those working in a monorepo.\n"
+            },
+            "experimentalDiagnosticsDelay": {
+              "type": "time.Duration",
+              "default": "0s",
+              "description": "[EXPERIMENTAL] experimentalDiagnosticsDelay controls the amount of time that gopls waits\nafter the most recent file modification before computing deep diagnostics.\nSimple diagnostics (parsing and type-checking) are always run immediately\non recently modified packages.\n\nThis option must be set to a valid duration string, for example `\"250ms\"`.\n"
+            },
+            "experimentalPackageCacheKey": {
+              "type": "boolean",
+              "default": true,
+              "description": "[EXPERIMENTAL] experimentalPackageCacheKey controls whether to use a coarser cache key\nfor package type information to increase cache hits. This setting removes\nthe user's environment, build flags, and working directory from the cache\nkey, which should be a safe change as all relevant inputs into the type\nchecking pass are already hashed into the key. This is temporarily guarded\nby an experiment because caching behavior is subtle and difficult to\ncomprehensively test.\n"
+            },
+            "experimentalWorkspaceModule": {
+              "type": "boolean",
+              "default": false,
+              "description": "[EXPERIMENTAL] experimentalWorkspaceModule opts a user into the experimental support\nfor multi-module workspaces.\n"
+            },
+            "importShortcut": {
+              "type": "string",
+              "enum": [
+                "Both",
+                "Definition",
+                "Link"
+              ],
+              "default": "Both",
+              "description": "[EXPERIMENTAL] importShortcut specifies whether import statements should link to\ndocumentation or go to definitions.\nMust be one of:\n\n * `\"Both\"`\n * `\"Definition\"`\n * `\"Link\"`\n"
+            },
+            "linksInHover": {
+              "type": "boolean",
+              "default": true,
+              "description": "[EXPERIMENTAL] linksInHover toggles the presence of links to documentation in hover.\n"
             },
             "matcher": {
               "type": "string",
@@ -378,14 +422,10 @@
               "default": "Fuzzy",
               "description": "[EXPERIMENTAL] matcher sets the algorithm that is used when calculating completion candidates.\nMust be one of:\n\n * `\"CaseInsensitive\"`\n * `\"CaseSensitive\"`\n * `\"Fuzzy\"`\n"
             },
-            "annotations": {
-              "type": "object",
-              "patternProperties": {
-                ".+": {
-                  "type": "boolean"
-                }
-              },
-              "description": "[EXPERIMENTAL] annotations suppress various kinds of optimization diagnostics\nthat would be reported by the gc_details command.\n * noNilcheck suppresses display of nilchecks.\n * noEscape suppresses escape choices.\n * noInline suppresses inlining choices.\n * noBounds suppresses bounds checking diagnostics.\n"
+            "semanticTokens": {
+              "type": "boolean",
+              "default": false,
+              "description": "[EXPERIMENTAL] semanticTokens controls whether the LSP server will send\nsemantic tokens to the client.\n"
             },
             "staticcheck": {
               "type": "boolean",
@@ -412,55 +452,15 @@
               "default": "Package",
               "description": "[EXPERIMENTAL] symbolStyle controls how symbols are qualified in symbol responses.\n\nExample Usage:\n```json5\n\"gopls\": {\n...\n  \"symbolStyle\": \"dynamic\",\n...\n}\n```\nMust be one of:\n\n * `\"Dynamic\"` uses whichever qualifier results in the highest scoring\nmatch for the given symbol query. Here a \"qualifier\" is any \"/\" or \".\"\ndelimited suffix of the fully qualified symbol. i.e. \"to/pkg.Foo.Field\" or\njust \"Foo.Field\".\n\n * `\"Full\"` is fully qualified symbols, i.e.\n\"path/to/pkg.Foo.Field\".\n\n * `\"Package\"` is package qualified symbols i.e.\n\"pkg.Foo.Field\".\n"
             },
-            "linksInHover": {
-              "type": "boolean",
-              "default": true,
-              "description": "[EXPERIMENTAL] linksInHover toggles the presence of links to documentation in hover.\n"
-            },
             "tempModfile": {
               "type": "boolean",
               "default": true,
               "description": "[EXPERIMENTAL] tempModfile controls the use of the -modfile flag in Go 1.14.\n"
             },
-            "importShortcut": {
-              "type": "string",
-              "enum": [
-                "Both",
-                "Definition",
-                "Link"
-              ],
-              "default": "Both",
-              "description": "[EXPERIMENTAL] importShortcut specifies whether import statements should link to\ndocumentation or go to definitions.\nMust be one of:\n\n * `\"Both\"`\n * `\"Definition\"`\n * `\"Link\"`\n"
-            },
             "verboseWorkDoneProgress": {
               "type": "boolean",
               "default": false,
               "description": "[EXPERIMENTAL] verboseWorkDoneProgress controls whether the LSP server should send\nprogress reports for all work done outside the scope of an RPC.\n"
-            },
-            "semanticTokens": {
-              "type": "boolean",
-              "default": false,
-              "description": "[EXPERIMENTAL] semanticTokens controls whether the LSP server will send\nsemantic tokens to the client.\n"
-            },
-            "expandWorkspaceToModule": {
-              "type": "boolean",
-              "default": true,
-              "description": "[EXPERIMENTAL] expandWorkspaceToModule instructs `gopls` to expand the scope of the workspace to include the\nmodules containing the workspace folders. Set this to false to avoid loading\nyour entire module. This is particularly useful for those working in a monorepo.\n"
-            },
-            "experimentalWorkspaceModule": {
-              "type": "boolean",
-              "default": false,
-              "description": "[EXPERIMENTAL] experimentalWorkspaceModule opts a user into the experimental support\nfor multi-module workspaces.\n"
-            },
-            "experimentalDiagnosticsDelay": {
-              "type": "time.Duration",
-              "default": "0s",
-              "description": "[EXPERIMENTAL] experimentalDiagnosticsDelay controls the amount of time that gopls waits\nafter the most recent file modification before computing deep diagnostics.\nSimple diagnostics (parsing and type-checking) are always run immediately\non recently modified packages.\n\nThis option must be set to a valid duration string, for example `\"250ms\"`.\n"
-            },
-            "experimentalPackageCacheKey": {
-              "type": "boolean",
-              "default": true,
-              "description": "[EXPERIMENTAL] experimentalPackageCacheKey controls whether to use a coarser cache key\nfor package type information to increase cache hits. This setting removes\nthe user's environment, build flags, and working directory from the cache\nkey, which should be a safe change as all relevant inputs into the type\nchecking pass are already hashed into the key. This is temporarily guarded\nby an experiment because caching behavior is subtle and difficult to\ncomprehensively test.\n"
             }
           }
         },
