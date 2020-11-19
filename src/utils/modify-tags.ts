@@ -30,7 +30,9 @@ export async function addTags(document: TextDocument, params: Params = {}): Prom
   const transform = (config.transform || "snakecase")
   const skipUnexported = config.skipUnexported
 
+  let cursor
   if (params.prompt) {
+    cursor = await workspace.getCursorPosition()
     tags = await workspace.requestInput('Enter comma separated tag names', tags)
     if (!tags) {
       return
@@ -44,7 +46,7 @@ export async function addTags(document: TextDocument, params: Params = {}): Prom
     '-override',
     '-add-options', (options || ""),
     '-transform', transform,
-    ...(await offsetArgs(document, (params.selection || "struct")))
+    ...(await offsetArgs(document, (params.selection || "struct"), cursor))
   ]
   if (skipUnexported) {
     args.push('--skip-unexported')
@@ -59,7 +61,9 @@ export async function removeTags(document: TextDocument, params: Params = {}): P
     ? params.tags.join(',')
     : (config.tags || 'json')
 
+  let cursor
   if (params.prompt) {
+    cursor = await workspace.getCursorPosition()
     tags = await workspace.requestInput('Enter comma separated tag names', tags)
     if (!tags) {
       return
@@ -69,7 +73,7 @@ export async function removeTags(document: TextDocument, params: Params = {}): P
   await runGomodifytags(document, [
     '-remove-tags', (tags || "json"),
     '-clear-options',
-    ...(await offsetArgs(document, (params.selection || "struct")))
+    ...(await offsetArgs(document, (params.selection || "struct"), cursor))
   ])
 }
 
@@ -138,11 +142,13 @@ function byteOffsetAt(document: TextDocument, position: Position): string {
   return Buffer.byteLength(text.substr(0, offset)).toString()
 }
 
-async function offsetArgs(document: TextDocument, seletion: "struct" | "line"): Promise<string[]> {
+async function offsetArgs(document: TextDocument, selection: "struct" | "line", cursor = null): Promise<string[]> {
 
-  const cursor = await workspace.getCursorPosition()
+  cursor = cursor || await workspace.getCursorPosition()
 
-  switch (seletion) {
+  workspace.showMessage(`selection = ${selection}`)
+
+  switch (selection) {
     case "struct":
       return ['-offset', byteOffsetAt(document, cursor)]
     case "line":
