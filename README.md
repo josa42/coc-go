@@ -56,7 +56,7 @@ Additional to commands provided by gopls, this extensions provides these command
 - **Add missing imports on save**
 
   ```viml
-  autocmd BufWritePre *.go :call CocAction('organizeImport')
+  autocmd BufWritePre *.go :silent call CocAction('runCommand', 'editor.action.organizeImport')
   ```
 
 - **Map Keys to command**
