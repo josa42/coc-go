@@ -55,9 +55,9 @@ export interface GoplsOptions {
   buildFlags: string[]
 
   /**
-   * Default: undefined
+   * Default: {}
    */
-  env: map[string]string
+  env: { string: string }
 
   /**
    * Default: false
@@ -128,9 +128,9 @@ export interface GoplsOptions {
 
   /**
    * Experimental!
-   * Default: 0s
+   * Default: "0s"
    */
-  experimentalDiagnosticsDelay: time.Duration
+  experimentalDiagnosticsDelay: string
 
   /**
    * Experimental!

@@ -120,7 +120,7 @@ const parseType = (str, doc) => {
           },
         },
       }
-    case "map[string]script":
+    case "map[string]string":
       return {
         type: "object",
         patternProperties: {
@@ -133,6 +133,10 @@ const parseType = (str, doc) => {
       return {
         type: "string",
         enum: parseEnum(doc),
+      }
+    case "time.Duration":
+      return {
+        type: "string",
       }
   }
 }

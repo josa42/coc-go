@@ -144,7 +144,12 @@
               "description": "buildFlags is the set of flags passed on to the build system when invoked.\nIt is applied to queries like `go list`, which is used when discovering files.\nThe most common use is to set `-tags`.\n"
             },
             "env": {
-              "type": "map[string]string",
+              "type": "object",
+              "patternProperties": {
+                ".+": {
+                  "type": "string"
+                }
+              },
               "description": "env adds environment variables to external commands run by `gopls`, most notably `go list`.\n"
             },
             "gofumpt": {
@@ -383,7 +388,7 @@
               "description": "[EXPERIMENTAL] expandWorkspaceToModule instructs `gopls` to expand the scope of the workspace to include the\nmodules containing the workspace folders. Set this to false to avoid loading\nyour entire module. This is particularly useful for those working in a monorepo.\n"
             },
             "experimentalDiagnosticsDelay": {
-              "type": "time.Duration",
+              "type": "string",
               "default": "0s",
               "description": "[EXPERIMENTAL] experimentalDiagnosticsDelay controls the amount of time that gopls waits\nafter the most recent file modification before computing deep diagnostics.\nSimple diagnostics (parsing and type-checking) are always run immediately\non recently modified packages.\n\nThis option must be set to a valid duration string, for example `\"250ms\"`.\n"
             },
