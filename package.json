@@ -136,57 +136,9 @@
           "type": "object",
           "description": "See `gopls` documentation: https://github.com/golang/tools/blob/master/gopls/doc/settings.md",
           "properties": {
-            "buildFlags": {
-              "type": "array",
-              "items": {
-                "type": "string"
-              },
-              "description": "buildFlags is the set of flags passed on to the build system when invoked.\nIt is applied to queries like `go list`, which is used when discovering files.\nThe most common use is to set `-tags`.\n"
-            },
-            "env": {
-              "type": "object",
-              "patternProperties": {
-                ".+": {
-                  "type": "string"
-                }
-              },
-              "description": "env adds environment variables to external commands run by `gopls`, most notably `go list`.\n"
-            },
-            "gofumpt": {
-              "type": "boolean",
-              "default": false,
-              "description": "gofumpt indicates if we should run gofumpt formatting.\n"
-            },
-            "hoverKind": {
-              "type": "string",
-              "enum": [
-                "FullDocumentation",
-                "NoDocumentation",
-                "SingleLine",
-                "Structured",
-                "SynopsisDocumentation"
-              ],
-              "default": "FullDocumentation",
-              "description": "hoverKind controls the information that appears in the hover text.\nSingleLine and Structured are intended for use only by authors of editor plugins.\nMust be one of:\n\n * `\"FullDocumentation\"`\n * `\"NoDocumentation\"`\n * `\"SingleLine\"`\n * `\"Structured\"` is an experimental setting that returns a structured hover format.\nThis format separates the signature from the documentation, so that the client\ncan do more manipulation of these fields.\\\nThis should only be used by clients that support this behavior.\n\n * `\"SynopsisDocumentation\"`\n"
-            },
-            "linkTarget": {
-              "type": "string",
-              "default": "pkg.go.dev",
-              "description": "linkTarget controls where documentation links go.\nIt might be one of:\n\n* `\"godoc.org\"`\n* `\"pkg.go.dev\"`\n\nIf company chooses to use its own `godoc.org`, its address can be used as well.\n"
-            },
-            "local": {
-              "type": "string",
-              "default": "",
-              "description": "local is the equivalent of the `goimports -local` flag, which puts imports beginning with this string after 3rd-party packages.\nIt should be the prefix of the import path whose imports should be grouped separately.\n"
-            },
-            "usePlaceholders": {
-              "type": "boolean",
-              "default": false,
-              "description": "placeholders enables placeholders for function parameters or struct fields in completion responses.\n"
-            },
             "analyses": {
               "type": "object",
-              "description": "[EXPERIMENTAL] analyses specify analyses that the user would like to enable or disable.\nA map of the names of analysis passes that should be enabled/disabled.\nA full list of analyzers that gopls uses can be found [here](analyzers.md)\n\nExample Usage:\n```json5\n...\n\"analyses\": {\n  \"unreachable\": false, // Disable the unreachable analyzer.\n  \"unusedparams\": true  // Enable the unusedparams analyzer.\n}\n...\n```\n",
+              "description": "analyses specify analyses that the user would like to enable or disable.\nA map of the names of analysis passes that should be enabled/disabled.\nA full list of analyzers that gopls uses can be found [here](analyzers.md)\n\nExample Usage:\n```json5\n...\n\"analyses\": {\n  \"unreachable\": false, // Disable the unreachable analyzer.\n  \"unusedparams\": true  // Enable the unusedparams analyzer.\n}\n...\n```\n",
               "additionalProperties": false,
               "properties": {
                 "asmdecl": {
@@ -285,6 +237,10 @@
                   "type": "boolean",
                   "default": true
                 },
+                "fieldalignment": {
+                  "type": "boolean",
+                  "default": false
+                },
                 "fillreturns": {
                   "type": "boolean",
                   "default": false
@@ -327,18 +283,16 @@
                 }
               }
             },
-            "annotations": {
-              "type": "object",
-              "patternProperties": {
-                ".+": {
-                  "type": "boolean"
-                }
+            "buildFlags": {
+              "type": "array",
+              "items": {
+                "type": "string"
               },
-              "description": "[EXPERIMENTAL] annotations suppress various kinds of optimization diagnostics\nthat would be reported by the gc_details command.\n * noNilcheck suppresses display of nilchecks.\n * noEscape suppresses escape choices.\n * noInline suppresses inlining choices.\n * noBounds suppresses bounds checking diagnostics.\n"
+              "description": "buildFlags is the set of flags passed on to the build system when invoked.\nIt is applied to queries like `go list`, which is used when discovering files.\nThe most common use is to set `-tags`.\n"
             },
-            "codelens": {
+            "codelenses": {
               "type": "object",
-              "description": "[EXPERIMENTAL] codelens overrides the enabled/disabled state of code lenses. See the \"Code Lenses\"\nsection of settings.md for the list of supported lenses.\n\nExample Usage:\n```json5\n\"gopls\": {\n...\n  \"codelens\": {\n    \"generate\": false,  // Don't show the `go generate` lens.\n    \"gc_details\": true  // Show a code lens toggling the display of gc's choices.\n  }\n...\n}\n```\n",
+              "description": "codelenses overrides the enabled/disabled state of code lenses. See the \"Code Lenses\"\nsection of settings.md for the list of supported lenses.\n\nExample Usage:\n```json5\n\"gopls\": {\n...\n  \"codelenses\": {\n    \"generate\": false,  // Don't show the `go generate` lens.\n    \"gc_details\": true  // Show a code lens toggling the display of gc's choices.\n  }\n...\n}\n```\n",
               "additionalProperties": false,
               "properties": {
                 "gc_details": {
@@ -367,29 +321,126 @@
                 }
               }
             },
-            "completeUnimported": {
-              "type": "boolean",
-              "default": true,
-              "description": "[EXPERIMENTAL] completeUnimported enables completion for packages that you do not currently import.\n"
+            "directoryFilters": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              },
+              "description": "directoryFilters can be used to exclude unwanted directories from the\nworkspace. By default, all directories are included. Filters are an\noperator, `+` to include and `-` to exclude, followed by a path prefix\nrelative to the workspace folder. They are evaluated in order, and\nthe last filter that applies to a path controls whether it is included.\nThe path prefix can be empty, so an initial `-` excludes everything.\n\nExamples:\nExclude node_modules: `-node_modules`\nInclude only project_a: `-` (exclude everything), `+project_a`\nInclude only project_a, but not node_modules inside it: `-`, `+project_a`, `-project_a/node_modules`\n"
             },
-            "completionDocumentation": {
-              "type": "boolean",
-              "default": true,
-              "description": "[EXPERIMENTAL] completionDocumentation enables documentation with completion results.\n"
+            "env": {
+              "type": "object",
+              "patternProperties": {
+                ".+": {
+                  "type": "string"
+                }
+              },
+              "description": "env adds environment variables to external commands run by `gopls`, most notably `go list`.\n"
             },
-            "deepCompletion": {
+            "gofumpt": {
+              "type": "boolean",
+              "default": false,
+              "description": "gofumpt indicates if we should run gofumpt formatting.\n"
+            },
+            "hoverKind": {
+              "type": "string",
+              "enum": [
+                "FullDocumentation",
+                "NoDocumentation",
+                "SingleLine",
+                "Structured",
+                "SynopsisDocumentation"
+              ],
+              "default": "FullDocumentation",
+              "description": "hoverKind controls the information that appears in the hover text.\nSingleLine and Structured are intended for use only by authors of editor plugins.\nMust be one of:\n\n * `\"FullDocumentation\"`\n * `\"NoDocumentation\"`\n * `\"SingleLine\"`\n * `\"Structured\"` is an experimental setting that returns a structured hover format.\nThis format separates the signature from the documentation, so that the client\ncan do more manipulation of these fields.\\\nThis should only be used by clients that support this behavior.\n\n * `\"SynopsisDocumentation\"`\n"
+            },
+            "importShortcut": {
+              "type": "string",
+              "enum": [
+                "Both",
+                "Definition",
+                "Link"
+              ],
+              "default": "Both",
+              "description": "importShortcut specifies whether import statements should link to\ndocumentation or go to definitions.\nMust be one of:\n\n * `\"Both\"`\n * `\"Definition\"`\n * `\"Link\"`\n"
+            },
+            "linksInHover": {
               "type": "boolean",
               "default": true,
-              "description": "[EXPERIMENTAL] deepCompletion enables the ability to return completions from deep inside relevant entities, rather than just the locally accessible ones.\n\nConsider this example:\n\n```go\npackage main\n\nimport \"fmt\"\n\ntype wrapString struct {\n    str string\n}\n\nfunc main() {\n    x := wrapString{\"hello world\"}\n    fmt.Printf(<>)\n}\n```\n\nAt the location of the `<>` in this program, deep completion would suggest the result `x.str`.\n"
+              "description": "linksInHover toggles the presence of links to documentation in hover.\n"
+            },
+            "linkTarget": {
+              "type": "string",
+              "default": "pkg.go.dev",
+              "description": "linkTarget controls where documentation links go.\nIt might be one of:\n\n* `\"godoc.org\"`\n* `\"pkg.go.dev\"`\n\nIf company chooses to use its own `godoc.org`, its address can be used as well.\n"
+            },
+            "local": {
+              "type": "string",
+              "default": "",
+              "description": "local is the equivalent of the `goimports -local` flag, which puts imports beginning with this string after 3rd-party packages.\nIt should be the prefix of the import path whose imports should be grouped separately.\n"
+            },
+            "matcher": {
+              "type": "string",
+              "enum": [
+                "CaseInsensitive",
+                "CaseSensitive",
+                "Fuzzy"
+              ],
+              "default": "Fuzzy",
+              "description": "matcher sets the algorithm that is used when calculating completion candidates.\nMust be one of:\n\n * `\"CaseInsensitive\"`\n * `\"CaseSensitive\"`\n * `\"Fuzzy\"`\n"
+            },
+            "symbolMatcher": {
+              "type": "string",
+              "enum": [
+                "CaseInsensitive",
+                "CaseSensitive",
+                "Fuzzy"
+              ],
+              "default": "Fuzzy",
+              "description": "symbolMatcher sets the algorithm that is used when finding workspace symbols.\nMust be one of:\n\n * `\"CaseInsensitive\"`\n * `\"CaseSensitive\"`\n * `\"Fuzzy\"`\n"
+            },
+            "symbolStyle": {
+              "type": "string",
+              "enum": [
+                "Dynamic",
+                "Full",
+                "Package"
+              ],
+              "default": "Dynamic",
+              "description": "symbolStyle controls how symbols are qualified in symbol responses.\n\nExample Usage:\n```json5\n\"gopls\": {\n...\n  \"symbolStyle\": \"dynamic\",\n...\n}\n```\nMust be one of:\n\n * `\"Dynamic\"` uses whichever qualifier results in the highest scoring\nmatch for the given symbol query. Here a \"qualifier\" is any \"/\" or \".\"\ndelimited suffix of the fully qualified symbol. i.e. \"to/pkg.Foo.Field\" or\njust \"Foo.Field\".\n\n * `\"Full\"` is fully qualified symbols, i.e.\n\"path/to/pkg.Foo.Field\".\n\n * `\"Package\"` is package qualified symbols i.e.\n\"pkg.Foo.Field\".\n"
+            },
+            "usePlaceholders": {
+              "type": "boolean",
+              "default": false,
+              "description": "placeholders enables placeholders for function parameters or struct fields in completion responses.\n"
+            },
+            "allowImplicitNetworkAccess": {
+              "type": "boolean",
+              "default": false,
+              "description": "[EXPERIMENTAL] allowImplicitNetworkAccess disables GOPROXY=off, allowing implicit module\ndownloads rather than requiring user action. This option will eventually\nbe removed.\n"
+            },
+            "allowModfileModifications": {
+              "type": "boolean",
+              "default": false,
+              "description": "[EXPERIMENTAL] allowModfileModifications disables -mod=readonly, allowing imports from\nout-of-scope modules. This option will eventually be removed.\n"
+            },
+            "annotations": {
+              "type": "object",
+              "patternProperties": {
+                ".+": {
+                  "type": "boolean"
+                }
+              },
+              "description": "[EXPERIMENTAL] annotations suppress various kinds of optimization diagnostics\nthat would be reported by the gc_details command.\n * noNilcheck suppresses display of nilchecks.\n * noEscape suppresses escape choices.\n * noInline suppresses inlining choices.\n * noBounds suppresses bounds checking diagnostics.\n"
             },
             "expandWorkspaceToModule": {
               "type": "boolean",
               "default": true,
-              "description": "[EXPERIMENTAL] expandWorkspaceToModule instructs `gopls` to expand the scope of the workspace to include the\nmodules containing the workspace folders. Set this to false to avoid loading\nyour entire module. This is particularly useful for those working in a monorepo.\n"
+              "description": "[EXPERIMENTAL] expandWorkspaceToModule instructs `gopls` to adjust the scope of the\nworkspace to find the best available module root. `gopls` first looks for\na go.mod file in any parent directory of the workspace folder, expanding\nthe scope to that directory if it exists. If no viable parent directory is\nfound, gopls will check if there is exactly one child directory containing\na go.mod file, narrowing the scope to that directory if it exists.\n"
             },
             "experimentalDiagnosticsDelay": {
               "type": "string",
-              "default": "0s",
+              "default": "250ms",
               "description": "[EXPERIMENTAL] experimentalDiagnosticsDelay controls the amount of time that gopls waits\nafter the most recent file modification before computing deep diagnostics.\nSimple diagnostics (parsing and type-checking) are always run immediately\non recently modified packages.\n\nThis option must be set to a valid duration string, for example `\"250ms\"`.\n"
             },
             "experimentalPackageCacheKey": {
@@ -402,31 +453,6 @@
               "default": false,
               "description": "[EXPERIMENTAL] experimentalWorkspaceModule opts a user into the experimental support\nfor multi-module workspaces.\n"
             },
-            "importShortcut": {
-              "type": "string",
-              "enum": [
-                "Both",
-                "Definition",
-                "Link"
-              ],
-              "default": "Both",
-              "description": "[EXPERIMENTAL] importShortcut specifies whether import statements should link to\ndocumentation or go to definitions.\nMust be one of:\n\n * `\"Both\"`\n * `\"Definition\"`\n * `\"Link\"`\n"
-            },
-            "linksInHover": {
-              "type": "boolean",
-              "default": true,
-              "description": "[EXPERIMENTAL] linksInHover toggles the presence of links to documentation in hover.\n"
-            },
-            "matcher": {
-              "type": "string",
-              "enum": [
-                "CaseInsensitive",
-                "CaseSensitive",
-                "Fuzzy"
-              ],
-              "default": "Fuzzy",
-              "description": "[EXPERIMENTAL] matcher sets the algorithm that is used when calculating completion candidates.\nMust be one of:\n\n * `\"CaseInsensitive\"`\n * `\"CaseSensitive\"`\n * `\"Fuzzy\"`\n"
-            },
             "semanticTokens": {
               "type": "boolean",
               "default": false,
@@ -436,36 +462,6 @@
               "type": "boolean",
               "default": false,
               "description": "[EXPERIMENTAL] staticcheck enables additional analyses from staticcheck.io.\n"
-            },
-            "symbolMatcher": {
-              "type": "string",
-              "enum": [
-                "CaseInsensitive",
-                "CaseSensitive",
-                "Fuzzy"
-              ],
-              "default": "Fuzzy",
-              "description": "[EXPERIMENTAL] symbolMatcher sets the algorithm that is used when finding workspace symbols.\nMust be one of:\n\n * `\"CaseInsensitive\"`\n * `\"CaseSensitive\"`\n * `\"Fuzzy\"`\n"
-            },
-            "symbolStyle": {
-              "type": "string",
-              "enum": [
-                "Dynamic",
-                "Full",
-                "Package"
-              ],
-              "default": "Package",
-              "description": "[EXPERIMENTAL] symbolStyle controls how symbols are qualified in symbol responses.\n\nExample Usage:\n```json5\n\"gopls\": {\n...\n  \"symbolStyle\": \"dynamic\",\n...\n}\n```\nMust be one of:\n\n * `\"Dynamic\"` uses whichever qualifier results in the highest scoring\nmatch for the given symbol query. Here a \"qualifier\" is any \"/\" or \".\"\ndelimited suffix of the fully qualified symbol. i.e. \"to/pkg.Foo.Field\" or\njust \"Foo.Field\".\n\n * `\"Full\"` is fully qualified symbols, i.e.\n\"path/to/pkg.Foo.Field\".\n\n * `\"Package\"` is package qualified symbols i.e.\n\"pkg.Foo.Field\".\n"
-            },
-            "tempModfile": {
-              "type": "boolean",
-              "default": true,
-              "description": "[EXPERIMENTAL] tempModfile controls the use of the -modfile flag in Go 1.14.\n"
-            },
-            "verboseWorkDoneProgress": {
-              "type": "boolean",
-              "default": false,
-              "description": "[EXPERIMENTAL] verboseWorkDoneProgress controls whether the LSP server should send\nprogress reports for all work done outside the scope of an RPC.\n"
             }
           }
         },

@@ -50,9 +50,24 @@ export interface GoTestsConfig {
 export interface GoplsOptions {
 
   /**
+   * Default: {}
+   */
+  analyses: { string: boolean }
+
+  /**
    * Default: []
    */
   buildFlags: string[]
+
+  /**
+   * Default: {}
+   */
+  codelenses: { string: boolean }
+
+  /**
+   * Default: []
+   */
+  directoryFilters: string[]
 
   /**
    * Default: {}
@@ -70,14 +85,39 @@ export interface GoplsOptions {
   hoverKind: "FullDocumentation" | "NoDocumentation" | "SingleLine" | "Structured" | "SynopsisDocumentation"
 
   /**
+   * Default: "Both"
+   */
+  importShortcut: "Both" | "Definition" | "Link"
+
+  /**
    * Default: "pkg.go.dev"
    */
   linkTarget: string
 
   /**
+   * Default: true
+   */
+  linksInHover: boolean
+
+  /**
    * Default: ""
    */
   local: string
+
+  /**
+   * Default: "Fuzzy"
+   */
+  matcher: "CaseInsensitive" | "CaseSensitive" | "Fuzzy"
+
+  /**
+   * Default: "Fuzzy"
+   */
+  symbolMatcher: "CaseInsensitive" | "CaseSensitive" | "Fuzzy"
+
+  /**
+   * Default: "Dynamic"
+   */
+  symbolStyle: "Dynamic" | "Full" | "Package"
 
   /**
    * Default: false
@@ -86,9 +126,15 @@ export interface GoplsOptions {
 
   /**
    * Experimental!
-   * Default: {}
+   * Default: false
    */
-  analyses: { string: boolean }
+  allowImplicitNetworkAccess: boolean
+
+  /**
+   * Experimental!
+   * Default: false
+   */
+  allowModfileModifications: boolean
 
   /**
    * Experimental!
@@ -98,37 +144,13 @@ export interface GoplsOptions {
 
   /**
    * Experimental!
-   * Default: {}
-   */
-  codelens: { string: boolean }
-
-  /**
-   * Experimental!
-   * Default: true
-   */
-  completeUnimported: boolean
-
-  /**
-   * Experimental!
-   * Default: true
-   */
-  completionDocumentation: boolean
-
-  /**
-   * Experimental!
-   * Default: true
-   */
-  deepCompletion: boolean
-
-  /**
-   * Experimental!
    * Default: true
    */
   expandWorkspaceToModule: boolean
 
   /**
    * Experimental!
-   * Default: "0s"
+   * Default: "250ms"
    */
   experimentalDiagnosticsDelay: string
 
@@ -146,24 +168,6 @@ export interface GoplsOptions {
 
   /**
    * Experimental!
-   * Default: "Both"
-   */
-  importShortcut: "Both" | "Definition" | "Link"
-
-  /**
-   * Experimental!
-   * Default: true
-   */
-  linksInHover: boolean
-
-  /**
-   * Experimental!
-   * Default: "Fuzzy"
-   */
-  matcher: "CaseInsensitive" | "CaseSensitive" | "Fuzzy"
-
-  /**
-   * Experimental!
    * Default: false
    */
   semanticTokens: boolean
@@ -173,30 +177,6 @@ export interface GoplsOptions {
    * Default: false
    */
   staticcheck: boolean
-
-  /**
-   * Experimental!
-   * Default: "Fuzzy"
-   */
-  symbolMatcher: "CaseInsensitive" | "CaseSensitive" | "Fuzzy"
-
-  /**
-   * Experimental!
-   * Default: "Package"
-   */
-  symbolStyle: "Dynamic" | "Full" | "Package"
-
-  /**
-   * Experimental!
-   * Default: true
-   */
-  tempModfile: boolean
-
-  /**
-   * Experimental!
-   * Default: false
-   */
-  verboseWorkDoneProgress: boolean
 }
 
 export function setStoragePath(dir: string): void {
