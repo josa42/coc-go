@@ -1,12 +1,9 @@
 {
-  "coc.preferences.formatOnSaveFiletypes": [
-    "javascript",
-    "typescript",
-    "json"
-  ],
+  "coc.preferences.formatOnSaveFiletypes": ["javascript", "typescript", "json"],
 
   "typescript.format.insertSpaceAfterOpeningAndBeforeClosingNonemptyBraces": true,
   "javascript.format.insertSpaceAfterOpeningAndBeforeClosingNonemptyBraces": true,
+  "javascript.format.semicolons": "remove",
 
   "eslint.autoFix": true,
   "eslint.autoFixOnSave": true,

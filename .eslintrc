@@ -5,6 +5,7 @@
     "mocha": true
   },
   "rules": {
+    "no-extra-semi": "error",
     "sort-imports": [
       "error",
       {

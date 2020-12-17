@@ -49,7 +49,9 @@ const run = async () => {
   let props = {}
   ;["User", "Experimental"].forEach((k) => {
     props = opts[k]
-      .sort(({ Name: a }, { Name: b }) => a.localeCompare(b))
+      .sort(({ Name: a }, { Name: b }) =>
+        a.toLowerCase().localeCompare(b.toLowerCase())
+      )
       .reduce((props, { Name, Type, Doc, Default }) => {
         props[Name] = {
           ...parseType(Type, Doc),
@@ -86,11 +88,11 @@ const run = async () => {
       return props
     }, {})
 
-  const codeLenseDefault = JSON.parse(data.codelens.Default)
+  const codeLenseDefault = JSON.parse(data.codelenses.Default)
 
-  props.codelens.additionalProperties = false
-  props.codelens.patternProperties = undefined
-  props.codelens.properties = Object.keys(codeLenseDefault).reduce(
+  props.codelenses.additionalProperties = false
+  props.codelenses.patternProperties = undefined
+  props.codelenses.properties = Object.keys(codeLenseDefault).reduce(
     (props, key) => {
       props[key] = { type: "boolean", default: codeLenseDefault[key] }
       return props
@@ -181,4 +183,11 @@ const get = async (url) =>
       .on("error", (err) => reject(err))
   })
 
-run()
+;(async () => {
+  try {
+    await run()
+  } catch (err) {
+    console.error(err)
+    process.exit(1)
+  }
+})()

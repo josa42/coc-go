@@ -1,0 +1,28 @@
+name: update-settings
+
+on:
+  push:
+  schedule:
+    - cron:  '0 * * * *'
+
+jobs:
+  main:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v2
+    - uses: actions/setup-node@v1
+      with: { node-version: '12' }
+    - run: ./scripts/update-commands.js
+    - run: ./scripts/update-options.js
+    - run: ./scripts/update-options-interface.js
+    - run: ./scripts/update-snippets.js
+    - run: ./scripts/update-tables.sh
+    - run: git diff
+    - uses: EndBug/add-and-commit@v5
+      with:
+        push: true
+        author_name:  Github Action
+        author_email: josa@gesell.me
+        message: '[auto] Update Settings'
+      env:
+        GITHUB_TOKEN: '${{ secrets.GITHUB_TOKEN }}'
