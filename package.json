@@ -261,6 +261,10 @@
                   "type": "boolean",
                   "default": true
                 },
+                "shadow": {
+                  "type": "boolean",
+                  "default": false
+                },
                 "simplifyslice": {
                   "type": "boolean",
                   "default": true
