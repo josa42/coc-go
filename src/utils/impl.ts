@@ -1,9 +1,9 @@
 import { workspace } from 'coc.nvim'
 import { TextDocument, TextEdit } from 'vscode-languageserver-protocol'
 import { IMPL } from '../binaries'
-import {execTool } from './tools'
+import { execTool } from './tools'
 
-const interfaceRegex = /^(\w+ \*?\w+ )?([\w./]+)$/
+const interfaceRegex = /^(\w+ \*?\w+ )?([\w./-]+)$/
 
 export async function generateImplStubs(document: TextDocument): Promise<void> {
   try {
