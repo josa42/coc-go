@@ -1,99 +1,109 @@
-import { workspace } from 'coc.nvim'
-import { URI } from 'vscode-uri'
-import { TextDocument } from 'vscode-languageserver-protocol'
-import { execTool } from './tools'
-import { GOTESTS } from '../binaries'
-import { GoTestsConfig } from './config'
+import { workspace } from 'coc.nvim';
+import { URI } from 'vscode-uri';
+import { TextDocument } from 'vscode-languageserver-protocol';
+import { execTool } from './tools';
+import { GOTESTS } from '../binaries';
+import { GoTestsConfig } from './config';
 
 ////////////////////////////////////////////////////////////////////////////////
 
 export async function generateTestsAll(document: TextDocument): Promise<void> {
   if (isTest(document)) {
-    workspace.showMessage("Document is a test file", "error")
-    return
+    workspace.showMessage('Document is a test file', 'error');
+    return;
   }
-  await runGotests(document, ["-all"]) && await openTests(document)
+  (await runGotests(document, ['-all'])) && (await openTests(document));
 }
 
-export async function generateTestsExported(document: TextDocument): Promise<void> {
+export async function generateTestsExported(
+  document: TextDocument
+): Promise<void> {
   if (isTest(document)) {
-    workspace.showMessage("Document is a test file", "error")
-    return
+    workspace.showMessage('Document is a test file', 'error');
+    return;
   }
-  await runGotests(document, ["-exported"]) && await openTests(document)
+  (await runGotests(document, ['-exported'])) && (await openTests(document));
 }
 
-export async function generateTestsFunction(document: TextDocument): Promise<void> {
+export async function generateTestsFunction(
+  document: TextDocument
+): Promise<void> {
   if (isTest(document)) {
-    workspace.showMessage("Document is a test file", "error")
-    return
+    workspace.showMessage('Document is a test file', 'error');
+    return;
   }
 
-  const { line } = await workspace.getCursorPosition()
+  const { line } = await workspace.getCursorPosition();
   const text = await document.getText({
     start: { line, character: 0 },
     end: { line, character: Infinity },
-  })
+  });
 
-  workspace.showMessage(text)
+  workspace.showMessage(text);
 
-  const funcName = extractFunctionName(text)
+  const funcName = extractFunctionName(text);
   if (!funcName) {
-    workspace.showMessage("No function found", "error")
-    return
+    workspace.showMessage('No function found', 'error');
+    return;
   }
 
-  await runGotests(document, ["-only", `^${funcName}$`]) && await openTests(document)
+  (await runGotests(document, ['-only', `^${funcName}$`])) &&
+    (await openTests(document));
 }
 
 export async function toogleTests(document: TextDocument): Promise<void> {
-  const targetURI = isTest(document)
-    ? sourceURI(document)
-    : testURI(document)
+  const targetURI = isTest(document) ? sourceURI(document) : testURI(document);
 
-  return workspace.openResource(targetURI)
+  return workspace.openResource(targetURI);
 }
 
 ////////////////////////////////////////////////////////////////////////////////
 
 async function openTests(document: TextDocument): Promise<void> {
-  return workspace.openResource(testURI(document))
+  return workspace.openResource(testURI(document));
 }
 
-function isTest(document: TextDocument): boolean {
-  return document.uri.endsWith('_test.go')
+export function isTest(document: TextDocument): boolean {
+  return document.uri.endsWith('_test.go');
 }
 
 function testURI(document: TextDocument): string {
-  return document.uri.replace(/(_test)?\.go$/, '_test.go')
+  return document.uri.replace(/(_test)?\.go$/, '_test.go');
 }
 
 function sourceURI(document: TextDocument): string {
-  return document.uri.replace(/(_test)?\.go$/, '.go')
+  return document.uri.replace(/(_test)?\.go$/, '.go');
 }
 
-async function runGotests(document: TextDocument, args: string[]): Promise<boolean> {
+async function runGotests(
+  document: TextDocument,
+  args: string[]
+): Promise<boolean> {
+  const config = workspace
+    .getConfiguration()
+    .get('go.tests', {}) as GoTestsConfig;
 
-  const config = workspace.getConfiguration().get('go.tests', {}) as GoTestsConfig
-
-  args.push(...(config.generateFlags || []), '-w', URI.parse(document.uri).fsPath)
+  args.push(
+    ...(config.generateFlags || []),
+    '-w',
+    URI.parse(document.uri).fsPath
+  );
   try {
-    const stdout = await execTool(GOTESTS, args)
-    workspace.showMessage(stdout || "")
+    const stdout = await execTool(GOTESTS, args);
+    workspace.showMessage(stdout || '');
 
-    return true
-
+    return true;
   } catch (err) {
-    workspace.showMessage(`Error: ${err}`, "error")
-    return false
+    workspace.showMessage(`Error: ${err}`, 'error');
+    return false;
   }
 }
 
 ////////////////////////////////////////////////////////////////////////////////
 
 export function extractFunctionName(line: string): string | null {
-  const m = /^func +(\([^)]+\) +)?([^\s(]+)/.exec(line)
+  const m = /^func +(\([^)]+\) +)?([^\s(]+)/.exec(line);
   if (m) {
-    return m[2]
+    return m[2];
   }
 }
