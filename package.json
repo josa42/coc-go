@@ -44,7 +44,7 @@
   "prettier": {
     "singleQuote": true,
     "printWidth": 80,
-    "semi": true
+    "semi": false
   },
   "activationEvents": [
     "onLanguage:go",

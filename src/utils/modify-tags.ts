@@ -2,22 +2,22 @@ import {
   Position,
   TextDocument,
   TextEdit,
-} from 'vscode-languageserver-protocol';
-import { workspace } from 'coc.nvim';
-import { URI } from 'vscode-uri';
+} from 'vscode-languageserver-protocol'
+import { workspace } from 'coc.nvim'
+import { URI } from 'vscode-uri'
 
-import { GoTagsConfig } from './config';
-import { execTool } from './tools';
-import { GOMODIFYTAGS } from '../binaries';
+import { GoTagsConfig } from './config'
+import { execTool } from './tools'
+import { GOMODIFYTAGS } from '../binaries'
 
 interface Params {
-  prompt?: boolean;
-  tags?: string[];
-  selection?: 'line' | 'struct';
+  prompt?: boolean
+  tags?: string[]
+  selection?: 'line' | 'struct'
 }
 
 interface ClearParams {
-  selection?: 'line' | 'struct';
+  selection?: 'line' | 'struct'
 }
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -26,34 +26,29 @@ export async function addTags(
   document: TextDocument,
   params: Params = {}
 ): Promise<void> {
-  const config = workspace
-    .getConfiguration()
-    .get('go.tags', {}) as GoTagsConfig;
+  const config = workspace.getConfiguration().get('go.tags', {}) as GoTagsConfig
 
   let tags =
     params.tags && params.tags.length > 0
       ? params.tags.join(',')
-      : config.tags || 'json';
+      : config.tags || 'json'
   let options =
-    config.options || config.options === '' ? config.options : 'json=omitempty';
-  const transform = config.transform || 'snakecase';
-  const skipUnexported = config.skipUnexported;
+    config.options || config.options === '' ? config.options : 'json=omitempty'
+  const transform = config.transform || 'snakecase'
+  const skipUnexported = config.skipUnexported
 
-  let cursor;
+  let cursor
   if (params.prompt) {
-    cursor = await workspace.getCursorPosition();
-    tags = await workspace.requestInput(
-      'Enter comma separated tag names',
-      tags
-    );
+    cursor = await workspace.getCursorPosition()
+    tags = await workspace.requestInput('Enter comma separated tag names', tags)
     if (!tags) {
-      return;
+      return
     }
 
     options = await workspace.requestInput(
       'Enter comma separated options',
       options
-    );
+    )
   }
 
   const args = [
@@ -65,35 +60,30 @@ export async function addTags(
     '-transform',
     transform,
     ...(await offsetArgs(document, params.selection || 'struct', cursor)),
-  ];
+  ]
   if (skipUnexported) {
-    args.push('--skip-unexported');
+    args.push('--skip-unexported')
   }
-  await runGomodifytags(document, args);
+  await runGomodifytags(document, args)
 }
 
 export async function removeTags(
   document: TextDocument,
   params: Params = {}
 ): Promise<void> {
-  const config = workspace
-    .getConfiguration()
-    .get('go.tags', {}) as GoTagsConfig;
+  const config = workspace.getConfiguration().get('go.tags', {}) as GoTagsConfig
 
   let tags =
     params.tags && params.tags.length > 0
       ? params.tags.join(',')
-      : config.tags || 'json';
+      : config.tags || 'json'
 
-  let cursor;
+  let cursor
   if (params.prompt) {
-    cursor = await workspace.getCursorPosition();
-    tags = await workspace.requestInput(
-      'Enter comma separated tag names',
-      tags
-    );
+    cursor = await workspace.getCursorPosition()
+    tags = await workspace.requestInput('Enter comma separated tag names', tags)
     if (!tags) {
-      return;
+      return
     }
   }
 
@@ -102,7 +92,7 @@ export async function removeTags(
     tags || 'json',
     '-clear-options',
     ...(await offsetArgs(document, params.selection || 'struct', cursor)),
-  ]);
+  ])
 }
 
 export async function clearTags(
@@ -113,7 +103,7 @@ export async function clearTags(
     '-clear-tags',
     '-clear-options',
     ...(await offsetArgs(document, params.selection || 'struct')),
-  ]);
+  ])
 }
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -122,21 +112,21 @@ async function runGomodifytags(
   document: TextDocument,
   args: string[]
 ): Promise<void> {
-  const fileName = URI.parse(document.uri).fsPath;
+  const fileName = URI.parse(document.uri).fsPath
 
-  args.push('-modified', '-file', fileName, '-format', 'json');
+  args.push('-modified', '-file', fileName, '-format', 'json')
 
-  const input = fileArchive(fileName, document.getText());
-  const edit = await execGomodifytags(args, input);
+  const input = fileArchive(fileName, document.getText())
+  const edit = await execGomodifytags(args, input)
 
-  await workspace.applyEdit({ changes: { [document.uri]: [edit] } });
+  await workspace.applyEdit({ changes: { [document.uri]: [edit] } })
 }
 
 // Interface for the output from gomodifytags
 interface GomodifytagsOutput {
-  start: number;
-  end: number;
-  lines: string[];
+  start: number
+  end: number
+  lines: string[]
 }
 
 async function execGomodifytags(
@@ -144,8 +134,8 @@ async function execGomodifytags(
   input: string
 ): Promise<TextEdit> {
   try {
-    const stdout = await execTool(GOMODIFYTAGS, args, input);
-    const mods = JSON.parse(stdout) as GomodifytagsOutput;
+    const stdout = await execTool(GOMODIFYTAGS, args, input)
+    const mods = JSON.parse(stdout) as GomodifytagsOutput
 
     return {
       range: {
@@ -153,10 +143,10 @@ async function execGomodifytags(
         end: { line: mods.end, character: 0 },
       },
       newText: mods.lines.join('\n') + '\n',
-    };
+    }
   } catch (err) {
-    workspace.showMessage(`Cannot modify tags: ${err}`, 'error');
-    throw err;
+    workspace.showMessage(`Cannot modify tags: ${err}`, 'error')
+    throw err
   }
 }
 
@@ -167,14 +157,14 @@ function fileArchive(fileName: string, fileContents: string): string {
     Buffer.byteLength(fileContents, 'utf8') +
     '\n' +
     fileContents
-  );
+  )
 }
 
 // https://github.com/microsoft/vscode-go/blob/master/src/util.ts#L84
 function byteOffsetAt(document: TextDocument, position: Position): string {
-  const offset = document.offsetAt(position);
-  const text = document.getText();
-  return Buffer.byteLength(text.substr(0, offset)).toString();
+  const offset = document.offsetAt(position)
+  const text = document.getText()
+  return Buffer.byteLength(text.substr(0, offset)).toString()
 }
 
 async function offsetArgs(
@@ -182,14 +172,14 @@ async function offsetArgs(
   selection: 'struct' | 'line',
   cursor = null
 ): Promise<string[]> {
-  cursor = cursor || (await workspace.getCursorPosition());
+  cursor = cursor || (await workspace.getCursorPosition())
 
-  workspace.showMessage(`selection = ${selection}`);
+  workspace.showMessage(`selection = ${selection}`)
 
   switch (selection) {
     case 'struct':
-      return ['-offset', byteOffsetAt(document, cursor)];
+      return ['-offset', byteOffsetAt(document, cursor)]
     case 'line':
-      return ['-line', String(cursor.line + 1)];
+      return ['-line', String(cursor.line + 1)]
   }
 }

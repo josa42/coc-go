@@ -1,25 +1,25 @@
-import path from 'path';
-import fs from 'fs';
-import { LanguageClient, workspace } from 'coc.nvim';
-import { installGoBin, runGoTool } from './utils/tools';
-import checkLatestTag from './utils/checktag';
+import path from 'path'
+import fs from 'fs'
+import { LanguageClient, workspace } from 'coc.nvim'
+import { installGoBin, runGoTool } from './utils/tools'
+import checkLatestTag from './utils/checktag'
 
-import { GOMODIFYTAGS, GOPLAY, GOPLS, GOTESTS, IMPL, TOOLS } from './binaries';
-import { compareVersions, isValidVersion } from './utils/versions';
+import { GOMODIFYTAGS, GOPLAY, GOPLS, GOTESTS, IMPL, TOOLS } from './binaries'
+import { compareVersions, isValidVersion } from './utils/versions'
 
 export async function version(): Promise<void> {
-  const v1 = await pkgVersion();
-  const v2 = (await goplsVersion()) || 'unknown';
+  const v1 = await pkgVersion()
+  const v2 = (await goplsVersion()) || 'unknown'
 
-  workspace.showMessage(`Version: coc-go ${v1}; gopls ${v2}`, 'more');
+  workspace.showMessage(`Version: coc-go ${v1}; gopls ${v2}`, 'more')
 }
 
 export async function installGopls(client: LanguageClient): Promise<void> {
-  await installGoBin(GOPLS, true);
+  await installGoBin(GOPLS, true)
 
   if (client.needsStop()) {
-    await client.stop();
-    client.restart();
+    await client.stop()
+    client.restart()
   }
 }
 
@@ -30,91 +30,91 @@ export async function checkGopls(
   const [current, latest] = await Promise.all([
     goplsVersion(),
     checkLatestTag('golang/tools', /^gopls\//),
-  ]);
+  ])
 
   try {
-    let install = false;
+    let install = false
     switch (compareVersions(latest, current)) {
       case 0:
-        workspace.showMessage(`[gopls] up-to-date: ${current}`, 'more');
-        break;
+        workspace.showMessage(`[gopls] up-to-date: ${current}`, 'more')
+        break
       case 1:
         switch (mode) {
           case 'install':
-            install = true;
-            break;
+            install = true
+            break
           case 'ask':
             install = await workspace.showPrompt(
               `[gopls] Install update? ${current} => ${latest}`
-            );
-            break;
+            )
+            break
           case 'inform':
             workspace.showMessage(
               `[gopls] update available: ${current} => ${latest}`
-            );
-            break;
+            )
+            break
         }
 
-        break;
+        break
       case -1:
         workspace.showMessage(
           `[gopls] current: ${current} | latest: ${latest}`,
           'more'
-        );
-        break;
+        )
+        break
     }
 
     if (install) {
-      await installGopls(client);
+      await installGopls(client)
     }
   } catch (e) {
-    workspace.showMessage(e.toString(), 'error');
+    workspace.showMessage(e.toString(), 'error')
   }
 }
 
 async function pkgVersion(): Promise<string> {
   try {
-    const pkgPath = path.resolve(__dirname, '..', 'package.json');
-    const pkgContent = await fs.promises.readFile(pkgPath, 'utf8');
-    return JSON.parse(pkgContent).version;
+    const pkgPath = path.resolve(__dirname, '..', 'package.json')
+    const pkgContent = await fs.promises.readFile(pkgPath, 'utf8')
+    return JSON.parse(pkgContent).version
   } catch (err) {
-    console.error(err);
+    console.error(err)
   }
 
-  return '';
+  return ''
 }
 
 async function goplsVersion(): Promise<string> {
-  const [, versionOut] = await runGoTool('gopls', ['version']);
+  const [, versionOut] = await runGoTool('gopls', ['version'])
 
   const m = versionOut
     .trim()
-    .match(/^golang\.org\/x\/tools\/gopls (v?\d+\.\d+\.\d+)/);
+    .match(/^golang\.org\/x\/tools\/gopls (v?\d+\.\d+\.\d+)/)
   if (m && isValidVersion(m[1])) {
-    return m[1].replace(/^v/, '');
+    return m[1].replace(/^v/, '')
   }
 
-  return '';
+  return ''
 }
 
 export async function installGomodifytags(): Promise<void> {
-  await installGoBin(GOMODIFYTAGS, true);
+  await installGoBin(GOMODIFYTAGS, true)
 }
 
 export async function installGotests(): Promise<void> {
-  await installGoBin(GOTESTS, true);
+  await installGoBin(GOTESTS, true)
 }
 
 export async function installGoplay(): Promise<void> {
-  await installGoBin(GOPLAY, true);
+  await installGoBin(GOPLAY, true)
 }
 
 export async function installImpl(): Promise<void> {
-  await installGoBin(IMPL, true);
+  await installGoBin(IMPL, true)
 }
 
 export async function installTools(): Promise<void> {
   for (const tool of TOOLS) {
-    await installGoBin(tool, true);
+    await installGoBin(tool, true)
   }
 }
