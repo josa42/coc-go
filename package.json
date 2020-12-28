@@ -356,7 +356,7 @@
                 "SynopsisDocumentation"
               ],
               "default": "FullDocumentation",
-              "description": "hoverKind controls the information that appears in the hover text.\nSingleLine and Structured are intended for use only by authors of editor plugins.\nMust be one of:\n\n * `\"FullDocumentation\"`\n * `\"NoDocumentation\"`\n * `\"SingleLine\"`\n * `\"Structured\"` is an experimental setting that returns a structured hover format.\nThis format separates the signature from the documentation, so that the client\ncan do more manipulation of these fields.\\\nThis should only be used by clients that support this behavior.\n\n * `\"SynopsisDocumentation\"`\n"
+              "description": "hoverKind controls the information that appears in the hover text.\nSingleLine and Structured are intended for use only by authors of editor plugins.\n\nMust be one of:\n\n* `\"FullDocumentation\"`\n* `\"NoDocumentation\"`\n* `\"SingleLine\"`\n* `\"Structured\"` is an experimental setting that returns a structured hover format.\nThis format separates the signature from the documentation, so that the client\ncan do more manipulation of these fields.\\\nThis should only be used by clients that support this behavior.\n\n* `\"SynopsisDocumentation\"`\n"
             },
             "importShortcut": {
               "type": "string",
@@ -366,7 +366,7 @@
                 "Link"
               ],
               "default": "Both",
-              "description": "importShortcut specifies whether import statements should link to\ndocumentation or go to definitions.\nMust be one of:\n\n * `\"Both\"`\n * `\"Definition\"`\n * `\"Link\"`\n"
+              "description": "importShortcut specifies whether import statements should link to\ndocumentation or go to definitions.\n\nMust be one of:\n\n* `\"Both\"`\n* `\"Definition\"`\n* `\"Link\"`\n"
             },
             "linksInHover": {
               "type": "boolean",
@@ -391,7 +391,7 @@
                 "Fuzzy"
               ],
               "default": "Fuzzy",
-              "description": "matcher sets the algorithm that is used when calculating completion candidates.\nMust be one of:\n\n * `\"CaseInsensitive\"`\n * `\"CaseSensitive\"`\n * `\"Fuzzy\"`\n"
+              "description": "matcher sets the algorithm that is used when calculating completion candidates.\n\nMust be one of:\n\n* `\"CaseInsensitive\"`\n* `\"CaseSensitive\"`\n* `\"Fuzzy\"`\n"
             },
             "symbolMatcher": {
               "type": "string",
@@ -401,7 +401,7 @@
                 "Fuzzy"
               ],
               "default": "Fuzzy",
-              "description": "symbolMatcher sets the algorithm that is used when finding workspace symbols.\nMust be one of:\n\n * `\"CaseInsensitive\"`\n * `\"CaseSensitive\"`\n * `\"Fuzzy\"`\n"
+              "description": "symbolMatcher sets the algorithm that is used when finding workspace symbols.\n\nMust be one of:\n\n* `\"CaseInsensitive\"`\n* `\"CaseSensitive\"`\n* `\"Fuzzy\"`\n"
             },
             "symbolStyle": {
               "type": "string",
@@ -411,7 +411,7 @@
                 "Package"
               ],
               "default": "Dynamic",
-              "description": "symbolStyle controls how symbols are qualified in symbol responses.\n\nExample Usage:\n```json5\n\"gopls\": {\n...\n  \"symbolStyle\": \"dynamic\",\n...\n}\n```\nMust be one of:\n\n * `\"Dynamic\"` uses whichever qualifier results in the highest scoring\nmatch for the given symbol query. Here a \"qualifier\" is any \"/\" or \".\"\ndelimited suffix of the fully qualified symbol. i.e. \"to/pkg.Foo.Field\" or\njust \"Foo.Field\".\n\n * `\"Full\"` is fully qualified symbols, i.e.\n\"path/to/pkg.Foo.Field\".\n\n * `\"Package\"` is package qualified symbols i.e.\n\"pkg.Foo.Field\".\n"
+              "description": "symbolStyle controls how symbols are qualified in symbol responses.\n\nExample Usage:\n```json5\n\"gopls\": {\n...\n  \"symbolStyle\": \"dynamic\",\n...\n}\n```\n\nMust be one of:\n\n* `\"Dynamic\"` uses whichever qualifier results in the highest scoring\nmatch for the given symbol query. Here a \"qualifier\" is any \"/\" or \".\"\ndelimited suffix of the fully qualified symbol. i.e. \"to/pkg.Foo.Field\" or\njust \"Foo.Field\".\n\n* `\"Full\"` is fully qualified symbols, i.e.\n\"path/to/pkg.Foo.Field\".\n\n* `\"Package\"` is package qualified symbols i.e.\n\"pkg.Foo.Field\".\n"
             },
             "usePlaceholders": {
               "type": "boolean",
@@ -435,7 +435,7 @@
                   "type": "boolean"
                 }
               },
-              "description": "[EXPERIMENTAL] annotations suppress various kinds of optimization diagnostics\nthat would be reported by the gc_details command.\n * noNilcheck suppresses display of nilchecks.\n * noEscape suppresses escape choices.\n * noInline suppresses inlining choices.\n * noBounds suppresses bounds checking diagnostics.\n"
+              "description": "[EXPERIMENTAL] annotations specifies the various kinds of optimization diagnostics\nthat should be reported by the gc_details command.\n\nCan contain any of:\n\n* `\"bounds\"` controls bounds checking diagnostics.\n\n* `\"escape\"` controls diagnostics about escape choices.\n\n* `\"inline\"` controls diagnostics about inlining choices.\n\n* `\"nil\"` controls nil checks.\n"
             },
             "expandWorkspaceToModule": {
               "type": "boolean",
