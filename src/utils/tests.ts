@@ -1,6 +1,6 @@
-import { workspace } from 'coc.nvim'
+import { window, workspace } from 'coc.nvim'
 import { URI } from 'vscode-uri'
-import { TextDocument } from 'vscode-languageserver-protocol'
+import { TextDocument } from 'vscode-languageserver-textdocument'
 import { execTool } from './tools'
 import { GOTESTS } from '../binaries'
 import { GoTestsConfig } from './config'
@@ -9,7 +9,7 @@ import { GoTestsConfig } from './config'
 
 export async function generateTestsAll(document: TextDocument): Promise<void> {
   if (isTest(document)) {
-    workspace.showMessage("Document is a test file", "error")
+    window.showMessage("Document is a test file", "error")
     return
   }
   await runGotests(document, ["-all"]) && await openTests(document)
@@ -17,7 +17,7 @@ export async function generateTestsAll(document: TextDocument): Promise<void> {
 
 export async function generateTestsExported(document: TextDocument): Promise<void> {
   if (isTest(document)) {
-    workspace.showMessage("Document is a test file", "error")
+    window.showMessage("Document is a test file", "error")
     return
   }
   await runGotests(document, ["-exported"]) && await openTests(document)
@@ -25,21 +25,21 @@ export async function generateTestsExported(document: TextDocument): Promise<voi
 
 export async function generateTestsFunction(document: TextDocument): Promise<void> {
   if (isTest(document)) {
-    workspace.showMessage("Document is a test file", "error")
+    window.showMessage("Document is a test file", "error")
     return
   }
 
-  const { line } = await workspace.getCursorPosition()
+  const { line } = await window.getCursorPosition()
   const text = await document.getText({
     start: { line, character: 0 },
     end: { line, character: Infinity },
   })
 
-  workspace.showMessage(text)
+  window.showMessage(text)
 
   const funcName = extractFunctionName(text)
   if (!funcName) {
-    workspace.showMessage("No function found", "error")
+    window.showMessage("No function found", "error")
     return
   }
 
@@ -79,12 +79,12 @@ async function runGotests(document: TextDocument, args: string[]): Promise<boole
   args.push(...(config.generateFlags || []), '-w', URI.parse(document.uri).fsPath)
   try {
     const stdout = await execTool(GOTESTS, args)
-    workspace.showMessage(stdout || "")
+    window.showMessage(stdout || "")
 
     return true
 
   } catch (err) {
-    workspace.showMessage(`Error: ${err}`, "error")
+    window.showMessage(`Error: ${err}`, "error")
     return false
   }
 }

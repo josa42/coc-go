@@ -1,5 +1,5 @@
-import { workspace } from 'coc.nvim'
-import { TextDocument, TextEdit } from 'vscode-languageserver-protocol'
+import { window, workspace } from 'coc.nvim'
+import { TextDocument, TextEdit } from 'vscode-languageserver-textdocument'
 import { IMPL } from '../binaries'
 import { execTool } from './tools'
 
@@ -7,10 +7,10 @@ const interfaceRegex = /^(\w+ \*?\w+ )?([\w./-]+)$/
 
 export async function generateImplStubs(document: TextDocument): Promise<void> {
   try {
-    const implInput = await workspace.requestInput("Enter receiver and interface [f *File io.Closer]")
+    const implInput = await window.requestInput("Enter receiver and interface [f *File io.Closer]")
 
     if (implInput == null) {
-      workspace.showMessage("No input detected! Aborting.", "warning")
+      window.showMessage("No input detected! Aborting.", "warning")
       return
     }
 
@@ -23,7 +23,7 @@ export async function generateImplStubs(document: TextDocument): Promise<void> {
 
     await workspace.applyEdit({ changes: { [document.uri]: [edit] } })
   } catch (error) {
-    workspace.showMessage(error, "error")
+    window.showMessage(error, "error")
   }
 }
 
@@ -31,7 +31,7 @@ async function runGoImpl(document: TextDocument, args: string[]): Promise<TextEd
 
   const stdout = await execTool(IMPL, args)
 
-  const { line } = await workspace.getCursorPosition()
+  const { line } = await window.getCursorPosition()
   const insertPos = { line: line + 1, character: 0 }
 
   const lineText = await workspace.getLine(document.uri, line)

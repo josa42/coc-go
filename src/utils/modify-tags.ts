@@ -1,5 +1,5 @@
-import { Position, TextDocument, TextEdit } from 'vscode-languageserver-protocol'
-import { workspace } from 'coc.nvim'
+import { Position, TextDocument, TextEdit } from 'vscode-languageserver-textdocument'
+import { window, workspace } from 'coc.nvim'
 import { URI } from 'vscode-uri'
 
 import { GoTagsConfig } from './config'
@@ -32,13 +32,13 @@ export async function addTags(document: TextDocument, params: Params = {}): Prom
 
   let cursor
   if (params.prompt) {
-    cursor = await workspace.getCursorPosition()
-    tags = await workspace.requestInput('Enter comma separated tag names', tags)
+    cursor = await window.getCursorPosition()
+    tags = await window.requestInput('Enter comma separated tag names', tags)
     if (!tags) {
       return
     }
 
-    options = await workspace.requestInput('Enter comma separated options', options)
+    options = await window.requestInput('Enter comma separated options', options)
   }
 
   const args = [
@@ -63,8 +63,8 @@ export async function removeTags(document: TextDocument, params: Params = {}): P
 
   let cursor
   if (params.prompt) {
-    cursor = await workspace.getCursorPosition()
-    tags = await workspace.requestInput('Enter comma separated tag names', tags)
+    cursor = await window.getCursorPosition()
+    tags = await window.requestInput('Enter comma separated tag names', tags)
     if (!tags) {
       return
     }
@@ -126,7 +126,7 @@ async function execGomodifytags(args: string[], input: string): Promise<TextEdit
     }
 
   } catch (err) {
-    workspace.showMessage(`Cannot modify tags: ${err}`, 'error')
+    window.showMessage(`Cannot modify tags: ${err}`, 'error')
     throw err
   }
 }
@@ -144,9 +144,9 @@ function byteOffsetAt(document: TextDocument, position: Position): string {
 
 async function offsetArgs(document: TextDocument, selection: "struct" | "line", cursor = null): Promise<string[]> {
 
-  cursor = cursor || await workspace.getCursorPosition()
+  cursor = cursor || await window.getCursorPosition()
 
-  workspace.showMessage(`selection = ${selection}`)
+  window.showMessage(`selection = ${selection}`)
 
   switch (selection) {
     case "struct":

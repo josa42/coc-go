@@ -1,4 +1,4 @@
-import { ExtensionContext, LanguageClient, LanguageClientOptions, commands, services, workspace } from 'coc.nvim'
+import { ExtensionContext, LanguageClient, LanguageClientOptions, commands, services, window, workspace } from 'coc.nvim'
 import { ChildProcess, spawn } from 'child_process'
 import { commandExists, goBinPath, installGoBin } from './utils/tools'
 import { checkGopls, installGomodifytags, installGoplay, installGopls, installGotests, installImpl, installTools, version } from './commands'
@@ -110,7 +110,7 @@ async function registerGopls(context: ExtensionContext): Promise<void> {
 async function goplsPath(goplsPath: string): Promise<string | null> {
   if (goplsPath) {
     if (!await commandExists(goplsPath)) {
-      workspace.showMessage(`goplsPath is configured ("${goplsPath}"), but does not exist!`, 'error')
+      window.showMessage(`goplsPath is configured ("${goplsPath}"), but does not exist!`, 'error')
       return null
     }
 

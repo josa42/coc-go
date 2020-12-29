@@ -2,7 +2,7 @@ import path from 'path'
 import fs from 'fs'
 import util from 'util'
 import { ExecOptions, exec, execFile, spawn } from 'child_process'
-import { workspace } from 'coc.nvim'
+import { window, workspace } from 'coc.nvim'
 import which from 'which'
 import { configDir } from './config'
 
@@ -19,16 +19,16 @@ export async function installGoBin(source: string, force = false): Promise<boole
     return true
   }
 
-  const statusItem = workspace.createStatusBarItem(90, { progress: true })
+  const statusItem = window.createStatusBarItem(90, { progress: true })
   statusItem.text = `Installing '${name}'`
   statusItem.show()
 
   const success = await goRun(`get ${source}@latest`) && await goBinExists(name)
 
   if (success) {
-    workspace.showMessage(`Installed '${name}'`)
+    window.showMessage(`Installed '${name}'`)
   } else {
-    workspace.showMessage(`Failed to install '${name}'`, 'error')
+    window.showMessage(`Failed to install '${name}'`, 'error')
   }
 
   statusItem.hide()
@@ -95,7 +95,7 @@ async function goRun(args: string): Promise<boolean> {
   try {
     await runExec(cmd, opts)
   } catch (ex) {
-    workspace.showMessage(ex, 'error')
+    window.showMessage(ex, 'error')
     return false
   }
 

@@ -1,6 +1,6 @@
 import path from 'path'
 import fs from 'fs'
-import { LanguageClient, workspace } from 'coc.nvim'
+import { LanguageClient, window } from 'coc.nvim'
 import { installGoBin, runGoTool } from './utils/tools'
 import checkLatestTag from './utils/checktag'
 
@@ -11,7 +11,7 @@ export async function version(): Promise<void> {
   const v1 = await pkgVersion()
   const v2 = await goplsVersion() || 'unknown'
 
-  workspace.showMessage(`Version: coc-go ${v1}; gopls ${v2}`, 'more')
+  window.showMessage(`Version: coc-go ${v1}; gopls ${v2}`, 'more')
 }
 
 export async function installGopls(client: LanguageClient): Promise<void> {
@@ -34,7 +34,7 @@ export async function checkGopls(client: LanguageClient, mode: 'ask' | 'inform' 
     let install = false
     switch (compareVersions(latest, current)) {
       case 0:
-        workspace.showMessage(`[gopls] up-to-date: ${current}`, 'more')
+        window.showMessage(`[gopls] up-to-date: ${current}`, 'more')
         break
       case 1:
         switch (mode) {
@@ -42,16 +42,16 @@ export async function checkGopls(client: LanguageClient, mode: 'ask' | 'inform' 
             install = true
             break
           case 'ask':
-            install = await workspace.showPrompt(`[gopls] Install update? ${current} => ${latest}`)
+            install = await window.showPrompt(`[gopls] Install update? ${current} => ${latest}`)
             break
           case 'inform':
-            workspace.showMessage(`[gopls] update available: ${current} => ${latest}`)
+            window.showMessage(`[gopls] update available: ${current} => ${latest}`)
             break
         }
 
         break
       case -1:
-        workspace.showMessage(`[gopls] current: ${current} | latest: ${latest}`, 'more')
+        window.showMessage(`[gopls] current: ${current} | latest: ${latest}`, 'more')
         break
     }
 
@@ -59,7 +59,7 @@ export async function checkGopls(client: LanguageClient, mode: 'ask' | 'inform' 
       await installGopls(client)
     }
   } catch (e) {
-    workspace.showMessage(e.toString(), 'error')
+    window.showMessage(e.toString(), 'error')
   }
 }
 

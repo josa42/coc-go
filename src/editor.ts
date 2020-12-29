@@ -1,5 +1,5 @@
 import { workspace } from 'coc.nvim'
-import { TextDocument } from 'vscode-languageserver-protocol'
+import { TextDocument } from 'vscode-languageserver-textdocument'
 
 export async function activeTextDocument(): Promise<TextDocument> {
   const doc = await workspace.document
