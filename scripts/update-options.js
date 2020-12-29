@@ -65,28 +65,9 @@ const run = async () => {
       }, props)
   })
 
-  let k = ""
-
   props.analyses.additionalProperties = false
   props.analyses.patternProperties = undefined
-  props.analyses.properties = (
-    await get(
-      "https://raw.githubusercontent.com/golang/tools/master/gopls/doc/analyzers.md"
-    )
-  )
-    .split(/\n/)
-    .reduce((props, l) => {
-      if (l.match(/^### /)) {
-        k = l.replace(/^### \*\*(.*)\*\*$/, "$1")
-        props[k] = { type: "boolean" }
-      }
-
-      if (l.match(/^Default value: /)) {
-        props[k].default =
-          l.replace(/^Default value: `(true|false)`\.$/, "$1") === "true"
-      }
-      return props
-    }, {})
+  props.analyses.properties = await getAnalysesProperties()
 
   const codeLenseDefault = JSON.parse(data.codelenses.Default)
 
@@ -182,6 +163,47 @@ const get = async (url) =>
       })
       .on("error", (err) => reject(err))
   })
+
+const getAnalysesProperties = async () => {
+  let k = ""
+  let inside = false
+
+  const content = await get(
+    "https://raw.githubusercontent.com/golang/tools/master/gopls/doc/analyzers.md"
+  )
+
+  let props = content.split(/\n/).reduce((props, l) => {
+    const m = l.match(/^<!-- ([A-Z]+) Analyzers/)
+    inside = m !== null ? m[1] === "BEGIN" : inside
+    if (!inside) {
+      return props
+    }
+
+    if (l.match(/^## /)) {
+      k = l.replace(/^## \*\*(.*)\*\*$/, "$1")
+      props[k] = { type: "boolean", description: "" }
+    } else if (l.match(/^\*\*Enabled by default\.\*\*/)) {
+      props[k].default = true
+    } else if (props[k] && l) {
+      props[k].description += `${l}\n`
+    }
+
+    return props
+  }, {})
+
+  props = Object.keys(props).reduce(
+    (p, k) => ({
+      ...p,
+      [k]: {
+        ...props[k],
+        description: props[k].description.trim(),
+      },
+    }),
+    {}
+  )
+
+  return props
+}
 
 ;(async () => {
   try {

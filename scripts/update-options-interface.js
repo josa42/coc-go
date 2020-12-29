@@ -34,9 +34,9 @@ function generate() {
     pkg.contributes.configuration.properties["go.goplsOptions"].properties
 
   Object.keys(opts)
-    .filter(k => !opts[k].description.match(/EXPERIMENTAL/))
+    .filter((k) => !opts[k].description.match(/EXPERIMENTAL/))
     .sort()
-    .forEach(k => {
+    .forEach((k) => {
       lines.push(
         "",
         `  /**`,
@@ -47,9 +47,9 @@ function generate() {
     })
 
   Object.keys(opts)
-    .filter(k => opts[k].description.match(/EXPERIMENTAL/))
+    .filter((k) => opts[k].description.match(/EXPERIMENTAL/))
     .sort()
-    .forEach(k => {
+    .forEach((k) => {
       lines.push(
         "",
         `  /**`,
@@ -74,7 +74,7 @@ function getType(o) {
         return `{ string: ${o.patternProperties[".+"].type} }`
       }
       return `{ string: ${Object.keys(o.properties)
-        .map(k => o.properties[k].type)
+        .map((k) => o.properties[k].type)
         .reduce((ts, t) => (ts.includes(t) ? ts : [...ts, t]), [])
         .join("|")} }`
 

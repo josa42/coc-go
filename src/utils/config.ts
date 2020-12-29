@@ -52,7 +52,7 @@ export interface GoplsOptions {
   /**
    * Default: {}
    */
-  analyses: { string:  }
+  analyses: { string: boolean }
 
   /**
    * Default: []
