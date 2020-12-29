@@ -12,7 +12,11 @@ const isWin = process.platform === 'win32'
 
 ////////////////////////////////////////////////////////////////////////////////
 
-export async function installGoBin(source: string, force = false): Promise<boolean> {
+interface GetVersionFunction {
+  (): string | Promise<string>
+}
+
+export async function installGoBin(source: string, force = false, getVersion?: GetVersionFunction): Promise<boolean> {
   const name = goBinName(source)
 
   if (!force && await goBinExists(name)) {
@@ -26,7 +30,9 @@ export async function installGoBin(source: string, force = false): Promise<boole
   const success = await goRun(`get ${source}@latest`) && await goBinExists(name)
 
   if (success) {
-    window.showMessage(`Installed '${name}'`)
+    const vname = getVersion ? `${name}@${await getVersion()}` : name
+
+    window.showMessage(`Installed '${vname}'`)
   } else {
     window.showMessage(`Failed to install '${name}'`, 'error')
   }

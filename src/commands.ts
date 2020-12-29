@@ -15,7 +15,7 @@ export async function version(): Promise<void> {
 }
 
 export async function installGopls(client: LanguageClient): Promise<void> {
-  await installGoBin(GOPLS, true)
+  await installGoBin(GOPLS, true, goplsVersion)
 
   if (client.needsStop()) {
     await client.stop()
@@ -79,7 +79,7 @@ async function pkgVersion(): Promise<string> {
 async function goplsVersion(): Promise<string> {
   const [, versionOut] = await runGoTool("gopls", ["version"])
 
-  const m = versionOut.trim().match(/^golang\.org\/x\/tools\/gopls (v?\d+\.\d+\.\d+)/)
+  const m = versionOut.trim().match(/\s{4}golang\.org\/x\/tools\/gopls@(v?\d+\.\d+\.\d+) .*/)
   if (m && isValidVersion(m[1])) {
     return m[1].replace(/^v/, '')
   }
