@@ -139,16 +139,16 @@
             "allowImplicitNetworkAccess": {
               "type": "boolean",
               "default": false,
-              "description": "[EXPERIMENTAL] allowImplicitNetworkAccess disables GOPROXY=off, allowing implicit module\ndownloads rather than requiring user action. This option will eventually\nbe removed.\n"
+              "description": "**This setting is experimental and may be deleted.**\n\nallowImplicitNetworkAccess disables GOPROXY=off, allowing implicit module\ndownloads rather than requiring user action. This option will eventually\nbe removed.\n"
             },
             "allowModfileModifications": {
               "type": "boolean",
               "default": false,
-              "description": "[EXPERIMENTAL] allowModfileModifications disables -mod=readonly, allowing imports from\nout-of-scope modules. This option will eventually be removed.\n"
+              "description": "**This setting is experimental and may be deleted.**\n\nallowModfileModifications disables -mod=readonly, allowing imports from\nout-of-scope modules. This option will eventually be removed.\n"
             },
             "analyses": {
               "type": "object",
-              "description": "analyses specify analyses that the user would like to enable or disable.\nA map of the names of analysis passes that should be enabled/disabled.\nA full list of analyzers that gopls uses can be found [here](analyzers.md)\n\nExample Usage:\n```json5\n...\n\"analyses\": {\n  \"unreachable\": false, // Disable the unreachable analyzer.\n  \"unusedparams\": true  // Enable the unusedparams analyzer.\n}\n...\n```\n",
+              "description": "analyses specify analyses that the user would like to enable or disable.\nA map of the names of analysis passes that should be enabled/disabled.\nA full list of analyzers that gopls uses can be found\n[here](https://github.com/golang/tools/blob/master/gopls/doc/analyzers.md).\n\nExample Usage:\n\n```json5\n...\n\"analyses\": {\n  \"unreachable\": false, // Disable the unreachable analyzer.\n  \"unusedparams\": true  // Enable the unusedparams analyzer.\n}\n...\n```\n",
               "additionalProperties": false,
               "properties": {
                 "asmdecl": {
@@ -352,7 +352,7 @@
                   "type": "boolean"
                 }
               },
-              "description": "[EXPERIMENTAL] annotations specifies the various kinds of optimization diagnostics\nthat should be reported by the gc_details command.\n\nCan contain any of:\n\n* `\"bounds\"` controls bounds checking diagnostics.\n\n* `\"escape\"` controls diagnostics about escape choices.\n\n* `\"inline\"` controls diagnostics about inlining choices.\n\n* `\"nil\"` controls nil checks.\n"
+              "description": "**This setting is experimental and may be deleted.**\n\nannotations specifies the various kinds of optimization diagnostics\nthat should be reported by the gc_details command.\n\nCan contain any of:\n\n* `\"bounds\"` controls bounds checking diagnostics.\n\n* `\"escape\"` controls diagnostics about escape choices.\n\n* `\"inline\"` controls diagnostics about inlining choices.\n\n* `\"nil\"` controls nil checks.\n"
             },
             "buildFlags": {
               "type": "array",
@@ -363,7 +363,7 @@
             },
             "codelenses": {
               "type": "object",
-              "description": "codelenses overrides the enabled/disabled state of code lenses. See the \"Code Lenses\"\nsection of settings.md for the list of supported lenses.\n\nExample Usage:\n```json5\n\"gopls\": {\n...\n  \"codelenses\": {\n    \"generate\": false,  // Don't show the `go generate` lens.\n    \"gc_details\": true  // Show a code lens toggling the display of gc's choices.\n  }\n...\n}\n```\n",
+              "description": "codelenses overrides the enabled/disabled state of code lenses. See the\n\"Code Lenses\" section of the\n[Settings page](https://github.com/golang/tools/blob/master/gopls/doc/settings.md)\nfor the list of supported lenses.\n\nExample Usage:\n\n```json5\n\"gopls\": {\n...\n  \"codelens\": {\n    \"generate\": false,  // Don't show the `go generate` lens.\n    \"gc_details\": true  // Show a code lens toggling the display of gc's choices.\n  }\n...\n}\n```\n",
               "additionalProperties": false,
               "properties": {
                 "gc_details": {
@@ -392,6 +392,11 @@
                 }
               }
             },
+            "completionBudget": {
+              "type": "string",
+              "default": "100ms",
+              "description": "**This setting is for debugging purposes only.**\n\ncompletionBudget is the soft latency goal for completion requests. Most\nrequests finish in a couple milliseconds, but in some cases deep\ncompletions can take much longer. As we use up our budget we\ndynamically reduce the search scope to ensure we return timely\nresults. Zero means unlimited.\n"
+            },
             "directoryFilters": {
               "type": "array",
               "items": {
@@ -411,22 +416,22 @@
             "expandWorkspaceToModule": {
               "type": "boolean",
               "default": true,
-              "description": "[EXPERIMENTAL] expandWorkspaceToModule instructs `gopls` to adjust the scope of the\nworkspace to find the best available module root. `gopls` first looks for\na go.mod file in any parent directory of the workspace folder, expanding\nthe scope to that directory if it exists. If no viable parent directory is\nfound, gopls will check if there is exactly one child directory containing\na go.mod file, narrowing the scope to that directory if it exists.\n"
+              "description": "**This setting is experimental and may be deleted.**\n\nexpandWorkspaceToModule instructs `gopls` to adjust the scope of the\nworkspace to find the best available module root. `gopls` first looks for\na go.mod file in any parent directory of the workspace folder, expanding\nthe scope to that directory if it exists. If no viable parent directory is\nfound, gopls will check if there is exactly one child directory containing\na go.mod file, narrowing the scope to that directory if it exists.\n"
             },
             "experimentalDiagnosticsDelay": {
               "type": "string",
               "default": "250ms",
-              "description": "[EXPERIMENTAL] experimentalDiagnosticsDelay controls the amount of time that gopls waits\nafter the most recent file modification before computing deep diagnostics.\nSimple diagnostics (parsing and type-checking) are always run immediately\non recently modified packages.\n\nThis option must be set to a valid duration string, for example `\"250ms\"`.\n"
+              "description": "**This setting is experimental and may be deleted.**\n\nexperimentalDiagnosticsDelay controls the amount of time that gopls waits\nafter the most recent file modification before computing deep diagnostics.\nSimple diagnostics (parsing and type-checking) are always run immediately\non recently modified packages.\n\nThis option must be set to a valid duration string, for example `\"250ms\"`.\n"
             },
             "experimentalPackageCacheKey": {
               "type": "boolean",
               "default": true,
-              "description": "[EXPERIMENTAL] experimentalPackageCacheKey controls whether to use a coarser cache key\nfor package type information to increase cache hits. This setting removes\nthe user's environment, build flags, and working directory from the cache\nkey, which should be a safe change as all relevant inputs into the type\nchecking pass are already hashed into the key. This is temporarily guarded\nby an experiment because caching behavior is subtle and difficult to\ncomprehensively test.\n"
+              "description": "**This setting is experimental and may be deleted.**\n\nexperimentalPackageCacheKey controls whether to use a coarser cache key\nfor package type information to increase cache hits. This setting removes\nthe user's environment, build flags, and working directory from the cache\nkey, which should be a safe change as all relevant inputs into the type\nchecking pass are already hashed into the key. This is temporarily guarded\nby an experiment because caching behavior is subtle and difficult to\ncomprehensively test.\n"
             },
             "experimentalWorkspaceModule": {
               "type": "boolean",
               "default": false,
-              "description": "[EXPERIMENTAL] experimentalWorkspaceModule opts a user into the experimental support\nfor multi-module workspaces.\n"
+              "description": "**This setting is experimental and may be deleted.**\n\nexperimentalWorkspaceModule opts a user into the experimental support\nfor multi-module workspaces.\n"
             },
             "gofumpt": {
               "type": "boolean",
@@ -455,20 +460,20 @@
               "default": "Both",
               "description": "importShortcut specifies whether import statements should link to\ndocumentation or go to definitions.\n\nMust be one of:\n\n* `\"Both\"`\n* `\"Definition\"`\n* `\"Link\"`\n"
             },
-            "linkTarget": {
-              "type": "string",
-              "default": "pkg.go.dev",
-              "description": "linkTarget controls where documentation links go.\nIt might be one of:\n\n* `\"godoc.org\"`\n* `\"pkg.go.dev\"`\n\nIf company chooses to use its own `godoc.org`, its address can be used as well.\n"
-            },
             "linksInHover": {
               "type": "boolean",
               "default": true,
               "description": "linksInHover toggles the presence of links to documentation in hover.\n"
             },
+            "linkTarget": {
+              "type": "string",
+              "default": "pkg.go.dev",
+              "description": "linkTarget controls where documentation links go.\nIt might be one of:\n\n* `\"godoc.org\"`\n* `\"pkg.go.dev\"`\n\nIf company chooses to use its own `godoc.org`, its address can be used as well.\n"
+            },
             "local": {
               "type": "string",
               "default": "",
-              "description": "local is the equivalent of the `goimports -local` flag, which puts imports beginning with this string after 3rd-party packages.\nIt should be the prefix of the import path whose imports should be grouped separately.\n"
+              "description": "local is the equivalent of the `goimports -local` flag, which puts\nimports beginning with this string after third-party packages. It should\nbe the prefix of the import path whose imports should be grouped\nseparately.\n"
             },
             "matcher": {
               "type": "string",
@@ -478,17 +483,17 @@
                 "Fuzzy"
               ],
               "default": "Fuzzy",
-              "description": "matcher sets the algorithm that is used when calculating completion candidates.\n\nMust be one of:\n\n* `\"CaseInsensitive\"`\n* `\"CaseSensitive\"`\n* `\"Fuzzy\"`\n"
+              "description": "**This is an advanced setting and should not be configured by most `gopls` users.**\n\nmatcher sets the algorithm that is used when calculating completion\ncandidates.\n\nMust be one of:\n\n* `\"CaseInsensitive\"`\n* `\"CaseSensitive\"`\n* `\"Fuzzy\"`\n"
             },
             "semanticTokens": {
               "type": "boolean",
               "default": false,
-              "description": "[EXPERIMENTAL] semanticTokens controls whether the LSP server will send\nsemantic tokens to the client.\n"
+              "description": "**This setting is experimental and may be deleted.**\n\nsemanticTokens controls whether the LSP server will send\nsemantic tokens to the client.\n"
             },
             "staticcheck": {
               "type": "boolean",
               "default": false,
-              "description": "[EXPERIMENTAL] staticcheck enables additional analyses from staticcheck.io.\n"
+              "description": "**This setting is experimental and may be deleted.**\n\nstaticcheck enables additional analyses from staticcheck.io.\n"
             },
             "symbolMatcher": {
               "type": "string",
@@ -498,7 +503,7 @@
                 "Fuzzy"
               ],
               "default": "Fuzzy",
-              "description": "symbolMatcher sets the algorithm that is used when finding workspace symbols.\n\nMust be one of:\n\n* `\"CaseInsensitive\"`\n* `\"CaseSensitive\"`\n* `\"Fuzzy\"`\n"
+              "description": "**This is an advanced setting and should not be configured by most `gopls` users.**\n\nsymbolMatcher sets the algorithm that is used when finding workspace symbols.\n\nMust be one of:\n\n* `\"CaseInsensitive\"`\n* `\"CaseSensitive\"`\n* `\"Fuzzy\"`\n"
             },
             "symbolStyle": {
               "type": "string",
@@ -508,12 +513,17 @@
                 "Package"
               ],
               "default": "Dynamic",
-              "description": "symbolStyle controls how symbols are qualified in symbol responses.\n\nExample Usage:\n```json5\n\"gopls\": {\n...\n  \"symbolStyle\": \"dynamic\",\n...\n}\n```\n\nMust be one of:\n\n* `\"Dynamic\"` uses whichever qualifier results in the highest scoring\nmatch for the given symbol query. Here a \"qualifier\" is any \"/\" or \".\"\ndelimited suffix of the fully qualified symbol. i.e. \"to/pkg.Foo.Field\" or\njust \"Foo.Field\".\n\n* `\"Full\"` is fully qualified symbols, i.e.\n\"path/to/pkg.Foo.Field\".\n\n* `\"Package\"` is package qualified symbols i.e.\n\"pkg.Foo.Field\".\n"
+              "description": "**This is an advanced setting and should not be configured by most `gopls` users.**\n\nsymbolStyle controls how symbols are qualified in symbol responses.\n\nExample Usage:\n\n```json5\n\"gopls\": {\n...\n  \"symbolStyle\": \"dynamic\",\n...\n}\n```\n\nMust be one of:\n\n* `\"Dynamic\"` uses whichever qualifier results in the highest scoring\nmatch for the given symbol query. Here a \"qualifier\" is any \"/\" or \".\"\ndelimited suffix of the fully qualified symbol. i.e. \"to/pkg.Foo.Field\" or\njust \"Foo.Field\".\n\n* `\"Full\"` is fully qualified symbols, i.e.\n\"path/to/pkg.Foo.Field\".\n\n* `\"Package\"` is package qualified symbols i.e.\n\"pkg.Foo.Field\".\n"
             },
             "usePlaceholders": {
               "type": "boolean",
               "default": false,
-              "description": "placeholders enables placeholders for function parameters or struct fields in completion responses.\n"
+              "description": "placeholders enables placeholders for function parameters or struct\nfields in completion responses.\n"
+            },
+            "verboseOutput": {
+              "type": "boolean",
+              "default": false,
+              "description": "**This setting is for debugging purposes only.**\n\nverboseOutput enables additional debug logging.\n"
             }
           }
         },

@@ -7,7 +7,7 @@ const run = async () => {
     "https://raw.githubusercontent.com/golang/tools/master/gopls/doc/settings.md"
   )
 
-  const opts = {}
+  const opts = []
 
   let section
   let m
@@ -19,14 +19,13 @@ const run = async () => {
         /<!-- BEGIN (.*): DO NOT MANUALLY EDIT THIS SECTION -->/,
         `$1`
       )
-      opts[section] = []
     }
 
     if (section) {
-      if ((m = line.match(/^### \*\*(.*)\*\* \*(.*)\*$/))) {
+      if ((m = line.match(/^###+ \*\*(.*)\*\* \*(.*)\*$/))) {
         const [, Name, Type] = m
         item = { Name, Type, Doc: "", Default: null }
-        opts[section].push(item)
+        opts.push(item)
       } else if ((m = line.match(/^Default: `(.*)`\.$/))) {
         const [, Default] = m
         item.Default = Default
@@ -46,24 +45,21 @@ const run = async () => {
 
   const data = {}
 
-  let props = {}
-  ;["User", "Experimental"].forEach((k) => {
-    props = opts[k]
-      .sort(({ Name: a }, { Name: b }) =>
-        a.toLowerCase().localeCompare(b.toLowerCase())
-      )
-      .reduce((props, { Name, Type, Doc, Default }) => {
-        props[Name] = {
-          ...parseType(Type, Doc),
-          default: parseDefault(Default),
-          description: parseDescription(Doc, k),
-        }
+  let props = opts
+    .sort(({ Name: a }, { Name: b }) =>
+      a.toLowerCase().localeCompare(b.toLowerCase())
+    )
+    .reduce((props, { Name, Type, Doc, Default }) => {
+      props[Name] = {
+        ...parseType(Type, Doc),
+        default: parseDefault(Default),
+        description: Doc,
+      }
 
-        data[Name] = { Name, Type, Doc, Default }
+      data[Name] = { Name, Type, Doc, Default }
 
-        return props
-      }, props)
-  })
+      return props
+    }, {})
 
   props.analyses.additionalProperties = false
   props.analyses.patternProperties = undefined
@@ -146,9 +142,6 @@ const parseDefault = (str) => {
 
   return undefined
 }
-
-const parseDescription = (doc, key) =>
-  key === "Experimental" ? `[EXPERIMENTAL] ${doc}` : doc
 
 const https = require("https")
 

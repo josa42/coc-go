@@ -50,9 +50,24 @@ export interface GoTestsConfig {
 export interface GoplsOptions {
 
   /**
+   * Default: false
+   */
+  allowImplicitNetworkAccess: boolean
+
+  /**
+   * Default: false
+   */
+  allowModfileModifications: boolean
+
+  /**
    * Default: {}
    */
   analyses: { string: boolean }
+
+  /**
+   * Default: {}
+   */
+  annotations: { string: boolean }
 
   /**
    * Default: []
@@ -65,6 +80,11 @@ export interface GoplsOptions {
   codelenses: { string: boolean }
 
   /**
+   * Default: "100ms"
+   */
+  completionBudget: string
+
+  /**
    * Default: []
    */
   directoryFilters: string[]
@@ -73,6 +93,26 @@ export interface GoplsOptions {
    * Default: {}
    */
   env: { string: string }
+
+  /**
+   * Default: true
+   */
+  expandWorkspaceToModule: boolean
+
+  /**
+   * Default: "250ms"
+   */
+  experimentalDiagnosticsDelay: string
+
+  /**
+   * Default: true
+   */
+  experimentalPackageCacheKey: boolean
+
+  /**
+   * Default: false
+   */
+  experimentalWorkspaceModule: boolean
 
   /**
    * Default: false
@@ -110,6 +150,16 @@ export interface GoplsOptions {
   matcher: "CaseInsensitive" | "CaseSensitive" | "Fuzzy"
 
   /**
+   * Default: false
+   */
+  semanticTokens: boolean
+
+  /**
+   * Default: false
+   */
+  staticcheck: boolean
+
+  /**
    * Default: "Fuzzy"
    */
   symbolMatcher: "CaseInsensitive" | "CaseSensitive" | "Fuzzy"
@@ -125,58 +175,9 @@ export interface GoplsOptions {
   usePlaceholders: boolean
 
   /**
-   * Experimental!
    * Default: false
    */
-  allowImplicitNetworkAccess: boolean
-
-  /**
-   * Experimental!
-   * Default: false
-   */
-  allowModfileModifications: boolean
-
-  /**
-   * Experimental!
-   * Default: {}
-   */
-  annotations: { string: boolean }
-
-  /**
-   * Experimental!
-   * Default: true
-   */
-  expandWorkspaceToModule: boolean
-
-  /**
-   * Experimental!
-   * Default: "250ms"
-   */
-  experimentalDiagnosticsDelay: string
-
-  /**
-   * Experimental!
-   * Default: true
-   */
-  experimentalPackageCacheKey: boolean
-
-  /**
-   * Experimental!
-   * Default: false
-   */
-  experimentalWorkspaceModule: boolean
-
-  /**
-   * Experimental!
-   * Default: false
-   */
-  semanticTokens: boolean
-
-  /**
-   * Experimental!
-   * Default: false
-   */
-  staticcheck: boolean
+  verboseOutput: boolean
 }
 
 export function setStoragePath(dir: string): void {
