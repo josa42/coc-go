@@ -61,9 +61,19 @@ const run = async () => {
       return props
     }, {})
 
-  props.analyses.additionalProperties = true
-  props.analyses.patternProperties = undefined
-  props.analyses.properties = await getAnalysesProperties()
+  const { type, description } = props.analyses
+
+  props.analyses = {
+    type,
+    description,
+    additionalProperties: false,
+    patternProperties: {
+      "^S[AT]?\\d{4}$": {
+        type: "boolean",
+      },
+    },
+    properties: await getAnalysesProperties(),
+  }
 
   const codeLenseDefault = JSON.parse(data.codelenses.Default)
 

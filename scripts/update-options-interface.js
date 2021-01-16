@@ -70,11 +70,9 @@ function getType(o) {
       return `${o.items.type}[]`
 
     case "object":
-      if (o.patternProperties) {
-        return `{ string: ${o.patternProperties[".+"].type} }`
-      }
-      return `{ string: ${Object.keys(o.properties)
-        .map((k) => o.properties[k].type)
+      const props = { ...(o.properties || {}), ...(o.patternProperties || {}) }
+      return `{ string: ${Object.keys(props)
+        .map((k) => props[k].type)
         .reduce((ts, t) => (ts.includes(t) ? ts : [...ts, t]), [])
         .join("|")} }`
 
