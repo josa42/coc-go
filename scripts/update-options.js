@@ -61,7 +61,7 @@ const run = async () => {
       return props
     }, {})
 
-  props.analyses.additionalProperties = false
+  props.analyses.additionalProperties = true
   props.analyses.patternProperties = undefined
   props.analyses.properties = await getAnalysesProperties()
 

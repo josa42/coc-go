@@ -150,6 +150,11 @@
               "type": "object",
               "description": "analyses specify analyses that the user would like to enable or disable.\nA map of the names of analysis passes that should be enabled/disabled.\nA full list of analyzers that gopls uses can be found\n[here](https://github.com/golang/tools/blob/master/gopls/doc/analyzers.md).\n\nExample Usage:\n\n```json5\n...\n\"analyses\": {\n  \"unreachable\": false, // Disable the unreachable analyzer.\n  \"unusedparams\": true  // Enable the unusedparams analyzer.\n}\n...\n```\n",
               "additionalProperties": false,
+              "patternProperties": {
+                "^S[AT]?\\d{4}$": {
+                  "type": "boolean"
+                }
+              },
               "properties": {
                 "asmdecl": {
                   "type": "boolean",
