@@ -69,13 +69,13 @@ function getType(o) {
     case "array":
       return `${o.items.type}[]`
 
-    case "object":
+    case "object": {
       const props = { ...(o.properties || {}), ...(o.patternProperties || {}) }
       return `{ string: ${Object.keys(props)
         .map((k) => props[k].type)
         .reduce((ts, t) => (ts.includes(t) ? ts : [...ts, t]), [])
         .join("|")} }`
-
+    }
     default:
       if (o.enum) {
         return `"${o.enum.join('" | "')}"`
