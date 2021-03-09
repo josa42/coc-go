@@ -90,7 +90,7 @@ async function goRun(args: string): Promise<boolean> {
   }
   const cmd = isWin
     ? `go ${args}`
-    : `env GOBIN=${gobin} go ${args}`
+    : `env GOBIN="${gobin}" go ${args}`
   const opts: ExecOptions = {
     env: Object.assign({}, process.env, env),
     cwd: gopath,
