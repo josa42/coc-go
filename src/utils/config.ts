@@ -112,6 +112,11 @@ export interface GoplsOptions {
   /**
    * Default: false
    */
+  experimentalPostfixCompletions: boolean
+
+  /**
+   * Default: false
+   */
   experimentalWorkspaceModule: boolean
 
   /**

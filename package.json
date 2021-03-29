@@ -441,6 +441,11 @@
               "default": true,
               "description": "**This setting is experimental and may be deleted.**\n\nexperimentalPackageCacheKey controls whether to use a coarser cache key\nfor package type information to increase cache hits. This setting removes\nthe user's environment, build flags, and working directory from the cache\nkey, which should be a safe change as all relevant inputs into the type\nchecking pass are already hashed into the key. This is temporarily guarded\nby an experiment because caching behavior is subtle and difficult to\ncomprehensively test.\n"
             },
+            "experimentalPostfixCompletions": {
+              "type": "boolean",
+              "default": false,
+              "description": "**This setting is experimental and may be deleted.**\n\nexperimentalPostfixCompletions enables artifical method snippets\nsuch as \"someSlice.sort!\".\n"
+            },
             "experimentalWorkspaceModule": {
               "type": "boolean",
               "default": false,
