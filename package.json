@@ -503,6 +503,15 @@
               "default": "Fuzzy",
               "description": "**This is an advanced setting and should not be configured by most `gopls` users.**\n\nmatcher sets the algorithm that is used when calculating completion\ncandidates.\n\nMust be one of:\n\n* `\"CaseInsensitive\"`\n* `\"CaseSensitive\"`\n* `\"Fuzzy\"`\n"
             },
+            "memoryMode": {
+              "type": "string",
+              "enum": [
+                "DegradeClosed",
+                "Normal"
+              ],
+              "default": "Normal",
+              "description": "**This setting is experimental and may be deleted.**\n\nmemoryMode controls the tradeoff `gopls` makes between memory usage and\ncorrectness.\n\nValues other than `Normal` are untested and may break in surprising ways.\n\nMust be one of:\n\n* `\"DegradeClosed\"`: In DegradeClosed mode, `gopls` will collect less information about\npackages without open files. As a result, features like Find\nReferences and Rename will miss results in such packages.\n\n* `\"Normal\"`\n"
+            },
             "semanticTokens": {
               "type": "boolean",
               "default": false,
