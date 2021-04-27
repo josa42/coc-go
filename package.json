@@ -213,7 +213,7 @@
                 },
                 "fieldalignment": {
                   "type": "boolean",
-                  "description": "find structs that would take less memory if their fields were sorted\nThis analyzer find structs that can be rearranged to take less memory, and provides\na suggested edit with the optimal order.\n**Disabled by default. Enable it by setting `\"analyses\": {\"fieldalignment\": true}`.**"
+                  "description": "find structs that would use less memory if their fields were sorted\nThis analyzer find structs that can be rearranged to use less memory, and provides\na suggested edit with the optimal order.\nNote that there are two different diagnostics reported. One checks struct size,\nand the other reports \"pointer bytes\" used. Pointer bytes is how many bytes of the\nobject that the garbage collector has to potentially scan for pointers, for example:\n\tstruct { uint32; string }\nhave 16 pointer bytes because the garbage collector has to scan up through the string's\ninner pointer.\n\tstruct { string; *uint32 }\nhas 24 pointer bytes because it has to scan further through the *uint32.\n\tstruct { string; uint32 }\nhas 8 because it can stop immediately after the string pointer.\n**Disabled by default. Enable it by setting `\"analyses\": {\"fieldalignment\": true}`.**"
                 },
                 "httpresponse": {
                   "type": "boolean",
