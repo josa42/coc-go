@@ -117,6 +117,11 @@ export interface GoplsOptions {
   /**
    * Default: false
    */
+  experimentalTemplateSupport: boolean
+
+  /**
+   * Default: false
+   */
   experimentalWorkspaceModule: boolean
 
   /**

@@ -446,6 +446,11 @@
               "default": false,
               "description": "**This setting is experimental and may be deleted.**\n\nexperimentalPostfixCompletions enables artifical method snippets\nsuch as \"someSlice.sort!\".\n"
             },
+            "experimentalTemplateSupport": {
+              "type": "boolean",
+              "default": false,
+              "description": "**This setting is experimental and may be deleted.**\n\nexperimentalTemplateSupport opts into the experimental support\nfor template files.\n"
+            },
             "experimentalWorkspaceModule": {
               "type": "boolean",
               "default": false,
