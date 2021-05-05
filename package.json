@@ -443,7 +443,7 @@
             },
             "experimentalPostfixCompletions": {
               "type": "boolean",
-              "default": false,
+              "default": true,
               "description": "**This setting is experimental and may be deleted.**\n\nexperimentalPostfixCompletions enables artifical method snippets\nsuch as \"someSlice.sort!\".\n"
             },
             "experimentalTemplateSupport": {

@@ -110,7 +110,7 @@ export interface GoplsOptions {
   experimentalPackageCacheKey: boolean
 
   /**
-   * Default: false
+   * Default: true
    */
   experimentalPostfixCompletions: boolean
 
