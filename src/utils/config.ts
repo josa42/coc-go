@@ -170,7 +170,7 @@ export interface GoplsOptions {
   memoryMode: "DegradeClosed" | "Normal"
 
   /**
-   * Default: false
+   * Default: true
    */
   semanticTokens: boolean
 

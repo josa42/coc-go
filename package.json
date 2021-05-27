@@ -524,7 +524,7 @@
             },
             "semanticTokens": {
               "type": "boolean",
-              "default": false,
+              "default": true,
               "description": "**This setting is experimental and may be deleted.**\n\nsemanticTokens controls whether the LSP server will send\nsemantic tokens to the client.\n"
             },
             "staticcheck": {
