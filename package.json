@@ -451,11 +451,6 @@
               "default": false,
               "description": "**This setting is experimental and may be deleted.**\n\nexperimentalTemplateSupport opts into the experimental support\nfor template files.\n"
             },
-            "experimentalUseInvalidMetadata": {
-              "type": "boolean",
-              "default": false,
-              "description": "**This setting is experimental and may be deleted.**\n\nexperimentalUseInvalidMetadata enables gopls to fall back on outdated\npackage metadata to provide editor features if the go command fails to\nload packages for some reason (like an invalid go.mod file). This will\neventually be the default behavior, and this setting will be removed.\n"
-            },
             "experimentalWorkspaceModule": {
               "type": "boolean",
               "default": false,
@@ -524,7 +519,7 @@
             },
             "semanticTokens": {
               "type": "boolean",
-              "default": true,
+              "default": false,
               "description": "**This setting is experimental and may be deleted.**\n\nsemanticTokens controls whether the LSP server will send\nsemantic tokens to the client.\n"
             },
             "staticcheck": {

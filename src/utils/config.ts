@@ -122,11 +122,6 @@ export interface GoplsOptions {
   /**
    * Default: false
    */
-  experimentalUseInvalidMetadata: boolean
-
-  /**
-   * Default: false
-   */
   experimentalWorkspaceModule: boolean
 
   /**
@@ -170,7 +165,7 @@ export interface GoplsOptions {
   memoryMode: "DegradeClosed" | "Normal"
 
   /**
-   * Default: true
+   * Default: false
    */
   semanticTokens: boolean
 
