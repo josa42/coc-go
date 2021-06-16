@@ -122,6 +122,11 @@ export interface GoplsOptions {
   /**
    * Default: false
    */
+  experimentalUseInvalidMetadata: boolean
+
+  /**
+   * Default: false
+   */
   experimentalWorkspaceModule: boolean
 
   /**
