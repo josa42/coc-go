@@ -69,7 +69,7 @@ Additional to commands provided by gopls, this extensions provides these command
 
 ## Snippets
 
-Snippets are imported from [`microsoft/vscode-go`](https://github.com/microsoft/vscode-go)
+Snippets are imported from [`golang/vscode-go`](https://github.com/microsoft/vscode-go)
 and require [`coc-snippets`](https://github.com/neoclide/coc-snippets) to be
 installed.
 
