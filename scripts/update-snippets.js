@@ -4,7 +4,7 @@ const https = require('https')
 const fs = require('fs')
 
 const run = async () => {
-  const resp = await request('https://raw.githubusercontent.com/microsoft/vscode-go/master/snippets/go.json')
+  const resp = await request('https://raw.githubusercontent.com/golang/vscode-go/master/snippets/go.json')
   const snippets = map(resp['.source.go'], ({ prefix, body, description }) => ({
     prefix,
     body: body.split(/\n/),

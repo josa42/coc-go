@@ -135,7 +135,7 @@ function fileArchive(fileName: string, fileContents: string): string {
   return fileName + '\n' + Buffer.byteLength(fileContents, 'utf8') + '\n' + fileContents
 }
 
-// https://github.com/microsoft/vscode-go/blob/master/src/util.ts#L84
+// https://github.com/golang/vscode-go/blob/master/src/util.ts#L84
 function byteOffsetAt(document: TextDocument, position: Position): string {
   const offset = document.offsetAt(position)
   const text = document.getText()
