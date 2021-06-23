@@ -1,6 +1,6 @@
 import path from 'path'
 import fs from 'fs'
-import { LanguageClient, window } from 'coc.nvim'
+import { commands, LanguageClient, window, workspace } from 'coc.nvim'
 import { installGoBin, runGoTool } from './utils/tools'
 import checkLatestTag from './utils/checktag'
 
@@ -108,4 +108,9 @@ export async function installTools(): Promise<void> {
   for (const tool of TOOLS) {
     await installGoBin(tool, true)
   }
+}
+
+export async function goplsTidy() {
+  const doc = await workspace.document
+  await commands.executeCommand('gopls.tidy', { URIs: [doc.uri] })
 }

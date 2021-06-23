@@ -1,7 +1,7 @@
 import { ExtensionContext, LanguageClient, LanguageClientOptions, commands, services, window, workspace } from 'coc.nvim'
 import { ChildProcess, spawn } from 'child_process'
 import { commandExists, goBinPath, installGoBin } from './utils/tools'
-import { checkGopls, installGomodifytags, installGoplay, installGopls, installGotests, installImpl, installTools, version } from './commands'
+import { checkGopls, goplsTidy, installGomodifytags, installGoplay, installGopls, installGotests, installImpl, installTools, version } from './commands'
 import { addTags, clearTags, removeTags } from './utils/modify-tags'
 import { getConfig, setStoragePath } from './utils/config'
 import { activeTextDocument } from './editor'
@@ -33,6 +33,7 @@ export async function activate(context: ExtensionContext): Promise<void> {
   registerPlaygroud(context)
   registerGoImpl(context)
   registerTools(context)
+  registerLspCommands(context)
 }
 
 async function registerGeneral(context: ExtensionContext): Promise<void> {
@@ -222,6 +223,15 @@ async function registerTools(context: ExtensionContext): Promise<void> {
     commands.registerCommand(
       "go.install.tools",
       () => installTools()
+    )
+  )
+}
+
+async function registerLspCommands(context: ExtensionContext): Promise<void> {
+  context.subscriptions.push(
+    commands.registerCommand(
+      "go.gopls.tidy",
+      () => goplsTidy()
     )
   )
 }
