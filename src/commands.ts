@@ -1,12 +1,11 @@
-import path from 'path'
+import { LanguageClient, window } from 'coc.nvim'
 import fs from 'fs'
-import { commands, LanguageClient, window } from 'coc.nvim'
-import { installGoBin, runGoTool } from './utils/tools'
-import checkLatestTag from './utils/checktag'
-
+import path from 'path'
 import { GOMODIFYTAGS, GOPLAY, GOPLS, GOTESTS, IMPL, TOOLS } from './binaries'
+import checkLatestTag from './utils/checktag'
+import { installGoBin, runGoTool } from './utils/tools'
 import { compareVersions, isValidVersion } from './utils/versions'
-import { activeTextDocument } from './editor'
+
 
 export async function version(): Promise<void> {
   const v1 = await pkgVersion()
