@@ -731,7 +731,7 @@
         "command": "go.gopls.tidy"
       },
       {
-        "title": "Run go test on current line",
+        "title": "Run test func on current line, or open list of all tests",
         "category": "Go",
         "command": "go.gopls.runTests"
       },
