@@ -231,7 +231,7 @@ async function registerLspCommands(context: ExtensionContext): Promise<void> {
   context.subscriptions.push(
     commands.registerCommand(
       "go.gopls.tidy",
-      () => goplsTidy()
+      goplsTidy,
     )
   )
 }
