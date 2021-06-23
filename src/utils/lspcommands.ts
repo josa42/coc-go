@@ -105,8 +105,6 @@ class GoTests implements IList {
   }
 }
 
-// const goTestList = new GoTests()
-
 function listTests(doc: TextDocument) {
   const content = doc.getText()
   const matches: string[] = []
