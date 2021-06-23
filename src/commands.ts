@@ -1,11 +1,12 @@
 import path from 'path'
 import fs from 'fs'
-import { commands, LanguageClient, window, workspace } from 'coc.nvim'
+import { commands, LanguageClient, window } from 'coc.nvim'
 import { installGoBin, runGoTool } from './utils/tools'
 import checkLatestTag from './utils/checktag'
 
 import { GOMODIFYTAGS, GOPLAY, GOPLS, GOTESTS, IMPL, TOOLS } from './binaries'
 import { compareVersions, isValidVersion } from './utils/versions'
+import { activeTextDocument } from './editor'
 
 export async function version(): Promise<void> {
   const v1 = await pkgVersion()
@@ -110,7 +111,3 @@ export async function installTools(): Promise<void> {
   }
 }
 
-export async function goplsTidy() {
-  const doc = await workspace.document
-  await commands.executeCommand('gopls.tidy', { URIs: [doc.uri] })
-}

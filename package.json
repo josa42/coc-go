@@ -729,6 +729,11 @@
         "title": "Run gopls.tidy LSP command",
         "category": "Go",
         "command": "go.gopls.tidy"
+      },
+      {
+        "title": "Run go test on current line",
+        "category": "Go",
+        "command": "go.gopls.runtests"
       }
     ],
     "snippets": [

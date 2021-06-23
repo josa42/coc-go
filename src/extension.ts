@@ -1,7 +1,7 @@
 import { ExtensionContext, LanguageClient, LanguageClientOptions, commands, services, window, workspace } from 'coc.nvim'
 import { ChildProcess, spawn } from 'child_process'
 import { commandExists, goBinPath, installGoBin } from './utils/tools'
-import { checkGopls, goplsTidy, installGomodifytags, installGoplay, installGopls, installGotests, installImpl, installTools, version } from './commands'
+import { checkGopls, installGomodifytags, installGoplay, installGopls, installGotests, installImpl, installTools, version } from './commands'
 import { addTags, clearTags, removeTags } from './utils/modify-tags'
 import { getConfig, setStoragePath } from './utils/config'
 import { activeTextDocument } from './editor'
@@ -9,6 +9,7 @@ import { GOPLS } from './binaries'
 import { generateTestsAll, generateTestsExported, generateTestsFunction, toogleTests } from './utils/tests'
 import { openPlayground } from './utils/playground'
 import { generateImplStubs } from './utils/impl'
+import { goplsRunTests, goplsTidy } from './utils/lspcommands'
 
 const restartConfigs = [
   'go.goplsArgs',
@@ -232,6 +233,10 @@ async function registerLspCommands(context: ExtensionContext): Promise<void> {
     commands.registerCommand(
       "go.gopls.tidy",
       goplsTidy,
+    ),
+    commands.registerCommand(
+      "go.gopls.runtests",
+      goplsRunTests,
     )
   )
 }
