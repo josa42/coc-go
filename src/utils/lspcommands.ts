@@ -36,6 +36,18 @@ export async function goplsRunTests() {
   await runGoplsTests(doc.uri, funcName)
 }
 
+export async function goplsListKnownPackages() {
+  const doc = await activeTextDocument()
+  const result = await commands.executeCommand('gopls.list_known_packages', { URI: doc.uri })
+  if (!result || !result.Packages || result.Packages.length === 0) {
+    window.showMessage("No known packages found", "error")
+    return
+  }
+  listManager.registerList(new GoKnownPackages(result.Packages))
+  // @ts-ignore
+  listManager.start(["goknownpackages"])
+}
+
 async function runGoplsTests(docUri: string, ...funcNames: string[]) {
   const tests: string[] = []
   const bench: string[] = []
@@ -130,3 +142,36 @@ function listTests(doc: TextDocument) {
   }
 }
 
+class GoKnownPackages implements IList {
+  public readonly name = 'goknownpackages'
+  public readonly description = 'go known packages'
+  public readonly defaultAction = 'import'
+  public actions: ListAction[] = []
+
+  constructor(private packages: string[]) {
+    this.actions.push({
+      name: 'import',
+      execute: async (item: ListItem) => {
+        const doc = await activeTextDocument()
+        await commands.executeCommand("gopls.add_import", {
+          // The test file containing the tests to run.
+          "URI": doc.uri,
+          "ImportPath": item.filterText,
+        })
+      }
+    })
+  }
+
+  public async loadItems(_context: ListContext): Promise<ListItem[]> {
+    const items = this.packages.map<ListItem>(pkg => ({
+      label: pkg,
+      filterText: pkg,
+    }))
+    return items
+  }
+
+  public dispose() {
+    console.debug("clearing goknownpackages list")
+    this.packages = []
+  }
+}

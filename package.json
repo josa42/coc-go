@@ -733,7 +733,12 @@
       {
         "title": "Run go test on current line",
         "category": "Go",
-        "command": "go.gopls.runtests"
+        "command": "go.gopls.runTests"
+      },
+      {
+        "title": "List known packages",
+        "category": "Go",
+        "command": "go.gopls.listKnownPackages"
       }
     ],
     "snippets": [

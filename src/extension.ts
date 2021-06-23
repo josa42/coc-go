@@ -9,7 +9,7 @@ import { GOPLS } from './binaries'
 import { generateTestsAll, generateTestsExported, generateTestsFunction, toogleTests } from './utils/tests'
 import { openPlayground } from './utils/playground'
 import { generateImplStubs } from './utils/impl'
-import { goplsRunTests, goplsTidy } from './utils/lspcommands'
+import { goplsListKnownPackages, goplsRunTests, goplsTidy } from './utils/lspcommands'
 
 const restartConfigs = [
   'go.goplsArgs',
@@ -235,8 +235,12 @@ async function registerLspCommands(context: ExtensionContext): Promise<void> {
       goplsTidy,
     ),
     commands.registerCommand(
-      "go.gopls.runtests",
+      "go.gopls.runTests",
       goplsRunTests,
+    ),
+    commands.registerCommand(
+      "go.gopls.listKnownPackages",
+      goplsListKnownPackages,
     )
   )
 }
