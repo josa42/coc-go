@@ -724,6 +724,11 @@
         "title": "Print extension version",
         "category": "Go",
         "command": "go.version"
+      },
+      {
+        "title": "Run gopls.tidy LSP command",
+        "category": "Go",
+        "command": "go.gopls.tidy"
       }
     ],
     "snippets": [

@@ -42,6 +42,7 @@ Additional to commands provided by gopls, this extensions provides these command
 | **`go.test.generate.function`** | Generate unit tests for current function           |
 | **`go.test.toggle`**            | Toggle test file                                   |
 | **`go.version`**                | Print extension version                            |
+| **`go.gopls.tidy`**             | Run gopls.tidy LSP command                         |
 
 ### Examples
 
