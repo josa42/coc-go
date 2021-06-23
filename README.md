@@ -43,7 +43,7 @@ Additional to commands provided by gopls, this extensions provides these command
 | **`go.test.toggle`**            | Toggle test file                                   |
 | **`go.version`**                | Print extension version                            |
 | **`go.gopls.tidy`**             | Run gopls.tidy LSP command                         |
-| **`go.gopls.runtests`**         | Run gopls.run_tests LSP command                         |
+| **`go.gopls.runtests`**         | Run gopls.run_tests LSP command. If test or benchmark if found in current line, run it, else show list of tests and benchmarks in current buffer                         |
 
 ### Examples
 
