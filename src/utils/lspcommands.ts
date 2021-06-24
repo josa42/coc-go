@@ -25,7 +25,7 @@ export async function goplsRunTests() {
   })
 
   const re = /^func\s+((Test|Benchmark)\w+)\s?\(/gm
-  const m = text.match(re)
+  const m = re.exec(text)
   if (m && m[1]) {
     window.showMessage(m[1])
     await runGoplsTests(doc.uri, m[1])
