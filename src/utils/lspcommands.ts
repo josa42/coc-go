@@ -5,7 +5,6 @@ import {
   ListItem, listManager, TextDocument, window, workspace
 } from 'coc.nvim'
 import { activeTextDocument } from '../editor'
-import { extractFunctionName } from './tests'
 
 export async function goplsTidy() {
   const doc = await workspace.document
@@ -25,15 +24,16 @@ export async function goplsRunTests() {
     end: { line, character: Infinity },
   })
 
-  const funcName = extractFunctionName(text)
-  if (!funcName) {
-    // if no function if found, put all functions to list so that user can choose what to execute
-    listTests(doc)
+  const re = /^func\s+((Test|Benchmark)\w+)\s?\(/gm
+  const m = text.match(re)
+  if (m && m[1]) {
+    window.showMessage(m[1])
+    await runGoplsTests(doc.uri, m[1])
     return
   }
+  // if no function if found, put all functions to list so that user can choose what to execute
+  listTests(doc)
 
-  window.showMessage(funcName)
-  await runGoplsTests(doc.uri, funcName)
 }
 
 export async function goplsListKnownPackages() {
@@ -60,7 +60,7 @@ async function runGoplsTests(docUri: string, ...funcNames: string[]) {
   })
 
   if (tests.length === 0 && bench.length === 0) {
-    window.showMessage("No tests or benchmarks found in current line")
+    window.showMessage("No tests or benchmarks found in current file")
     return
   }
 
