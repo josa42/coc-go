@@ -8,7 +8,7 @@ import { activeTextDocument } from '../editor'
 import { extractFunctionName } from './tests'
 
 export async function goplsTidy() {
-  const doc = await activeTextDocument()
+  const doc = await workspace.document
   await commands.executeCommand('gopls.tidy', { URIs: [doc.uri] })
 }
 
