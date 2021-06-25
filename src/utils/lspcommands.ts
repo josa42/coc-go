@@ -1,8 +1,9 @@
 import {
-  commands, IList,
+  commands,
+  IList,
   ListAction,
   ListContext,
-  ListItem, listManager, TextDocument, window, workspace
+  ListItem, SymbolInformation, window, workspace
 } from 'coc.nvim'
 import { activeTextDocument } from '../editor'
 
@@ -32,20 +33,11 @@ export async function goplsRunTests() {
     return
   }
   // if no function if found, put all functions to list so that user can choose what to execute
-  listTests(doc)
-
+  workspace.nvim.command('CocList gotests', true)
 }
 
 export async function goplsListKnownPackages() {
-  const doc = await activeTextDocument()
-  const result = await commands.executeCommand('gopls.list_known_packages', { URI: doc.uri })
-  if (!result || !result.Packages || result.Packages.length === 0) {
-    window.showMessage("No known packages found", "error")
-    return
-  }
-  listManager.registerList(new GoKnownPackages(result.Packages))
-  // @ts-ignore
-  listManager.start(["goknownpackages"])
+  workspace.nvim.command('CocList goknownpackages', true)
 }
 
 async function runGoplsTests(docUri: string, ...funcNames: string[]) {
@@ -75,37 +67,77 @@ async function runGoplsTests(docUri: string, ...funcNames: string[]) {
   })
 }
 
-class GoTests implements IList {
+type CocDocumentSymbol = {
+  kind: string
+  text: string
+}
+
+type GoTestsData = {
+  docUri: string
+  tests: string[]
+}
+
+type GoTestsListItem = { data: GoTestsData } & Omit<ListItem, 'data'>
+
+export class GoTestsList implements IList {
   public readonly name = 'gotests'
   public readonly description = 'go tests & benchmarks in current file'
   public readonly defaultAction = 'run'
   public actions: ListAction[] = []
 
-  constructor(private docUri: string, private tests: string[]) {
+  constructor() {
     this.actions.push({
       name: 'run',
-      execute: async (item: ListItem) => {
-        if (Array.isArray(item)) {
-          const funcs = item.map(i => i.filterText)
-          await runGoplsTests(this.docUri, ...funcs)
-        } else {
-          await runGoplsTests(this.docUri, ...item.data)
+      execute: async (item: GoTestsListItem) => {
+        const { docUri, tests } = item.data
+        await runGoplsTests(docUri, ...tests)
+      }
+    }, {
+      name: 'yank as go test',
+      execute: async (item: GoTestsListItem) => {
+        const { tests } = item.data
+        if (tests.length === 0) {
+          return
         }
+        // hacky way to retrieve current package qualified name
+        const symbol: SymbolInformation[] = await workspace.nvim.call('CocAction', ["getWorkspaceSymbols", `'${tests[0]}`])
+        if (symbol.length === 0) {
+          window.showMessage("can't retrieve go package for current file")
+          return
+        }
+        const pkg = symbol[0].containerName
+        const content = `go test ${pkg} -run '^${tests.join("|")}$' -timeout 30s -v -count 1`
+        console.log(content)
+        await workspace.nvim.command(`let @+ = "${content}"`, true)
+        window.showMessage("yanked to + register")
+      }
+    }, {
+      name: 'yank test name',
+      execute: async (item: GoTestsListItem) => {
+        const { tests } = item.data
+        const content = tests.join(" ")
+        await workspace.nvim.command(`let @+ = "${content}"`, true)
+        window.showMessage("yanked to + register")
       }
     })
   }
 
-  public async loadItems(_context: ListContext): Promise<ListItem[]> {
-    const items = this.tests.map<ListItem>(t => ({
-      label: t,
-      filterText: t,
-      data: [t],
+  public async loadItems(context: ListContext): Promise<ListItem[]> {
+    const symbols: CocDocumentSymbol[] = await workspace.nvim.call('CocAction', ['documentSymbols', context.buffer.id])
+    const tests = symbols.filter(s => s.kind === 'Function' && (s.text.startsWith("Test") || s.text.startsWith("Benchmark")))
+    const doc = workspace.getDocument(context.buffer.id)
+
+    const items = tests.map<GoTestsListItem>(t => ({
+      label: t.text,
+      filterText: t.text,
+      data: { docUri: doc.uri, tests: [t.text] },
     }))
-    if (this.tests.length > 1) {
+    if (tests.length > 1) {
       items.unshift({
         label: "all",
         filterText: "all",
-        data: this.tests,
+        // we need to remember the docUri in case the list is resumed. At this point the doc would be a different one
+        data: { docUri: doc.uri, tests: tests.map(t => t.text) }
       })
     }
     return items
@@ -113,42 +145,16 @@ class GoTests implements IList {
 
   public dispose() {
     console.debug("clearing gotest list")
-    this.tests = []
   }
 }
 
-function listTests(doc: TextDocument) {
-  const content = doc.getText()
-  const matches: string[] = []
-
-  const re = /^func\s+((Test|Benchmark)\w+)\s?\(/gm
-  let match: RegExpExecArray;
-  while ((match = re.exec(content)) !== null) {
-    matches.push(match[1])
-  }
-  if (matches.length !== 0) {
-    const dispose = listManager.registerList(new GoTests(doc.uri, matches))
-    workspace.registerAutocmd({
-      event: "BufWinLeave",
-      callback: () => {
-        console.debug("disposing gotest list on BufWinLeave")
-        dispose.dispose()
-      }
-    })
-    // @ts-ignore
-    listManager.start(["gotests"])
-  } else {
-    window.showMessage("No tests found in current buffer")
-  }
-}
-
-class GoKnownPackages implements IList {
+export class GoKnownPackagesList implements IList {
   public readonly name = 'goknownpackages'
   public readonly description = 'go known packages'
   public readonly defaultAction = 'import'
   public actions: ListAction[] = []
 
-  constructor(private packages: string[]) {
+  constructor() {
     this.actions.push({
       name: 'import',
       execute: async (item: ListItem) => {
@@ -159,11 +165,23 @@ class GoKnownPackages implements IList {
           "ImportPath": item.filterText,
         })
       }
+    }, {
+      name: 'yank',
+      execute: async (item: ListItem) => {
+        await workspace.nvim.command(`let @" = "${item.filterText}"`, true)
+        window.showMessage("yanked to \" register")
+      }
     })
   }
 
   public async loadItems(_context: ListContext): Promise<ListItem[]> {
-    const items = this.packages.map<ListItem>(pkg => ({
+    const doc = await activeTextDocument()
+    const result: { Packages: string[] } = await commands.executeCommand('gopls.list_known_packages', { URI: doc.uri })
+    if (!result || !result.Packages || result.Packages.length === 0) {
+      // window.showMessage("No known packages found", "error")
+      return []
+    }
+    const items = result.Packages.map<ListItem>(pkg => ({
       label: pkg,
       filterText: pkg,
     }))
@@ -172,6 +190,5 @@ class GoKnownPackages implements IList {
 
   public dispose() {
     console.debug("clearing goknownpackages list")
-    this.packages = []
   }
 }
