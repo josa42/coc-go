@@ -44,7 +44,7 @@ Additional to commands provided by gopls, this extensions provides these command
 | **`go.version`**                | Print extension version                            |
 | **`go.gopls.tidy`**             | Run gopls.tidy LSP command                         |
 | **`go.gopls.runTests`**         | Run gopls.run_tests LSP command. If test or benchmark if found in current line, run it, else show list of tests and benchmarks in current buffer                         |
-| **`go.gopls.listKnownPackages`** | Run gopls.list_known_packages LSP command and put in a list, default action is to import to corrent file |
+| **`go.gopls.listKnownPackages`** | Run gopls.list_known_packages LSP command and put in a list, default action is to add import to current file |
 
 ### Examples
 
