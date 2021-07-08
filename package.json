@@ -410,6 +410,11 @@
               "default": "100ms",
               "description": "**This setting is for debugging purposes only.**\n\ncompletionBudget is the soft latency goal for completion requests. Most\nrequests finish in a couple milliseconds, but in some cases deep\ncompletions can take much longer. As we use up our budget we\ndynamically reduce the search scope to ensure we return timely\nresults. Zero means unlimited.\n"
             },
+            "diagnosticsDelay": {
+              "type": "string",
+              "default": "250ms",
+              "description": "**This is an advanced setting and should not be configured by most `gopls` users.**\n\ndiagnosticsDelay controls the amount of time that gopls waits\nafter the most recent file modification before computing deep diagnostics.\nSimple diagnostics (parsing and type-checking) are always run immediately\non recently modified packages.\n\nThis option must be set to a valid duration string, for example `\"250ms\"`.\n"
+            },
             "directoryFilters": {
               "type": "array",
               "items": {
@@ -431,11 +436,6 @@
               "default": true,
               "description": "**This setting is experimental and may be deleted.**\n\nexpandWorkspaceToModule instructs `gopls` to adjust the scope of the\nworkspace to find the best available module root. `gopls` first looks for\na go.mod file in any parent directory of the workspace folder, expanding\nthe scope to that directory if it exists. If no viable parent directory is\nfound, gopls will check if there is exactly one child directory containing\na go.mod file, narrowing the scope to that directory if it exists.\n"
             },
-            "experimentalDiagnosticsDelay": {
-              "type": "string",
-              "default": "250ms",
-              "description": "**This setting is experimental and may be deleted.**\n\nexperimentalDiagnosticsDelay controls the amount of time that gopls waits\nafter the most recent file modification before computing deep diagnostics.\nSimple diagnostics (parsing and type-checking) are always run immediately\non recently modified packages.\n\nThis option must be set to a valid duration string, for example `\"250ms\"`.\n"
-            },
             "experimentalPackageCacheKey": {
               "type": "boolean",
               "default": true,
@@ -455,6 +455,11 @@
               "type": "boolean",
               "default": false,
               "description": "**This setting is experimental and may be deleted.**\n\nexperimentalUseInvalidMetadata enables gopls to fall back on outdated\npackage metadata to provide editor features if the go command fails to\nload packages for some reason (like an invalid go.mod file). This will\neventually be the default behavior, and this setting will be removed.\n"
+            },
+            "experimentalWatchedFileDelay": {
+              "type": "string",
+              "default": "0s",
+              "description": "**This setting is experimental and may be deleted.**\n\nexperimentalWatchedFileDelay controls the amount of time that gopls waits\nfor additional workspace/didChangeWatchedFiles notifications to arrive,\nbefore processing all such notifications in a single batch. This is\nintended for use by LSP clients that don't support their own batching of\nfile system notifications.\n\nThis option must be set to a valid duration string, for example `\"100ms\"`.\n"
             },
             "experimentalWorkspaceModule": {
               "type": "boolean",
