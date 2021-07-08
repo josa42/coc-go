@@ -1,11 +1,11 @@
-import path from 'path'
-import fs from 'fs'
 import { LanguageClient, window } from 'coc.nvim'
-import { installGoBin, runGoTool } from './utils/tools'
-import checkLatestTag from './utils/checktag'
-
+import fs from 'fs'
+import path from 'path'
 import { GOMODIFYTAGS, GOPLAY, GOPLS, GOTESTS, IMPL, TOOLS } from './binaries'
+import checkLatestTag from './utils/checktag'
+import { installGoBin, runGoTool } from './utils/tools'
 import { compareVersions, isValidVersion } from './utils/versions'
+
 
 export async function version(): Promise<void> {
   const v1 = await pkgVersion()
@@ -109,3 +109,4 @@ export async function installTools(): Promise<void> {
     await installGoBin(tool, true)
   }
 }
+
