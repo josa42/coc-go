@@ -83,6 +83,15 @@
     ],
     "description": "a variable"
   },
+  "multiple variables": {
+    "prefix": "vars",
+    "body": [
+      "var (",
+      "\t${1:name} = ${2:value}",
+      ")"
+    ],
+    "description": "a variable block"
+  },
   "switch statement": {
     "prefix": "switch",
     "body": [
