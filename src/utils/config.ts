@@ -187,7 +187,7 @@ export interface GoplsOptions {
   /**
    * Default: "Fuzzy"
    */
-  symbolMatcher: "CaseInsensitive" | "CaseSensitive" | "Fuzzy"
+  symbolMatcher: "CaseInsensitive" | "CaseSensitive" | "FastFuzzy" | "Fuzzy"
 
   /**
    * Default: "Dynamic"
