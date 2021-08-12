@@ -85,6 +85,11 @@ export interface GoplsOptions {
   completionBudget: string
 
   /**
+   * Default: "250ms"
+   */
+  diagnosticsDelay: string
+
+  /**
    * Default: []
    */
   directoryFilters: string[]
@@ -98,11 +103,6 @@ export interface GoplsOptions {
    * Default: true
    */
   expandWorkspaceToModule: boolean
-
-  /**
-   * Default: "250ms"
-   */
-  experimentalDiagnosticsDelay: string
 
   /**
    * Default: true
@@ -123,6 +123,11 @@ export interface GoplsOptions {
    * Default: false
    */
   experimentalUseInvalidMetadata: boolean
+
+  /**
+   * Default: "0s"
+   */
+  experimentalWatchedFileDelay: string
 
   /**
    * Default: false
@@ -182,7 +187,7 @@ export interface GoplsOptions {
   /**
    * Default: "Fuzzy"
    */
-  symbolMatcher: "CaseInsensitive" | "CaseSensitive" | "Fuzzy"
+  symbolMatcher: "CaseInsensitive" | "CaseSensitive" | "FastFuzzy" | "Fuzzy"
 
   /**
    * Default: "Dynamic"
