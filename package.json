@@ -331,6 +331,11 @@
                   "type": "boolean",
                   "description": "checks for unused writes\nThe analyzer reports instances of writes to struct fields and\narrays that are never read. Specifically, when a struct object\nor an array is copied, its elements are copied implicitly by\nthe compiler, and any element write to this copy does nothing\nwith the original object.\nFor example:\n\ttype T struct { x int }\n\tfunc f(input []T) {\n\t\tfor i, v := range input {  // v is a copy\n\t\t\tv.x = i  // unused write to field x\n\t\t}\n\t}\nAnother example is about non-pointer receiver:\n\ttype T struct { x int }\n\tfunc (t T) f() {  // t is a copy\n\t\tt.x = i  // unused write to field x\n\t}\n**Disabled by default. Enable it by setting `\"analyses\": {\"unusedwrite\": true}`.**"
                 },
+                "useany": {
+                  "type": "boolean",
+                  "description": "check for constraints that could be simplified to \"any\"",
+                  "default": true
+                },
                 "fillreturns": {
                   "type": "boolean",
                   "description": "suggested fixes for \"wrong number of return values (want %d, got %d)\"\nThis checker provides suggested fixes for type errors of the\ntype \"wrong number of return values (want %d, got %d)\". For example:\n\tfunc m() (int, string, *bool, error) {\n\t\treturn\n\t}\nwill turn into\n\tfunc m() (int, string, *bool, error) {\n\t\treturn 0, \"\", nil, nil\n\t}\nThis functionality is similar to https://github.com/sqs/goreturns.",
