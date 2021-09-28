@@ -341,10 +341,6 @@
                   "description": "suggested fixes for \"wrong number of return values (want %d, got %d)\"\nThis checker provides suggested fixes for type errors of the\ntype \"wrong number of return values (want %d, got %d)\". For example:\n\tfunc m() (int, string, *bool, error) {\n\t\treturn\n\t}\nwill turn into\n\tfunc m() (int, string, *bool, error) {\n\t\treturn 0, \"\", nil, nil\n\t}\nThis functionality is similar to https://github.com/sqs/goreturns.",
                   "default": true
                 },
-                "implementmissing": {
-                  "type": "boolean",
-                  "description": "suggested fixes for \"undeclared name: %s\" on a function call\nThis checker provides suggested fixes for type errors of the\ntype \"undeclared name: %s\" that happen for a function call. For example:\n\tfunc m() {\n\t  a(1)\n\t}\nwill turn into\n\tfunc m() {\n\t  a(1)\n\t}\n\tfunc a(i int) {}\n**Disabled by default. Enable it by setting `\"analyses\": {\"implementmissing\": true}`.**"
-                },
                 "nonewvars": {
                   "type": "boolean",
                   "description": "suggested fixes for \"no new vars on left side of :=\"\nThis checker provides suggested fixes for type errors of the\ntype \"no new vars on left side of :=\". For example:\n\tz := 1\n\tz := 2\nwill turn into\n\tz := 1\n\tz = 2",
@@ -357,7 +353,7 @@
                 },
                 "undeclaredname": {
                   "type": "boolean",
-                  "description": "suggested fixes for \"undeclared name: <>\"\nThis checker provides suggested fixes for type errors of the\ntype \"undeclared name: <>\". It will insert a new statement:\n\"<> := \".",
+                  "description": "suggested fixes for \"undeclared name: <>\"\nThis checker provides suggested fixes for type errors of the\ntype \"undeclared name: <>\". It will either insert a new statement,\nsuch as:\n\"<> := \"\nor a new function declaration, such as:\nfunc <>(inferred parameters) {\n\tpanic(\"implement me!\")\n}",
                   "default": true
                 },
                 "fillstruct": {
