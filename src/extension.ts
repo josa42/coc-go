@@ -1,5 +1,6 @@
 import { ExtensionContext, LanguageClient, LanguageClientOptions, commands, services, window, workspace } from 'coc.nvim'
 import { ChildProcess, spawn } from 'child_process'
+import os from 'os'
 import { commandExists, goBinPath, installGoBin } from './utils/tools'
 import { checkGopls, installGomodifytags, installGoplay, installGopls, installGotests, installImpl, installTools, version } from './commands'
 import { addTags, clearTags, removeTags } from './utils/modify-tags'
@@ -109,6 +110,9 @@ async function registerGopls(context: ExtensionContext): Promise<void> {
 
 async function goplsPath(goplsPath: string): Promise<string | null> {
   if (goplsPath) {
+    if (goplsPath.startsWith('~')) {
+      goplsPath = os.homedir() + goplsPath.slice(1)
+    }
     if (!await commandExists(goplsPath)) {
       window.showMessage(`goplsPath is configured ("${goplsPath}"), but does not exist!`, 'error')
       return null
