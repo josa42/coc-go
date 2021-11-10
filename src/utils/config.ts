@@ -117,11 +117,6 @@ export interface GoplsOptions {
   /**
    * Default: false
    */
-  experimentalTemplateSupport: boolean
-
-  /**
-   * Default: false
-   */
   experimentalUseInvalidMetadata: boolean
 
   /**
@@ -193,6 +188,16 @@ export interface GoplsOptions {
    * Default: "Dynamic"
    */
   symbolStyle: "Dynamic" | "Full" | "Package"
+
+  /**
+   * Default: []
+   */
+  templateExtensions: string[]
+
+  /**
+   * Default: true
+   */
+  templateSupport: boolean
 
   /**
    * Default: false

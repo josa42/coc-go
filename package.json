@@ -456,11 +456,6 @@
               "default": true,
               "description": "**This setting is experimental and may be deleted.**\n\nexperimentalPostfixCompletions enables artifical method snippets\nsuch as \"someSlice.sort!\".\n"
             },
-            "experimentalTemplateSupport": {
-              "type": "boolean",
-              "default": false,
-              "description": "**This setting is experimental and may be deleted.**\n\nexperimentalTemplateSupport opts into the experimental support\nfor template files.\n"
-            },
             "experimentalUseInvalidMetadata": {
               "type": "boolean",
               "default": false,
@@ -567,6 +562,18 @@
               ],
               "default": "Dynamic",
               "description": "**This is an advanced setting and should not be configured by most `gopls` users.**\n\nsymbolStyle controls how symbols are qualified in symbol responses.\n\nExample Usage:\n\n```json5\n\"gopls\": {\n...\n  \"symbolStyle\": \"Dynamic\",\n...\n}\n```\n\nMust be one of:\n\n* `\"Dynamic\"` uses whichever qualifier results in the highest scoring\nmatch for the given symbol query. Here a \"qualifier\" is any \"/\" or \".\"\ndelimited suffix of the fully qualified symbol. i.e. \"to/pkg.Foo.Field\" or\njust \"Foo.Field\".\n\n* `\"Full\"` is fully qualified symbols, i.e.\n\"path/to/pkg.Foo.Field\".\n\n* `\"Package\"` is package qualified symbols i.e.\n\"pkg.Foo.Field\".\n"
+            },
+            "templateExtensions": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              },
+              "description": "templateExtensions gives the extensions of file names that are treateed\nas template files. (The extension\nis the part of the file name after the final dot.)\n"
+            },
+            "templateSupport": {
+              "type": "boolean",
+              "default": true,
+              "description": "templateSupport can be used to turn off support for template files.\n"
             },
             "usePlaceholders": {
               "type": "boolean",
