@@ -570,11 +570,6 @@
               },
               "description": "templateExtensions gives the extensions of file names that are treateed\nas template files. (The extension\nis the part of the file name after the final dot.)\n"
             },
-            "templateSupport": {
-              "type": "boolean",
-              "default": true,
-              "description": "templateSupport can be used to turn off support for template files.\n"
-            },
             "usePlaceholders": {
               "type": "boolean",
               "default": false,

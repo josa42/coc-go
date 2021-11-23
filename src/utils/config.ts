@@ -195,11 +195,6 @@ export interface GoplsOptions {
   templateExtensions: string[]
 
   /**
-   * Default: true
-   */
-  templateSupport: boolean
-
-  /**
    * Default: false
    */
   usePlaceholders: boolean
