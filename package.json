@@ -227,7 +227,7 @@
                 },
                 "infertypeargs": {
                   "type": "boolean",
-                  "description": "check for unnecessary type arguments in call expressions\nExplicit type arguments may be omitted from call expressions if they can be\ninferred from function arguments, or from other type arguments:\nfunc f[T any](T) {}\nfunc _() {\n\tf[string](\"foo\") // string could be inferred\n}",
+                  "description": "check for unnecessary type arguments in call expressions\nExplicit type arguments may be omitted from call expressions if they can be\ninferred from function arguments, or from other type arguments:\n\tfunc f[T any](T) {}\n\t\n\tfunc _() {\n\t\tf[string](\"foo\") // string could be inferred\n\t}",
                   "default": true
                 },
                 "loopclosure": {
@@ -343,7 +343,7 @@
                 },
                 "fillreturns": {
                   "type": "boolean",
-                  "description": "suggested fixes for \"wrong number of return values (want %d, got %d)\"\nThis checker provides suggested fixes for type errors of the\ntype \"wrong number of return values (want %d, got %d)\". For example:\n\tfunc m() (int, string, *bool, error) {\n\t\treturn\n\t}\nwill turn into\n\tfunc m() (int, string, *bool, error) {\n\t\treturn 0, \"\", nil, nil\n\t}\nThis functionality is similar to https://github.com/sqs/goreturns.",
+                  "description": "suggest fixes for errors due to an incorrect number of return values\nThis checker provides suggested fixes for type errors of the\ntype \"wrong number of return values (want %d, got %d)\". For example:\n\tfunc m() (int, string, *bool, error) {\n\t\treturn\n\t}\nwill turn into\n\tfunc m() (int, string, *bool, error) {\n\t\treturn 0, \"\", nil, nil\n\t}\nThis functionality is similar to https://github.com/sqs/goreturns.",
                   "default": true
                 },
                 "nonewvars": {
