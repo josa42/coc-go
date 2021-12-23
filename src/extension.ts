@@ -1,10 +1,12 @@
 import { ExtensionContext, LanguageClient, LanguageClientOptions, commands, services, window, workspace } from 'coc.nvim'
 import { ChildProcess, spawn } from 'child_process'
 import os from 'os'
+import fs from 'fs'
+import path from "path"
 import { commandExists, goBinPath, installGoBin } from './utils/tools'
 import { checkGopls, installGomodifytags, installGoplay, installGopls, installGotests, installImpl, installTools, version } from './commands'
 import { addTags, clearTags, removeTags } from './utils/modify-tags'
-import { getConfig, setStoragePath } from './utils/config'
+import { getConfig, GoplsOptions, setStoragePath } from './utils/config'
 import { activeTextDocument } from './editor'
 import { GOPLS } from './binaries'
 import { generateTestsAll, generateTestsExported, generateTestsFunction, toogleTests } from './utils/tests'
@@ -59,6 +61,15 @@ async function registerGopls(context: ExtensionContext): Promise<void> {
     // Use daemon by default
     args.push('-remote=auto')
   }
+  let goplsOptions = config.goplsOptions
+  if (config.goplsOptions.local === '') { // Parse go.mod and set the -local options for goimports.
+    const modulePath = tryParseGoModulePath(workspace.cwd)
+    if (modulePath !== '') {
+      let copiedGoplsOptions = Object.assign({}, config.goplsOptions)
+      copiedGoplsOptions.local = modulePath
+      goplsOptions = copiedGoplsOptions as GoplsOptions
+    }
+  }
 
   // TMPDIR needs to be resetted, because its altered by coc.nvim, which breaks
   // the automatic deamon launching of gopls.
@@ -77,7 +88,7 @@ async function registerGopls(context: ExtensionContext): Promise<void> {
   // https://github.com/neoclide/coc.nvim/blob/master/src/language-client/client.ts#L684
   const clientOptions: LanguageClientOptions = {
     documentSelector: ['go', 'gomod'],
-    initializationOptions: () => getConfig().goplsOptions,
+    initializationOptions: () => goplsOptions,
     disableWorkspaceFolders: config.disable.workspaceFolders,
     disableDiagnostics: config.disable.diagnostics,
     disableCompletion: config.disable.completion,
@@ -106,6 +117,20 @@ async function registerGopls(context: ExtensionContext): Promise<void> {
       () => installGopls(client)
     )
   )
+}
+
+function tryParseGoModulePath(directory: string): string {
+  const modFile = path.join(directory, 'go.mod')
+  if (!fs.existsSync(modFile)) {
+    return ""
+  }
+  const lines = fs.readFileSync(modFile, 'utf8').split(os.EOL)
+  for (let i = 0; i < lines.length; i++) {
+    if (lines[i].indexOf('module ') == 0) { // Syntax: module {module-path}.
+      return lines[i].split('module ')[1]
+    }
+  }
+  return ""
 }
 
 async function goplsPath(goplsPath: string): Promise<string | null> {
