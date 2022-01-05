@@ -110,4 +110,3 @@ export async function installTools(): Promise<void> {
     await installGoBin(tool, true)
   }
 }
-
