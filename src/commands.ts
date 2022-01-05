@@ -1,9 +1,10 @@
-import { LanguageClient, window } from 'coc.nvim'
-import fs from 'fs'
 import path from 'path'
-import { GOMODIFYTAGS, GOPLAY, GOPLS, GOTESTS, IMPL, TOOLS } from './binaries'
-import checkLatestTag from './utils/checktag'
+import fs from 'fs'
+import { LanguageClient, window } from 'coc.nvim'
 import { installGoBin, runGoTool } from './utils/tools'
+import checkLatestTag from './utils/checktag'
+
+import { GOMODIFYTAGS, GOPLAY, GOPLS, GOTESTS, IMPL, TOOLS } from './binaries'
 import { compareVersions, isValidVersion } from './utils/versions'
 
 
