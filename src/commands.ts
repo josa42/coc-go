@@ -7,6 +7,7 @@ import checkLatestTag from './utils/checktag'
 import { GOMODIFYTAGS, GOPLAY, GOPLS, GOTESTS, IMPL, TOOLS } from './binaries'
 import { compareVersions, isValidVersion } from './utils/versions'
 
+
 export async function version(): Promise<void> {
   const v1 = await pkgVersion()
   const v2 = await goplsVersion() || 'unknown'

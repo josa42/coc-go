@@ -10,6 +10,7 @@ import { GOPLS } from './binaries'
 import { generateTestsAll, generateTestsExported, generateTestsFunction, toogleTests } from './utils/tests'
 import { openPlayground } from './utils/playground'
 import { generateImplStubs } from './utils/impl'
+import { goplsTidy } from './utils/lspcommands'
 
 const restartConfigs = [
   'go.goplsArgs',
@@ -34,6 +35,7 @@ export async function activate(context: ExtensionContext): Promise<void> {
   registerPlaygroud(context)
   registerGoImpl(context)
   registerTools(context)
+  registerLspCommands(context)
 }
 
 async function registerGeneral(context: ExtensionContext): Promise<void> {
@@ -227,5 +229,14 @@ async function registerTools(context: ExtensionContext): Promise<void> {
       "go.install.tools",
       () => installTools()
     )
+  )
+}
+
+async function registerLspCommands(context: ExtensionContext): Promise<void> {
+  context.subscriptions.push(
+    commands.registerCommand(
+      "go.gopls.tidy",
+      goplsTidy,
+    ),
   )
 }

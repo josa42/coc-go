@@ -21,6 +21,7 @@ Additional to commands provided by gopls, this extensions provides these command
 
 | Key                             | Description                                        |
 |---------------------------------|----------------------------------------------------|
+| **`go.gopls.tidy`**             | Run gopls.tidy LSP command                         |
 | **`go.impl.cursor`**            | Generate interface stubs                           |
 | **`go.install.gomodifytags`**   | Install / update gomodifytags                      |
 | **`go.install.goplay`**         | Install / update goplay                            |
