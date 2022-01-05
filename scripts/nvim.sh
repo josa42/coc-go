@@ -40,6 +40,25 @@ vim.opt.expandtab = false
 vim.api.nvim_set_keymap('i', '<c-space>', 'coc#refresh()', { silent = true, expr = true })
 vim.api.nvim_set_keymap('n', 'gd', '<Plug>(coc-definition)', { silent = true })
 vim.api.nvim_set_keymap('n', 'gf', 'CocAction("format")', { silent = true, expr = true })
+
+function _G.__coc()
+  local info = vim.b.coc_diagnostic_info or {}
+  local parts = {
+    'E' .. (info.error or 0),
+    'W' .. (info.warning or 0),
+    (vim.g.coc_status or ''),
+  }
+  return vim.fn.join(parts, ' ')
+end
+
+vim.opt.statusline = '%{v:lua.__coc()}'
+EOF
+
+cat > $TMP/config/nvim/coc-settings.json <<EOF
+{
+	"codeLens.enable": true,
+	"go.trace.server": "verbose"
+}
 EOF
 
 export XDG_CONFIG_HOME=$TMP/config
