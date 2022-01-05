@@ -747,16 +747,6 @@
         "title": "Run gopls.tidy LSP command",
         "category": "Go",
         "command": "go.gopls.tidy"
-      },
-      {
-        "title": "Run test func on current line, or open list of all tests",
-        "category": "Go",
-        "command": "go.gopls.runTests"
-      },
-      {
-        "title": "List known packages",
-        "category": "Go",
-        "command": "go.gopls.listKnownPackages"
       }
     ],
     "snippets": [

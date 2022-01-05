@@ -238,15 +238,5 @@ async function registerLspCommands(context: ExtensionContext): Promise<void> {
       "go.gopls.tidy",
       goplsTidy,
     ),
-    commands.registerCommand(
-      "go.gopls.runTests",
-      goplsRunTests,
-    ),
-    commands.registerCommand(
-      "go.gopls.listKnownPackages",
-      goplsListKnownPackages,
-    ),
-    listManager.registerList(new GoTestsList()),
-    listManager.registerList(new GoKnownPackagesList())
   )
 }
