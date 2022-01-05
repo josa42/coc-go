@@ -17,6 +17,10 @@ export default async function checkLatestTag(repo: string, prefixFilter?: RegExp
   const resp = await fetch(`https://api.github.com/repos/${repo}/tags`)
   const data = await resp.json() as Array<Tag>
 
+  if (!Array.isArray(data)) {
+    return ''
+  }
+
   let tags = data.map(t => t.name)
 
   if (prefixFilter) {

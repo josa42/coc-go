@@ -58,8 +58,9 @@ EOF
 
 cat > $TMP/config/nvim/coc-settings.json <<EOF
 {
-	"codeLens.enable": true,
-	"go.trace.server": "verbose"
+  "codeLens.enable": true,
+  "go.trace.server": "verbose",
+  "go.checkForUpdates": "ask"
 }
 EOF
 
