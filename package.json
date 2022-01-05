@@ -1,6 +1,6 @@
 {
   "name": "coc-go",
-  "version": "0.13.3",
+  "version": "v1.0.0",
   "description": "gopls extension for coc",
   "author": "Josa Gesell <josa@gesell.me>",
   "license": "MIT",
@@ -11,7 +11,7 @@
   },
   "engines": {
     "coc": "^0.0.80",
-    "node": ">=10"
+    "node": ">=12"
   },
   "keywords": [
     "coc.nvim",
@@ -225,6 +225,11 @@
                   "description": "detect impossible interface-to-interface type assertions\nThis checker flags type assertions v.(T) and corresponding type-switch cases\nin which the static type V of v is an interface that cannot possibly implement\nthe target interface T. This occurs when V and T contain methods with the same\nname but different signatures. Example:\n\tvar v interface {\n\t\tRead()\n\t}\n\t_ = v.(io.Reader)\nThe Read method in v has a different signature than the Read method in\nio.Reader, so this assertion cannot succeed.",
                   "default": true
                 },
+                "infertypeargs": {
+                  "type": "boolean",
+                  "description": "check for unnecessary type arguments in call expressions\nExplicit type arguments may be omitted from call expressions if they can be\ninferred from function arguments, or from other type arguments:\n\tfunc f[T any](T) {}\n\t\n\tfunc _() {\n\t\tf[string](\"foo\") // string could be inferred\n\t}",
+                  "default": true
+                },
                 "loopclosure": {
                   "type": "boolean",
                   "description": "check references to loop variables from within nested functions\nThis analyzer checks for references to loop variables from within a\nfunction literal inside the loop body. It checks only instances where\nthe function literal is called in a defer or go statement that is the\nlast statement in the loop body, as otherwise we would need whole\nprogram analysis.\nFor example:\n\tfor i, v := range s {\n\t\tgo func() {\n\t\t\tprintln(i, v) // not what you might expect\n\t\t}()\n\t}\nSee: https://golang.org/doc/go_faq.html#closures_and_goroutines",
@@ -331,9 +336,14 @@
                   "type": "boolean",
                   "description": "checks for unused writes\nThe analyzer reports instances of writes to struct fields and\narrays that are never read. Specifically, when a struct object\nor an array is copied, its elements are copied implicitly by\nthe compiler, and any element write to this copy does nothing\nwith the original object.\nFor example:\n\ttype T struct { x int }\n\tfunc f(input []T) {\n\t\tfor i, v := range input {  // v is a copy\n\t\t\tv.x = i  // unused write to field x\n\t\t}\n\t}\nAnother example is about non-pointer receiver:\n\ttype T struct { x int }\n\tfunc (t T) f() {  // t is a copy\n\t\tt.x = i  // unused write to field x\n\t}\n**Disabled by default. Enable it by setting `\"analyses\": {\"unusedwrite\": true}`.**"
                 },
+                "useany": {
+                  "type": "boolean",
+                  "description": "check for constraints that could be simplified to \"any\"",
+                  "default": true
+                },
                 "fillreturns": {
                   "type": "boolean",
-                  "description": "suggested fixes for \"wrong number of return values (want %d, got %d)\"\nThis checker provides suggested fixes for type errors of the\ntype \"wrong number of return values (want %d, got %d)\". For example:\n\tfunc m() (int, string, *bool, error) {\n\t\treturn\n\t}\nwill turn into\n\tfunc m() (int, string, *bool, error) {\n\t\treturn 0, \"\", nil, nil\n\t}\nThis functionality is similar to https://github.com/sqs/goreturns.",
+                  "description": "suggest fixes for errors due to an incorrect number of return values\nThis checker provides suggested fixes for type errors of the\ntype \"wrong number of return values (want %d, got %d)\". For example:\n\tfunc m() (int, string, *bool, error) {\n\t\treturn\n\t}\nwill turn into\n\tfunc m() (int, string, *bool, error) {\n\t\treturn 0, \"\", nil, nil\n\t}\nThis functionality is similar to https://github.com/sqs/goreturns.",
                   "default": true
                 },
                 "nonewvars": {
@@ -348,7 +358,7 @@
                 },
                 "undeclaredname": {
                   "type": "boolean",
-                  "description": "suggested fixes for \"undeclared name: <>\"\nThis checker provides suggested fixes for type errors of the\ntype \"undeclared name: <>\". It will insert a new statement:\n\"<> := \".",
+                  "description": "suggested fixes for \"undeclared name: <>\"\nThis checker provides suggested fixes for type errors of the\ntype \"undeclared name: <>\". It will either insert a new statement,\nsuch as:\n\"<> := \"\nor a new function declaration, such as:\nfunc <>(inferred parameters) {\n\tpanic(\"implement me!\")\n}",
                   "default": true
                 },
                 "fillstruct": {
@@ -376,7 +386,7 @@
             },
             "codelenses": {
               "type": "object",
-              "description": "codelenses overrides the enabled/disabled state of code lenses. See the\n\"Code Lenses\" section of the\n[Settings page](https://github.com/golang/tools/blob/master/gopls/doc/settings.md)\nfor the list of supported lenses.\n\nExample Usage:\n\n```json5\n\"gopls\": {\n...\n  \"codelens\": {\n    \"generate\": false,  // Don't show the `go generate` lens.\n    \"gc_details\": true  // Show a code lens toggling the display of gc's choices.\n  }\n...\n}\n```\n",
+              "description": "codelenses overrides the enabled/disabled state of code lenses. See the\n\"Code Lenses\" section of the\n[Settings page](https://github.com/golang/tools/blob/master/gopls/doc/settings.md)\nfor the list of supported lenses.\n\nExample Usage:\n\n```json5\n\"gopls\": {\n...\n  \"codelenses\": {\n    \"generate\": false,  // Don't show the `go generate` lens.\n    \"gc_details\": true  // Show a code lens toggling the display of gc's choices.\n  }\n...\n}\n```\n",
               "additionalProperties": false,
               "properties": {
                 "gc_details": {
@@ -445,11 +455,6 @@
               "type": "boolean",
               "default": true,
               "description": "**This setting is experimental and may be deleted.**\n\nexperimentalPostfixCompletions enables artifical method snippets\nsuch as \"someSlice.sort!\".\n"
-            },
-            "experimentalTemplateSupport": {
-              "type": "boolean",
-              "default": false,
-              "description": "**This setting is experimental and may be deleted.**\n\nexperimentalTemplateSupport opts into the experimental support\nfor template files.\n"
             },
             "experimentalUseInvalidMetadata": {
               "type": "boolean",
@@ -556,7 +561,14 @@
                 "Package"
               ],
               "default": "Dynamic",
-              "description": "**This is an advanced setting and should not be configured by most `gopls` users.**\n\nsymbolStyle controls how symbols are qualified in symbol responses.\n\nExample Usage:\n\n```json5\n\"gopls\": {\n...\n  \"symbolStyle\": \"dynamic\",\n...\n}\n```\n\nMust be one of:\n\n* `\"Dynamic\"` uses whichever qualifier results in the highest scoring\nmatch for the given symbol query. Here a \"qualifier\" is any \"/\" or \".\"\ndelimited suffix of the fully qualified symbol. i.e. \"to/pkg.Foo.Field\" or\njust \"Foo.Field\".\n\n* `\"Full\"` is fully qualified symbols, i.e.\n\"path/to/pkg.Foo.Field\".\n\n* `\"Package\"` is package qualified symbols i.e.\n\"pkg.Foo.Field\".\n"
+              "description": "**This is an advanced setting and should not be configured by most `gopls` users.**\n\nsymbolStyle controls how symbols are qualified in symbol responses.\n\nExample Usage:\n\n```json5\n\"gopls\": {\n...\n  \"symbolStyle\": \"Dynamic\",\n...\n}\n```\n\nMust be one of:\n\n* `\"Dynamic\"` uses whichever qualifier results in the highest scoring\nmatch for the given symbol query. Here a \"qualifier\" is any \"/\" or \".\"\ndelimited suffix of the fully qualified symbol. i.e. \"to/pkg.Foo.Field\" or\njust \"Foo.Field\".\n\n* `\"Full\"` is fully qualified symbols, i.e.\n\"path/to/pkg.Foo.Field\".\n\n* `\"Package\"` is package qualified symbols i.e.\n\"pkg.Foo.Field\".\n"
+            },
+            "templateExtensions": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              },
+              "description": "templateExtensions gives the extensions of file names that are treateed\nas template files. (The extension\nis the part of the file name after the final dot.)\n"
             },
             "usePlaceholders": {
               "type": "boolean",
@@ -759,28 +771,28 @@
     ]
   },
   "devDependencies": {
-    "@types/mocha": "^8.0.3",
-    "@types/node": "^14.11.1",
-    "@types/node-fetch": "^2.5.7",
-    "@types/tmp": "^0.2.0",
-    "@types/which": "^2.0.0",
-    "@typescript-eslint/eslint-plugin": "^4.1.1",
-    "@typescript-eslint/parser": "^4.1.1",
+    "@types/mocha": "^9.0.0",
+    "@types/node": "^16.11.6",
+    "@types/node-fetch": "^2.5.12",
+    "@types/tmp": "^0.2.2",
+    "@types/which": "^2.0.1",
+    "@typescript-eslint/eslint-plugin": "^5.3.0",
+    "@typescript-eslint/parser": "^5.3.0",
     "coc-dev-tools": "^0.1.0",
     "coc.nvim": "0.0.80",
-    "eslint": "^7.9.0",
+    "eslint": "^8.1.0",
     "eslint-config-josa-typescript": "^0.1.2",
-    "mocha": "^8.1.3",
+    "mocha": "^9.1.3",
     "rimraf": "^3.0.2",
     "tmp": "^0.2.1",
-    "ts-node": "^9.0.0",
-    "typescript": "~4.1.2"
+    "ts-node": "^10.4.0",
+    "typescript": "~4.4.4"
   },
   "dependencies": {
-    "node-fetch": "^2.6.1",
-    "tslib": "^2.0.0",
-    "vscode-languageserver-textdocument": "^1.0.1",
-    "vscode-uri": "^3.0.1",
+    "node-fetch": "^2.6.6",
+    "tslib": "^2.3.1",
+    "vscode-languageserver-textdocument": "^1.0.2",
+    "vscode-uri": "^3.0.2",
     "which": "^2.0.2"
   }
 }
