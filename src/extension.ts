@@ -10,7 +10,19 @@ import { GOPLS } from './binaries'
 import { generateTestsAll, generateTestsExported, generateTestsFunction, toogleTests } from './utils/tests'
 import { openPlayground } from './utils/playground'
 import { generateImplStubs } from './utils/impl'
-import { goplsTidy } from './utils/lspcommands'
+import { goplsTidy as goplsTidyDeprecated } from './utils/lspcommands'
+import {
+  goplsAddDependency,
+  goplsAddImport,
+  goplsGenerate,
+  goplsGenerateGoplsMod,
+  goplsGoGetPackage,
+  goplsRemoveDependency,
+  goplsRunTests,
+  goplsTidy,
+  goplsUpdateGoSum,
+  goplsVendor,
+} from './utils/goplsCommands'
 
 const restartConfigs = [
   'go.goplsArgs',
@@ -20,6 +32,8 @@ const restartConfigs = [
 ]
 
 export async function activate(context: ExtensionContext): Promise<void> {
+  window.showMessage(`activate`, 'warning')
+
 
   setStoragePath(context.storagePath)
 
@@ -28,14 +42,13 @@ export async function activate(context: ExtensionContext): Promise<void> {
   }
 
   registerGeneral(context)
-
   registerGopls(context)
   registerTest(context)
   registerTags(context)
   registerPlaygroud(context)
   registerGoImpl(context)
   registerTools(context)
-  registerLspCommands(context)
+  registerGoplsCommands(context)
 }
 
 async function registerGeneral(context: ExtensionContext): Promise<void> {
@@ -62,8 +75,8 @@ async function registerGopls(context: ExtensionContext): Promise<void> {
     args.push('-remote=auto')
   }
 
-  // TMPDIR needs to be resetted, because its altered by coc.nvim, which breaks
-  // the automatic deamon launching of gopls.
+  // TMPDIR needs to be reset, because its altered by coc.nvim, which breaks
+  // the automatic daemon launching of gopls.
   // See: https://github.com/neoclide/coc.nvim/commit/bdd9a9e1401fe6fdd57a9bd078e3651ecf1e0202
   const tmpdir = await workspace.nvim.eval('$TMPDIR') as string
 
@@ -232,11 +245,21 @@ async function registerTools(context: ExtensionContext): Promise<void> {
   )
 }
 
-async function registerLspCommands(context: ExtensionContext): Promise<void> {
+async function registerGoplsCommands(context: ExtensionContext): Promise<void> {
   context.subscriptions.push(
     commands.registerCommand(
       "go.gopls.tidy",
-      goplsTidy,
+      goplsTidyDeprecated,
     ),
+    commands.registerCommand('go.addDependency', goplsAddDependency),
+    commands.registerCommand('go.addImport', goplsAddImport),
+    commands.registerCommand('go.generate', goplsGenerate),
+    commands.registerCommand('go.generateGoplsMod', goplsGenerateGoplsMod),
+    commands.registerCommand('go.goGetPackage', goplsGoGetPackage),
+    commands.registerCommand('go.removeDependency', goplsRemoveDependency),
+    commands.registerCommand('go.runTests', goplsRunTests),
+    commands.registerCommand('go.tidy', goplsTidy),
+    commands.registerCommand('go.updateGoSum', goplsUpdateGoSum),
+    commands.registerCommand('go.vendor', goplsVendor),
   )
 }

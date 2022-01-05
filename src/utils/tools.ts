@@ -17,6 +17,7 @@ interface GetVersionFunction {
 }
 
 export async function installGoBin(source: string, force = false, getVersion?: GetVersionFunction): Promise<boolean> {
+  window.showMessage(`install: ${source}`, 'warning')
   const name = goBinName(source)
 
   if (!force && await goBinExists(name)) {
