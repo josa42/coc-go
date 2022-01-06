@@ -5,6 +5,7 @@ import { ExecOptions, exec, execFile, spawn } from 'child_process'
 import { window, workspace } from 'coc.nvim'
 import which from 'which'
 import { configDir } from './config'
+import { compareVersions } from './versions'
 
 const runExec = util.promisify(exec)
 
@@ -27,7 +28,7 @@ export async function installGoBin(source: string, force = false, getVersion?: G
   statusItem.text = `Installing '${name}'`
   statusItem.show()
 
-  const success = await goRun(`get ${source}@latest`) && await goBinExists(name)
+  const success = await goInstall(source) && await goBinExists(name)
 
   if (success) {
     const vname = getVersion ? `${name}@${await getVersion()}` : name
@@ -41,13 +42,42 @@ export async function installGoBin(source: string, force = false, getVersion?: G
   return success
 }
 
+async function goInstall(source: string): Promise<boolean> {
+  return await goVersionOrLater('1.17.0')
+    ? goRun(`install ${source}@latest`)
+    : goRun(`get ${source}@latest`)
+}
+
+async function goVersionOrLater(version: string): Promise<boolean> {
+  try {
+    return compareVersions(version, await getGoVersion()) < 0
+  } catch(err) {
+    // mute
+  }
+
+  return false
+}
+
+async function getGoVersion() {
+  try {
+    const [, out] = await runBin('go', ['version'])
+    return out.trim().match(/^go version go(\S+) .*$/)[1]
+  } catch(err) {
+    // mute
+  }
+  return ''
+}
+
 export async function goBinPath(source: string): Promise<string> {
   const name = goBinName(source)
   return path.join(await configDir('bin'), name + (isWin ? ".exe" : ""))
 }
 
 export async function runGoTool(name: string, args: string[] = []): Promise<[number, string]> {
-  const bin = await goBinPath(name)
+  return runBin(await goBinPath(name), args)
+}
+
+export async function runBin(bin: string, args: string[] = []): Promise<[number, string]> {
   return new Promise((resolve): void => {
     const p = spawn(bin, args)
 
