@@ -4,6 +4,7 @@ import { LanguageClient, window } from 'coc.nvim'
 import { installGoBin, runGoTool } from './utils/tools'
 import checkLatestTag from './utils/checktag'
 import { withProgress } from './utils/ui'
+import { getState, setState } from './utils/config'
 
 import { GOMODIFYTAGS, GOPLAY, GOPLS, GOTESTS, IMPL, TOOLS } from './binaries'
 import { compareVersions, isValidVersion } from './utils/versions'
@@ -25,9 +26,26 @@ export async function installGopls(client: LanguageClient): Promise<void> {
   }
 }
 
+const checkInterval = 24 * 60 * 60 * 1000
+
+async function shouldCheckGopls(): Promise<boolean> {
+  const now = new Date().getTime()
+  const last = await getState<number>('gopls:last-check')
+
+  if (last - (now - checkInterval) < 0) {
+    await setState('gopls:last-check', new Date().getTime())
+    return true
+  }
+  return false
+}
+
 export async function checkGopls(client: LanguageClient, mode: 'ask' | 'inform' | 'install'): Promise<void> {
 
   try {
+    if (!(await shouldCheckGopls())) {
+      return
+    }
+
     let install = false
 
     await withProgress('Checking for new gopls version', async () => {

@@ -1,5 +1,6 @@
 import path from "path"
 import os from "os"
+import fs from "fs"
 import { workspace } from "coc.nvim"
 import { createDir } from "./fs"
 
@@ -220,3 +221,36 @@ export async function configDir(...names: string[]): Promise<string> {
     resolve(dir)
   })
 }
+
+async function stateFile() {
+  return path.join(await configDir(), 'state.json')
+}
+
+async function getStateData(): Promise<object> {
+  try {
+    const f = await stateFile()
+    const d = JSON.parse(await fs.promises.readFile(f, 'utf-8'))
+
+    return d || {}
+  } catch(err) { /* mute */ }
+
+  return {}
+}
+
+async function setStateData(data: object): Promise<void> {
+  try {
+    await fs.promises.writeFile(await stateFile(), JSON.stringify(data, null, '  '))
+  } catch(err) { /* mute */ }
+}
+
+export async function getState<T>(key: string): Promise<T> {
+  const d = await getStateData()
+  return d[key] || ''
+}
+
+export async function setState<T>(key: string, value: T) {
+  const d = await getStateData()
+  d[key] = value
+  await setStateData(d)
+}
+
