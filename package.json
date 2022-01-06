@@ -625,9 +625,9 @@
           }
         },
         "go.checkForUpdates": {
-          "description": "[EXPERIMENTAL] Check for gopls updates on start.",
+          "description": "Check for gopls updates on start.",
           "type": "string",
-          "default": "disabled",
+          "default": "install",
           "enum": [
             "disabled",
             "inform",
