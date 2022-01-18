@@ -353,7 +353,7 @@
                 },
                 "noresultvalues": {
                   "type": "boolean",
-                  "description": "suggested fixes for \"no result values expected\"\nThis checker provides suggested fixes for type errors of the\ntype \"no result values expected\". For example:\n\tfunc z() { return nil }\nwill turn into\n\tfunc z() { return }",
+                  "description": "suggested fixes for unexpected return values\nThis checker provides suggested fixes for type errors of the\ntype \"no result values expected\" or \"too many return values\".\nFor example:\n\tfunc z() { return nil }\nwill turn into\n\tfunc z() { return }",
                   "default": true
                 },
                 "undeclaredname": {
