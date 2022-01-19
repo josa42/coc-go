@@ -375,7 +375,7 @@
                   "type": "boolean"
                 }
               },
-              "description": "**This setting is experimental and may be deleted.**\n\nannotations specifies the various kinds of optimization diagnostics\nthat should be reported by the gc_details command.\n\nCan contain any of:\n\n* `\"bounds\"` controls bounds checking diagnostics.\n\n* `\"escape\"` controls diagnostics about escape choices.\n\n* `\"inline\"` controls diagnostics about inlining choices.\n\n* `\"nil\"` controls nil checks.\n"
+              "description": "**This setting is experimental and may be deleted.**\n\nannotations specifies the various kinds of optimization diagnostics\nthat should be reported by the gc_details command.\n\nCan contain any of:\n\n* `\"bounds\"` controls bounds checking diagnostics.\n* `\"escape\"` controls diagnostics about escape choices.\n* `\"inline\"` controls diagnostics about inlining choices.\n* `\"nil\"` controls nil checks.\n"
             },
             "buildFlags": {
               "type": "array",
@@ -486,7 +486,7 @@
                 "SynopsisDocumentation"
               ],
               "default": "FullDocumentation",
-              "description": "hoverKind controls the information that appears in the hover text.\nSingleLine and Structured are intended for use only by authors of editor plugins.\n\nMust be one of:\n\n* `\"FullDocumentation\"`\n* `\"NoDocumentation\"`\n* `\"SingleLine\"`\n* `\"Structured\"` is an experimental setting that returns a structured hover format.\nThis format separates the signature from the documentation, so that the client\ncan do more manipulation of these fields.\\\nThis should only be used by clients that support this behavior.\n\n* `\"SynopsisDocumentation\"`\n"
+              "description": "hoverKind controls the information that appears in the hover text.\nSingleLine and Structured are intended for use only by authors of editor plugins.\n\nMust be one of:\n\n* `\"FullDocumentation\"`\n* `\"NoDocumentation\"`\n* `\"SingleLine\"`\n* `\"Structured\"` is an experimental setting that returns a structured hover format.\nThis format separates the signature from the documentation, so that the client\ncan do more manipulation of these fields.\\\nThis should only be used by clients that support this behavior.\n* `\"SynopsisDocumentation\"`\n"
             },
             "importShortcut": {
               "type": "string",
@@ -530,7 +530,7 @@
                 "Normal"
               ],
               "default": "Normal",
-              "description": "**This setting is experimental and may be deleted.**\n\nmemoryMode controls the tradeoff `gopls` makes between memory usage and\ncorrectness.\n\nValues other than `Normal` are untested and may break in surprising ways.\n\nMust be one of:\n\n* `\"DegradeClosed\"`: In DegradeClosed mode, `gopls` will collect less information about\npackages without open files. As a result, features like Find\nReferences and Rename will miss results in such packages.\n\n* `\"Normal\"`\n"
+              "description": "**This setting is experimental and may be deleted.**\n\nmemoryMode controls the tradeoff `gopls` makes between memory usage and\ncorrectness.\n\nValues other than `Normal` are untested and may break in surprising ways.\n\nMust be one of:\n\n* `\"DegradeClosed\"`: In DegradeClosed mode, `gopls` will collect less information about\npackages without open files. As a result, features like Find\nReferences and Rename will miss results in such packages.\n* `\"Normal\"`\n"
             },
             "semanticTokens": {
               "type": "boolean",
@@ -561,7 +561,7 @@
                 "Package"
               ],
               "default": "Dynamic",
-              "description": "**This is an advanced setting and should not be configured by most `gopls` users.**\n\nsymbolStyle controls how symbols are qualified in symbol responses.\n\nExample Usage:\n\n```json5\n\"gopls\": {\n...\n  \"symbolStyle\": \"Dynamic\",\n...\n}\n```\n\nMust be one of:\n\n* `\"Dynamic\"` uses whichever qualifier results in the highest scoring\nmatch for the given symbol query. Here a \"qualifier\" is any \"/\" or \".\"\ndelimited suffix of the fully qualified symbol. i.e. \"to/pkg.Foo.Field\" or\njust \"Foo.Field\".\n\n* `\"Full\"` is fully qualified symbols, i.e.\n\"path/to/pkg.Foo.Field\".\n\n* `\"Package\"` is package qualified symbols i.e.\n\"pkg.Foo.Field\".\n"
+              "description": "**This is an advanced setting and should not be configured by most `gopls` users.**\n\nsymbolStyle controls how symbols are qualified in symbol responses.\n\nExample Usage:\n\n```json5\n\"gopls\": {\n...\n  \"symbolStyle\": \"Dynamic\",\n...\n}\n```\n\nMust be one of:\n\n* `\"Dynamic\"` uses whichever qualifier results in the highest scoring\nmatch for the given symbol query. Here a \"qualifier\" is any \"/\" or \".\"\ndelimited suffix of the fully qualified symbol. i.e. \"to/pkg.Foo.Field\" or\njust \"Foo.Field\".\n* `\"Full\"` is fully qualified symbols, i.e.\n\"path/to/pkg.Foo.Field\".\n* `\"Package\"` is package qualified symbols i.e.\n\"pkg.Foo.Field\".\n"
             },
             "templateExtensions": {
               "type": "array",
