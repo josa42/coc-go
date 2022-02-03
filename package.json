@@ -550,7 +550,7 @@
                 "FastFuzzy",
                 "Fuzzy"
               ],
-              "default": "Fuzzy",
+              "default": "FastFuzzy",
               "description": "**This is an advanced setting and should not be configured by most `gopls` users.**\n\nsymbolMatcher sets the algorithm that is used when finding workspace symbols.\n\nMust be one of:\n\n* `\"CaseInsensitive\"`\n* `\"CaseSensitive\"`\n* `\"FastFuzzy\"`\n* `\"Fuzzy\"`\n"
             },
             "symbolStyle": {

@@ -181,7 +181,7 @@ export interface GoplsOptions {
   staticcheck: boolean
 
   /**
-   * Default: "Fuzzy"
+   * Default: "FastFuzzy"
    */
   symbolMatcher: "CaseInsensitive" | "CaseSensitive" | "FastFuzzy" | "Fuzzy"
 
