@@ -365,6 +365,11 @@
                   "type": "boolean",
                   "description": "note incomplete struct initializations\nThis analyzer provides diagnostics for any struct literals that do not have\nany fields initialized. Because the suggested fix for this analysis is\nexpensive to compute, callers should compute it separately, using the\nSuggestedFix function below.",
                   "default": true
+                },
+                "stubmethods": {
+                  "type": "boolean",
+                  "description": "stub methods analyzer\nThis analyzer generates method stubs for concrete types\nin order to implement a target interface",
+                  "default": true
                 }
               }
             },
