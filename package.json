@@ -338,8 +338,7 @@
                 },
                 "useany": {
                   "type": "boolean",
-                  "description": "check for constraints that could be simplified to \"any\"",
-                  "default": true
+                  "description": "check for constraints that could be simplified to \"any\"\n**Disabled by default. Enable it by setting `\"analyses\": {\"useany\": true}`.**"
                 },
                 "fillreturns": {
                   "type": "boolean",
