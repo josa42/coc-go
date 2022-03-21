@@ -4,7 +4,7 @@ export type version = [
   number,
 ]
 
-const versionExp = /^v?(\d+)\.(\d+).(\d+)$/
+const versionExp = /^v?(\d+)\.(\d+)\.?(\d+)?$/
 
 export function isValidVersion(version: string): boolean {
   return Boolean(version.trim().match(versionExp))

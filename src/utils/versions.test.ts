@@ -19,7 +19,7 @@ describe('isValidVersion()', () => {
   it('should recognise invalid versions', () => {
     assert.ok(!isValidVersion('v 1.0.0'))
     assert.ok(!isValidVersion('1'))
-    assert.ok(!isValidVersion('1.1'))
+    assert.ok(isValidVersion('1.1'))
   })
 
 })
@@ -60,6 +60,8 @@ describe('compareVersions()', () => {
 
     assert.strictEqual(compareVersions('1.0.0', 'v1.1.0'), -1)
     assert.strictEqual(compareVersions('v1.0.0', '1.1.0'), -1)
+
+    assert.strictEqual(compareVersions("1.17.0", "1.18"), -1)
   })
 
 })
