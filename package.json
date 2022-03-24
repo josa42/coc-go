@@ -458,7 +458,7 @@
             "experimentalPostfixCompletions": {
               "type": "boolean",
               "default": true,
-              "description": "**This setting is experimental and may be deleted.**\n\nexperimentalPostfixCompletions enables artifical method snippets\nsuch as \"someSlice.sort!\".\n"
+              "description": "**This setting is experimental and may be deleted.**\n\nexperimentalPostfixCompletions enables artificial method snippets\nsuch as \"someSlice.sort!\".\n"
             },
             "experimentalUseInvalidMetadata": {
               "type": "boolean",
