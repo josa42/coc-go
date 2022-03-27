@@ -4,3 +4,4 @@ node_modules
 test
 /README.tmp.md
 /.tmp
+.DS_Store

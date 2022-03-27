@@ -23,7 +23,7 @@
     "neovim"
   ],
   "scripts": {
-    "test": "true || mocha --require ts-node/register '**/*.test.ts'",
+    "test": "jest",
     "test:watch": "mocha --watch --watch-files '**/*.ts' --require ts-node/register '**/*.test.ts'",
     "clean": "rimraf lib",
     "build": "tsc -p tsconfig.json",
@@ -765,7 +765,7 @@
     ]
   },
   "devDependencies": {
-    "@types/mocha": "^9.0.0",
+    "@types/jest": "^27.4.1",
     "@types/node": "^16.11.6",
     "@types/node-fetch": "^2.5.12",
     "@types/tmp": "^0.2.2",
@@ -773,13 +773,13 @@
     "@typescript-eslint/eslint-plugin": "^5.3.0",
     "@typescript-eslint/parser": "^5.3.0",
     "coc-dev-tools": "^0.1.0",
-    "coc.nvim": "0.0.80",
+    "coc.nvim": "^0.0.80",
     "eslint": "^8.1.0",
     "eslint-config-josa-typescript": "^0.1.2",
-    "mocha": "^9.1.3",
+    "jest": "^27.5.1",
     "rimraf": "^3.0.2",
     "tmp": "^0.2.1",
-    "ts-node": "^10.4.0",
+    "ts-jest": "^27.1.4",
     "typescript": "~4.4.4"
   },
   "dependencies": {
