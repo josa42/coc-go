@@ -1,4 +1,4 @@
-import https from 'https';
+import https from 'https'
 import pkg from '../../package.json'
 
 const options = {
@@ -10,16 +10,16 @@ const options = {
 export function getJSON(url: string) {
   return new Promise((resolve, reject) => {
     https.get(url, options, (res) => {
-      let body = '';
+      let body = ''
 
-      res.on('data', (chunk) => (body += chunk));
+      res.on('data', (chunk) => (body += chunk))
       res.on('end', () => {
         try {
-          resolve(JSON.parse(body));
+          resolve(JSON.parse(body))
         } catch (err) {
-          reject(err);
-        };
-      });
+          reject(err)
+        }
+      })
 
     }).on('error', reject)
   })

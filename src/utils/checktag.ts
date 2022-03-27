@@ -1,4 +1,3 @@
-import { window } from 'coc.nvim'
 import { getJSON } from './request'
 
 const releaseFilter = /^v\d+\.\d+\.\d+$/
