@@ -4,11 +4,13 @@ DIR="$(cd -- "$(dirname -- "${BASH_SOURCE[0]}")/.." &> /dev/null && pwd)"
 TMP="$DIR/.tmp"
 
 # rm -rf $TMP
-mkdir -p $TMP/{share/nvim,state,cache,config/nvim}
+mkdir -p $TMP/{share/nvim,state,cache,config/nvim/syntax}
 
 PLUGGED="$TMP/share/data/plugged"
 PLUG_FILE="$TMP/share/nvim/site/autoload/plug.vim"
 PLUG_URL='https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim'
+
+curl -sS 'https://raw.githubusercontent.com/fatih/vim-go/master/syntax/gowork.vim' > $TMP/config/nvim/syntax/gowork.vim
 
 cat > $TMP/config/nvim/init.lua <<EOF
 vim.cmd [[
@@ -54,6 +56,11 @@ function _G.__coc()
 end
 
 vim.opt.statusline = '%{v:lua.__coc()}'
+
+vim.cmd [[
+  au BufRead,BufNewFile go.work.sum set filetype=gosum
+  au BufRead,BufNewFile go.work set filetype=gowork
+]]
 EOF
 
 cat > $TMP/config/nvim/coc-settings.json <<EOF
