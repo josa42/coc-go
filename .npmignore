@@ -1,7 +1,9 @@
+/__mocks__/**
 /src
 /tsconfig.json
 /tslint.json
 /scripts
+/jest.config.js
 *.map
 *.ts
 *.log
