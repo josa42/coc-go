@@ -3,5 +3,6 @@ module.exports = {
   preset: 'ts-jest',
   testEnvironment: 'node',
   verbose: true,
-  testRegex: 'src/.*\\.test\\.ts$'
+  testRegex: 'src/.*\\.test\\.ts$',
+  modulePathIgnorePatterns: ['<rootDir>/lib'],
 }
