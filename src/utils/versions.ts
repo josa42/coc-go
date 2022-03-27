@@ -4,7 +4,7 @@ export type version = [
   number,
 ]
 
-const versionExp = /^v?(\d+)\.(\d+).(\d+)$/
+const versionExp = /^v?(\d+)\.(\d+)(\.(\d+))?$/
 
 export function isValidVersion(version: string): boolean {
   return Boolean(version.trim().match(versionExp))
@@ -30,7 +30,7 @@ export function parseVersion(v: string): version {
   const match = v.trim().match(versionExp)
 
   if (match) {
-    const [, major, minor, patch] = match
+    const [, major, minor,, patch = '0'] = match
     ver = [parseInt(major), parseInt(minor), parseInt(patch)]
   }
 
