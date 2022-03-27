@@ -1,4 +1,5 @@
-import fetch from 'node-fetch'
+import { window } from 'coc.nvim'
+import { getJSON } from './request'
 
 const releaseFilter = /^v\d+\.\d+\.\d+$/
 
@@ -14,8 +15,7 @@ interface Tag {
 }
 
 export default async function checkLatestTag(repo: string, prefixFilter?: RegExp): Promise<string> {
-  const resp = await fetch(`https://api.github.com/repos/${repo}/tags`)
-  const data = await resp.json() as Array<Tag>
+  const data = await getJSON(`https://api.github.com/repos/${repo}/tags`) as Array<Tag>
 
   if (!Array.isArray(data)) {
     return ''
