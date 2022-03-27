@@ -43,7 +43,6 @@
   "activationEvents": [
     "onLanguage:go",
     "onLanguage:gomod",
-    "onLanguage:gowork",
     "onCommand:go.install.gomodifytags",
     "onCommand:go.install.goplay",
     "onCommand:go.install.gopls",
