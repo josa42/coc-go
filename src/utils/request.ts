@@ -1,9 +1,8 @@
 import https from 'https'
-import pkg from '../../package.json'
 
 const options = {
   headers: {
-    'User-Agent': `coc-go/${pkg.version}`,
+    'User-Agent': `coc-go`,
   }
 }
 
