@@ -6,4 +6,4 @@
 *.map
 *.ts
 *.log
-
+/.tmp
