@@ -1,6 +1,6 @@
 {
   "name": "coc-go",
-  "version": "1.2.1",
+  "version": "1.3.0",
   "description": "gopls extension for coc",
   "author": "Josa Gesell <josa@gesell.me>",
   "license": "MIT",
