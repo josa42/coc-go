@@ -206,6 +206,11 @@
                   "description": "check for calls of reflect.DeepEqual on error values\nThe deepequalerrors checker looks for calls of the form:\n    reflect.DeepEqual(err1, err2)\nwhere err1 and err2 are errors. Using reflect.DeepEqual to compare\nerrors is discouraged.",
                   "default": true
                 },
+                "embed": {
+                  "type": "boolean",
+                  "description": "check for //go:embed directive import\nThis analyzer checks that the embed package is imported when source code contains //go:embed comment directives.\nThe embed package must be imported for //go:embed directives to function.import _ \"embed\".",
+                  "default": true
+                },
                 "errorsas": {
                   "type": "boolean",
                   "description": "report passing non-pointer or non-error values to errors.As\nThe errorsas analysis reports calls to errors.As where the type\nof the second argument is not a pointer to a type implementing error.",
