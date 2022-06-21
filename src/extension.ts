@@ -76,14 +76,14 @@ async function registerGopls(context: ExtensionContext): Promise<void> {
     })
   }
 
-  // https://github.com/neoclide/coc.nvim/blob/master/src/language-client/client.ts#L684
+  // https://github.com/neoclide/coc.nvim/blob/6cfc134dd25a44f737ef8a70696a74664da1a96f/src/language-client/client.ts#L721-L752
   const clientOptions: LanguageClientOptions = {
     documentSelector: ['go', 'gomod', 'gowork'],
     initializationOptions: () => getConfig().goplsOptions,
+    disabledFeatures: config.disabledFeatures,
     disableWorkspaceFolders: config.disable.workspaceFolders,
     disableDiagnostics: config.disable.diagnostics,
     disableCompletion: config.disable.completion,
-    // TODO disableSnippetCompletion: config.disable.snippetCompletion,
   }
 
   const client = new LanguageClient('go', 'gopls', server, clientOptions)

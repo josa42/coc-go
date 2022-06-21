@@ -25,6 +25,7 @@ export interface GoConfig {
   tests: GoTestsConfig
   checkForUpdates: "disabled" | "inform" | "ask" | "install"
   disable: DisableConfig
+  disabledFeatures?: string[]
 }
 
 export interface DisableConfig {
