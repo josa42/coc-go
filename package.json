@@ -485,6 +485,15 @@
               "default": false,
               "description": "gofumpt indicates if we should run gofumpt formatting.\n"
             },
+            "hints": {
+              "type": "object",
+              "patternProperties": {
+                ".+": {
+                  "type": "boolean"
+                }
+              },
+              "description": "**This setting is experimental and may be deleted.**\n\nhints specify inlay hints that users want to see.\nA full list of hints that gopls uses can be found\n[here](https://github.com/golang/tools/blob/master/gopls/doc/inlayHints.md).\n"
+            },
             "hoverKind": {
               "type": "string",
               "enum": [

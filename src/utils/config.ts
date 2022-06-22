@@ -136,6 +136,11 @@ export interface GoplsOptions {
   gofumpt: boolean
 
   /**
+   * Default: {}
+   */
+  hints: { string: boolean }
+
+  /**
    * Default: "FullDocumentation"
    */
   hoverKind: "FullDocumentation" | "NoDocumentation" | "SingleLine" | "Structured" | "SynopsisDocumentation"
