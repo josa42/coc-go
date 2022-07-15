@@ -365,6 +365,10 @@
                   "description": "suggested fixes for \"undeclared name: <>\"\nThis checker provides suggested fixes for type errors of the\ntype \"undeclared name: <>\". It will either insert a new statement,\nsuch as:\n\"<> := \"\nor a new function declaration, such as:\nfunc <>(inferred parameters) {\n\tpanic(\"implement me!\")\n}",
                   "default": true
                 },
+                "unusedvariable": {
+                  "type": "boolean",
+                  "description": "check for unused variables\nThe unusedvariable analyzer suggests fixes for unused variables errors.\n**Disabled by default. Enable it by setting `\"analyses\": {\"unusedvariable\": true}`.**"
+                },
                 "fillstruct": {
                   "type": "boolean",
                   "description": "note incomplete struct initializations\nThis analyzer provides diagnostics for any struct literals that do not have\nany fields initialized. Because the suggested fix for this analysis is\nexpensive to compute, callers should compute it separately, using the\nSuggestedFix function below.",
