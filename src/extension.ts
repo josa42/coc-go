@@ -4,7 +4,7 @@ import os from 'os'
 import { commandExists, goBinPath, installGoBin } from './utils/tools'
 import { checkGopls, installGomodifytags, installGoplay, installGopls, installGotests, installImpl, installTools, version } from './commands'
 import { addTags, clearTags, removeTags } from './utils/modify-tags'
-import { getConfig, setStoragePath } from './utils/config'
+import { getConfig, getLanguageClientDisabledFeatures, setStoragePath } from './utils/config'
 import { activeTextDocument } from './editor'
 import { GOPLS } from './binaries'
 import { generateTestsAll, generateTestsExported, generateTestsFunction, toogleTests } from './utils/tests'
@@ -80,10 +80,7 @@ async function registerGopls(context: ExtensionContext): Promise<void> {
   const clientOptions: LanguageClientOptions = {
     documentSelector: ['go', 'gomod', 'gowork'],
     initializationOptions: () => getConfig().goplsOptions,
-    disableWorkspaceFolders: config.disable.workspaceFolders,
-    disableDiagnostics: config.disable.diagnostics,
-    disableCompletion: config.disable.completion,
-    // TODO disableSnippetCompletion: config.disable.snippetCompletion,
+    disabledFeatures: getLanguageClientDisabledFeatures(),
   }
 
   const client = new LanguageClient('go', 'gopls', server, clientOptions)
