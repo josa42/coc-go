@@ -11,6 +11,7 @@ import { generateTestsAll, generateTestsExported, generateTestsFunction, toogleT
 import { openPlayground } from './utils/playground'
 import { generateImplStubs } from './utils/impl'
 import { goplsTidy } from './utils/lspcommands'
+import * as goplsInlayHintsFeature from './inlayHints'
 
 const restartConfigs = [
   'go.goplsArgs',
@@ -105,6 +106,8 @@ async function registerGopls(context: ExtensionContext): Promise<void> {
       () => installGopls(client)
     )
   )
+
+  goplsInlayHintsFeature.register(context, client)
 }
 
 async function goplsPath(goplsPath: string): Promise<string | null> {
