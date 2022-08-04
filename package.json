@@ -559,6 +559,16 @@
               "default": "Normal",
               "description": "**This setting is experimental and may be deleted.**\n\nmemoryMode controls the tradeoff `gopls` makes between memory usage and\ncorrectness.\n\nValues other than `Normal` are untested and may break in surprising ways.\n\nMust be one of:\n\n* `\"DegradeClosed\"`: In DegradeClosed mode, `gopls` will collect less information about\npackages without open files. As a result, features like Find\nReferences and Rename will miss results in such packages.\n* `\"Normal\"`\n"
             },
+            "noSemanticNumber": {
+              "type": "boolean",
+              "default": false,
+              "description": "**This setting is experimental and may be deleted.**\n\nnoSemanticNumber  turns off the sending of the semantic token 'number'\n"
+            },
+            "noSemanticString": {
+              "type": "boolean",
+              "default": false,
+              "description": "**This setting is experimental and may be deleted.**\n\nnoSemanticString turns off the sending of the semantic token 'string'\n"
+            },
             "semanticTokens": {
               "type": "boolean",
               "default": false,

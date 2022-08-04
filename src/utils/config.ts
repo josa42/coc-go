@@ -178,6 +178,16 @@ export interface GoplsOptions {
   /**
    * Default: false
    */
+  noSemanticNumber: boolean
+
+  /**
+   * Default: false
+   */
+  noSemanticString: boolean
+
+  /**
+   * Default: false
+   */
   semanticTokens: boolean
 
   /**
