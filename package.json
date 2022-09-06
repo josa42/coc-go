@@ -577,7 +577,7 @@
             "staticcheck": {
               "type": "boolean",
               "default": false,
-              "description": "**This setting is experimental and may be deleted.**\n\nstaticcheck enables additional analyses from staticcheck.io.\n"
+              "description": "**This setting is experimental and may be deleted.**\n\nstaticcheck enables additional analyses from staticcheck.io.\nThese analyses are documented at [here](https://staticcheck.io/docs/checks/).\n"
             },
             "symbolMatcher": {
               "type": "string",
