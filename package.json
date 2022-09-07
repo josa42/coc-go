@@ -148,7 +148,7 @@
             },
             "analyses": {
               "type": "object",
-              "description": "analyses specify analyses that the user would like to enable or disable.\nA map of the names of analysis passes that should be enabled/disabled.\nA full list of analyzers that gopls uses can be found\n[here](https://github.com/golang/tools/blob/master/gopls/doc/analyzers.md).\n\nExample Usage:\n\n```json5\n...\n\"analyses\": {\n  \"unreachable\": false, // Disable the unreachable analyzer.\n  \"unusedparams\": true  // Enable the unusedparams analyzer.\n}\n...\n```\n",
+              "description": "analyses specify analyses that the user would like to enable or disable.\nA map of the names of analysis passes that should be enabled/disabled.\nA full list of analyzers that gopls uses can be found in\n[analyzers.md](https://github.com/golang/tools/blob/master/gopls/doc/analyzers.md).\n\nExample Usage:\n\n```json5\n...\n\"analyses\": {\n  \"unreachable\": false, // Disable the unreachable analyzer.\n  \"unusedparams\": true  // Enable the unusedparams analyzer.\n}\n...\n```\n",
               "additionalProperties": false,
               "patternProperties": {
                 "^S[AT]?\\d{4}$": {
@@ -501,7 +501,7 @@
                   "type": "boolean"
                 }
               },
-              "description": "**This setting is experimental and may be deleted.**\n\nhints specify inlay hints that users want to see.\nA full list of hints that gopls uses can be found\n[here](https://github.com/golang/tools/blob/master/gopls/doc/inlayHints.md).\n"
+              "description": "**This setting is experimental and may be deleted.**\n\nhints specify inlay hints that users want to see. A full list of hints\nthat gopls uses can be found in\n[inlayHints.md](https://github.com/golang/tools/blob/master/gopls/doc/inlayHints.md).\n"
             },
             "hoverKind": {
               "type": "string",
@@ -577,7 +577,7 @@
             "staticcheck": {
               "type": "boolean",
               "default": false,
-              "description": "**This setting is experimental and may be deleted.**\n\nstaticcheck enables additional analyses from staticcheck.io.\nThese analyses are documented at [here](https://staticcheck.io/docs/checks/).\n"
+              "description": "**This setting is experimental and may be deleted.**\n\nstaticcheck enables additional analyses from staticcheck.io.\nThese analyses are documented on\n[Staticcheck's website](https://staticcheck.io/docs/checks/).\n"
             },
             "symbolMatcher": {
               "type": "string",
