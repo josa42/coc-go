@@ -76,12 +76,21 @@
     ],
     "description": "function declaration"
   },
-  "variable declaration": {
+  "single variable": {
     "prefix": "var",
     "body": [
       "var ${1:name} ${2:type}"
     ],
     "description": "a variable"
+  },
+  "multiple variables": {
+    "prefix": "vars",
+    "body": [
+      "var (",
+      "\t${1:name} ${2:type}",
+      ")"
+    ],
+    "description": "variable block"
   },
   "switch statement": {
     "prefix": "switch",
