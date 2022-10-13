@@ -191,6 +191,11 @@ export interface GoplsOptions {
   semanticTokens: boolean
 
   /**
+   * Default: []
+   */
+  standaloneTags: string[]
+
+  /**
    * Default: false
    */
   staticcheck: boolean
