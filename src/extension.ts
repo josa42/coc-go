@@ -1,4 +1,4 @@
-import { ExtensionContext, LanguageClient, LanguageClientOptions, commands, services, window, workspace } from 'coc.nvim'
+import { ExtensionContext, LanguageClient, LanguageClientOptions, commands, services, window, workspace, listManager } from 'coc.nvim'
 import { ChildProcess, spawn } from 'child_process'
 import os from 'os'
 import { commandExists, goBinPath, installGoBin } from './utils/tools'
@@ -10,6 +10,7 @@ import { GOPLS } from './binaries'
 import { generateTestsAll, generateTestsExported, generateTestsFunction, toogleTests } from './utils/tests'
 import { openPlayground } from './utils/playground'
 import { generateImplStubs } from './utils/impl'
+import Goimpl from './utils/implist'
 import { goplsTidy } from './utils/lspcommands'
 
 const restartConfigs = [
@@ -107,6 +108,10 @@ async function registerGopls(context: ExtensionContext): Promise<void> {
       "go.install.gopls",
       () => installGopls(client)
     )
+  )
+
+  context.subscriptions.push(
+    listManager.registerList(new Goimpl(workspace.nvim, client))
   )
 }
 

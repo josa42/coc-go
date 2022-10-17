@@ -1,4 +1,4 @@
-import { window, workspace } from 'coc.nvim'
+import { Position, window, workspace } from 'coc.nvim'
 import { TextDocument, TextEdit } from 'vscode-languageserver-textdocument'
 import { IMPL } from '../binaries'
 import { execTool } from './tools'
@@ -27,12 +27,14 @@ export async function generateImplStubs(document: TextDocument): Promise<void> {
   }
 }
 
-async function runGoImpl(document: TextDocument, args: string[]): Promise<TextEdit> {
+export async function runGoImpl(document: TextDocument, args: string[], insertPos?: Position): Promise<TextEdit> {
 
   const stdout = await execTool(IMPL, args)
 
   const { line } = await window.getCursorPosition()
-  const insertPos = { line: line + 1, character: 0 }
+  if (!insertPos) {
+    insertPos = { line: line + 1, character: 0 }
+  }
 
   const lineText = await workspace.getLine(document.uri, line)
   const newText = lineText.trim() === ''
@@ -47,4 +49,3 @@ async function runGoImpl(document: TextDocument, args: string[]): Promise<TextEd
     newText
   }
 }
-
