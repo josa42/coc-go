@@ -44,11 +44,6 @@ export default class Goimpl extends BasicList {
   public readonly detail = 'worked with go struct'
   private cwd: string
   public name: string = 'goimpl'
-  public options: ListArgument[] = [{
-    name: '-n, -noptr',
-    description: 'Do not generate pointer receiver.',
-    hasValue: false
-  }]
   private client: LanguageClient
 
   private cursorSymbol: DocumentSymbol
@@ -68,13 +63,13 @@ export default class Goimpl extends BasicList {
         const cursorSymbol = executeCtx.cursorSymbol
 
         const selfName = cursorSymbol.name[0].toLowerCase()
-        let receiver: string
-        if (executeCtx.args['noptr']) {
-          receiver = `${selfName} ${cursorSymbol.name}`
-        } else {
-          receiver = `${selfName} *${cursorSymbol.name}`
-        }
+        let receiver = `${selfName} *${cursorSymbol.name}`
 
+        receiver = await window.requestInput('Enter receiver and interface [f *File io.Closer]', receiver)
+        if (receiver == null || receiver.length == 0) {
+          window.showMessage("No input detected! Aborting.", "warning")
+          return
+        }
         const document = await activeTextDocument()
         const interfaceFile = baseName(document.uri)
 
@@ -123,9 +118,6 @@ export default class Goimpl extends BasicList {
       if (this.cursorSymbol.kind != SymbolKind.Struct) {
         throw new Error('cursor symbol is not a struct')
       }
-    }
-    if (!this.args) {
-      this.args = this.parseArguments(context.args)
     }
     let { input } = context
     this.cwd = context.cwd
