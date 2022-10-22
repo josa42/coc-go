@@ -27,6 +27,7 @@ import {
 import * as lsp from './lsp'
 
 import { activeTextDocument } from '../editor'
+import { TextEdit } from 'vscode-languageserver-textdocument'
 
 class GoimplItem {
   public name: String
@@ -63,22 +64,40 @@ export default class Goimpl extends BasicList {
         if (Array.isArray(item)) {
           return
         }
+        const implSymbol = item.data as SymbolInformation
         const cursorSymbol = executeCtx.cursorSymbol
+
         const selfName = cursorSymbol.name[0].toLowerCase()
-        let receiver: String
+        let receiver: string
         if (executeCtx.args['noptr']) {
           receiver = `${selfName} ${cursorSymbol.name}`
         } else {
           receiver = `${selfName} *${cursorSymbol.name}`
         }
-        const implData = item.data as GoimplItem
+
         const document = await activeTextDocument()
-        const interfaceFile = this.baseName(document.uri)
-        const edit = await runGoImpl(
-          document,
-          ['-dir', interfaceFile, receiver as string, implData.name as string],
-          { line: cursorSymbol.range.end.line + 1, character: 0 },
-        )
+        const interfaceFile = baseName(document.uri)
+
+        let edit: TextEdit;
+        try {
+          edit = await runGoImpl(
+            document,
+            ['-dir', interfaceFile, receiver, interfaceFullName(implSymbol)],
+            { line: cursorSymbol.range.end.line + 1, character: 0 },
+          )
+        } catch (err) {
+          if (typeof err === 'string' && err.includes('unrecognized interface:')) {
+            // the interface may in the main package
+            // try with no containerName
+            edit = await runGoImpl(
+              document,
+              ['-dir', interfaceFile, receiver, implSymbol.name],
+              { line: cursorSymbol.range.end.line + 1, character: 0 },
+            )
+          } else {
+            throw err
+          }
+        }
         if (edit.newText.trim() == '') {
           return
         }
@@ -96,7 +115,7 @@ export default class Goimpl extends BasicList {
       let docSymbols = await lsp.provideDocumentSymbols(this.client, document, token) as DocumentSymbol[]
       const cursorPos = await window.getCursorPosition()
       for (const s of docSymbols) {
-        if (this.inRange(cursorPos, s.range)) {
+        if (inRange(cursorPos, s.range)) {
           this.cursorSymbol = s
           break
         }
@@ -114,41 +133,42 @@ export default class Goimpl extends BasicList {
       throw new Error('Symbols only works on interactive mode')
     }
     let symbols = await lsp.provideWorkspaceSymbols(this.client, input, token)
-    symbols = symbols ?
-      symbols.filter((s) => {
-        return s.kind == SymbolKind.Interface
-          // duplicate interface like  mime/multipart/formdata.go File.Reader 
-          // it is io.Reader actually
-          && !s.name.includes('.')
-      })
-      : [];
+    symbols = symbols ? symbols : []
+    symbols = symbols.filter((s) => { return s.kind == SymbolKind.Interface })
     let items: ListItem[] = []
     for (let s of symbols) {
-      const fullName = this.interfaceFullName(s)
+      const fullName = interfaceFullName(s)
       items.push({
         label: fullName,
         filterText: fullName,
         location: s.location,
-        data: new GoimplItem(fullName)
+        data: s,
       })
     }
     return items
   }
 
-  inRange(position: Position, range: Range): Boolean {
-    return position.line >= range.start.line
-      && position.line <= range.end.line
-  }
-
-  interfaceFullName(s: SymbolInformation): string {
-    return `${s.containerName}.${s.name}`
-  }
-
-  baseName(pathUri: string): string {
-    pathUri = pathUri.replace('file://', '')
-    pathUri = pathUri.slice(0,pathUri.lastIndexOf('/'))
-    return pathUri
-  }
-
 }
 
+
+function interfaceFullName(s: SymbolInformation): string {
+  let idx = s.name.lastIndexOf('.')
+  let name: string;
+  if (idx != -1) {
+    name = s.name.slice(idx + 1, s.name.length)
+  } else {
+    name = s.name
+  }
+  return `${s.containerName}.${name}`
+}
+
+function inRange(position: Position, range: Range): Boolean {
+  return position.line >= range.start.line
+    && position.line <= range.end.line
+}
+
+function baseName(pathUri: string): string {
+  pathUri = pathUri.replace('file://', '')
+  pathUri = pathUri.slice(0, pathUri.lastIndexOf('/'))
+  return pathUri
+}
