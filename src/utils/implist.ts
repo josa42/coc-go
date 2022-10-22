@@ -73,11 +73,15 @@ export default class Goimpl extends BasicList {
         }
         const implData = item.data as GoimplItem
         const document = await activeTextDocument()
+        const interfaceFile = this.baseName(document.uri)
         const edit = await runGoImpl(
           document,
-          [receiver as string, implData.name as string],
+          ['-dir', interfaceFile, receiver as string, implData.name as string],
           { line: cursorSymbol.range.end.line + 1, character: 0 },
         )
+        if (edit.newText.trim() == '') {
+          return
+        }
         await workspace.applyEdit({ changes: { [document.uri]: [edit] } })
         executeCtx.args = null
         executeCtx.cursorSymbol = null
@@ -138,6 +142,12 @@ export default class Goimpl extends BasicList {
 
   interfaceFullName(s: SymbolInformation): string {
     return `${s.containerName}.${s.name}`
+  }
+
+  baseName(pathUri: string): string {
+    pathUri = pathUri.replace('file://', '')
+    pathUri = pathUri.slice(0,pathUri.lastIndexOf('/'))
+    return pathUri
   }
 
 }

@@ -154,7 +154,7 @@ export async function execTool(source: string, args: string[], input?: string): 
   }
 
   return new Promise((resolve, reject) => {
-    const p = execFile(bin, args, { cwd: workspace.cwd }, async (err: Error, stdout: Buffer, stderr: Buffer) => {
+    const p = execFile(bin, args, { cwd: workspace.root }, async (err: Error, stdout: Buffer, stderr: Buffer) => {
       if (err && (err as execError).code === "ENOENT") {
         return reject(`Error: Command ${name} not found! Run "CocCommand go.install.${name}" to install it and try again.`)
       }
