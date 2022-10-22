@@ -11,6 +11,8 @@ import {
   DocumentSymbolParams,
   SymbolInformation,
   DocumentSymbol,
+  ResponseError,
+  ErrorCodes,
 } from 'vscode-languageserver-protocol'
 
 
@@ -23,8 +25,7 @@ export async function provideWorkspaceSymbols(client: LanguageClient, query: str
         return res
       },
       error => {
-        window.showMessage(error, "error")
-        return []
+        return handleLspError(error, [])
       }
     )
 }
@@ -38,8 +39,20 @@ export async function provideDocumentSymbols(client: LanguageClient, document: T
         return res
       },
       error => {
-        window.showMessage(error, "error")
-        return [] as SymbolInformation[]
+        return handleLspError(error, [] as SymbolInformation[])
       }
     )
+}
+
+export function handleLspError<T>(error: any, defaultValue: T): T {
+  // TODO: not work here, error instanceof != ResponseError 22-10-22 //
+  // maybe miss match dependencies version
+  if (error instanceof ResponseError) {
+    if (error.code === ErrorCodes.RequestCancelled) {
+      return defaultValue
+    }
+  }
+  // TODO: ignore error now 22-10-22 //
+  //window.showMessage(error, "error")
+  return defaultValue
 }
