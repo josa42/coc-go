@@ -76,14 +76,22 @@ async function registerGopls(context: ExtensionContext): Promise<void> {
       }))
     })
   }
+  const disabledFeatures = [];
+  if (config.disable.workspaceFolders) {
+    disabledFeatures.push('workspaceFolders')
+  }
+  if (config.disable.diagnostics) {
+    disabledFeatures.push('diagnostics')
+  }
+  if (config.disable.completion) {
+    disabledFeatures.push('completion')
+  }
 
   // https://github.com/neoclide/coc.nvim/blob/master/src/language-client/client.ts#L684
   const clientOptions: LanguageClientOptions = {
     documentSelector: ['go', 'gomod', 'gowork'],
     initializationOptions: () => getConfig().goplsOptions,
-    disableWorkspaceFolders: config.disable.workspaceFolders,
-    disableDiagnostics: config.disable.diagnostics,
-    disableCompletion: config.disable.completion,
+    disabledFeatures: disabledFeatures,
     // TODO disableSnippetCompletion: config.disable.snippetCompletion,
   }
 

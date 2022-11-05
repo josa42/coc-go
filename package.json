@@ -812,7 +812,7 @@
     "@typescript-eslint/eslint-plugin": "^5.16.0",
     "@typescript-eslint/parser": "^5.16.0",
     "coc-dev-tools": "^0.1.0",
-    "coc.nvim": "^0.0.80",
+    "coc.nvim": "^0.0.81",
     "eslint": "^8.12.0",
     "eslint-config-josa-typescript": "^0.1.2",
     "jest": "^27.5.1",
@@ -823,7 +823,7 @@
   },
   "dependencies": {
     "tslib": "^2.3.1",
-    "vscode-languageserver-protocol": "3.15.0",
+    "vscode-languageserver-protocol": "^3.15.0",
     "vscode-languageserver-textdocument": "^1.0.4",
     "vscode-uri": "^3.0.3",
     "which": "^2.0.2"

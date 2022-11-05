@@ -10,7 +10,6 @@ import {
   workspace,
   Position,
   Range,
-  ListArgument,
   BasicList,
   SymbolInformation,
 } from 'coc.nvim'
@@ -29,13 +28,6 @@ import * as lsp from './lsp'
 import { activeTextDocument } from '../editor'
 import { TextEdit } from 'vscode-languageserver-textdocument'
 
-class GoimplItem {
-  public name: String
-
-  constructor(name: String) {
-    this.name = name
-  }
-}
 export default class Goimpl extends BasicList {
   public defaultAction: string = 'goimpl'
   public actions: ListAction[] = []
@@ -67,7 +59,7 @@ export default class Goimpl extends BasicList {
 
         receiver = await window.requestInput('Enter receiver and interface [f *File io.Closer]', receiver)
         if (receiver == null || receiver.length == 0) {
-          window.showMessage("No input detected! Aborting.", "warning")
+          window.showWarningMessage("No input detected! Aborting.")
           return
         }
         const document = await activeTextDocument()

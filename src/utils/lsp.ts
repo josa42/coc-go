@@ -1,20 +1,27 @@
 import {
   CancellationToken,
   LanguageClient,
-  window,
   TextDocument,
+  SymbolInformation,
+  RequestType,
+  DocumentSymbol,
 } from 'coc.nvim'
 
 import {
-  WorkspaceSymbolRequest,
-  DocumentSymbolRequest,
   DocumentSymbolParams,
-  SymbolInformation,
-  DocumentSymbol,
-  ResponseError,
-  ErrorCodes,
+  WorkspaceSymbolParams,
 } from 'vscode-languageserver-protocol'
 
+
+namespace WorkspaceSymbolRequest {
+  export const method = 'workspace/symbol'
+  export const type = new RequestType<WorkspaceSymbolParams, SymbolInformation[] | null, void>(method);
+}
+
+namespace DocumentSymbolRequest {
+  export const method = 'textDocument/documentSymbol'
+  export const type = new RequestType<DocumentSymbolParams, DocumentSymbol[] | SymbolInformation[] | null, void>(method)
+}
 
 export async function provideWorkspaceSymbols(client: LanguageClient, query: string, token: CancellationToken): Promise<SymbolInformation[]> {
   query = query || ''
@@ -25,7 +32,7 @@ export async function provideWorkspaceSymbols(client: LanguageClient, query: str
         return res
       },
       error => {
-        return handleLspError(error, [])
+        return client.handleFailedRequest(WorkspaceSymbolRequest.type, token, error, [])
       }
     )
 }
@@ -39,20 +46,7 @@ export async function provideDocumentSymbols(client: LanguageClient, document: T
         return res
       },
       error => {
-        return handleLspError(error, [] as SymbolInformation[])
+        return client.handleFailedRequest(DocumentSymbolRequest.type, token, error, [])
       }
     )
-}
-
-export function handleLspError<T>(error: any, defaultValue: T): T {
-  // TODO: not work here, error instanceof != ResponseError 22-10-22 //
-  // maybe miss match dependencies version
-  if (error instanceof ResponseError) {
-    if (error.code === ErrorCodes.RequestCancelled) {
-      return defaultValue
-    }
-  }
-  // TODO: ignore error now 22-10-22 //
-  //window.showMessage(error, "error")
-  return defaultValue
 }
