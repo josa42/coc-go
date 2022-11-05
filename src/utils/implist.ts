@@ -57,9 +57,13 @@ export default class Goimpl extends BasicList {
         const selfName = cursorSymbol.name[0].toLowerCase()
         let receiver = `${selfName} *${cursorSymbol.name}`
 
-        receiver = await window.requestInput('Enter receiver and interface [f *File io.Closer]', receiver)
+        receiver = await window.requestInput('Enter receiver [f *File]', receiver)
         if (receiver == null || receiver.length == 0) {
           window.showWarningMessage("No input detected! Aborting.")
+          return
+        }
+        if (!receiver.match(receiverRegex)) {
+          window.showErrorMessage(`Ivalid receiver: ${receiver}`)
           return
         }
         const document = await activeTextDocument()
@@ -156,3 +160,5 @@ function baseName(pathUri: string): string {
   pathUri = pathUri.slice(0, pathUri.lastIndexOf('/'))
   return pathUri
 }
+
+const receiverRegex = /^\w+ \*?\w+$/
