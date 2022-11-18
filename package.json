@@ -474,11 +474,6 @@
               "default": true,
               "description": "**This setting is experimental and may be deleted.**\n\nexperimentalPostfixCompletions enables artificial method snippets\nsuch as \"someSlice.sort!\".\n"
             },
-            "experimentalUseInvalidMetadata": {
-              "type": "boolean",
-              "default": false,
-              "description": "**This setting is experimental and may be deleted.**\n\nexperimentalUseInvalidMetadata enables gopls to fall back on outdated\npackage metadata to provide editor features if the go command fails to\nload packages for some reason (like an invalid go.mod file).\n\nDeprecated: this setting is deprecated and will be removed in a future\nversion of gopls (https://go.dev/issue/55333).\n"
-            },
             "experimentalWatchedFileDelay": {
               "type": "string",
               "default": "0s",

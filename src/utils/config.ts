@@ -116,11 +116,6 @@ export interface GoplsOptions {
   experimentalPostfixCompletions: boolean
 
   /**
-   * Default: false
-   */
-  experimentalUseInvalidMetadata: boolean
-
-  /**
    * Default: "0s"
    */
   experimentalWatchedFileDelay: string
