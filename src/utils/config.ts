@@ -219,6 +219,11 @@ export interface GoplsOptions {
    * Default: false
    */
   verboseOutput: boolean
+
+  /**
+   * Default: "Off"
+   */
+  vulncheck: "Imports" | "Off"
 }
 
 export function setStoragePath(dir: string): void {

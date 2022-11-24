@@ -618,6 +618,15 @@
               "type": "boolean",
               "default": false,
               "description": "**This setting is for debugging purposes only.**\n\nverboseOutput enables additional debug logging.\n"
+            },
+            "vulncheck": {
+              "type": "string",
+              "enum": [
+                "Imports",
+                "Off"
+              ],
+              "default": "Off",
+              "description": "**This setting is experimental and may be deleted.**\n\nvulncheck enables vulnerability scanning.\n\nMust be one of:\n\n* `\"Imports\"`: In Imports mode, `gopls` will report vulnerabilities that affect packages\ndirectly and indirectly used by the analyzed main module.\n* `\"Off\"`: Disable vulnerability analysis.\n"
             }
           }
         },
