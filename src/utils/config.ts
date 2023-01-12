@@ -123,11 +123,6 @@ export interface GoplsOptions {
   /**
    * Default: false
    */
-  experimentalWorkspaceModule: boolean
-
-  /**
-   * Default: false
-   */
   gofumpt: boolean
 
   /**

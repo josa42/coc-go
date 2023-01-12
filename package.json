@@ -479,11 +479,6 @@
               "default": "0s",
               "description": "**This setting is experimental and may be deleted.**\n\nexperimentalWatchedFileDelay controls the amount of time that gopls waits\nfor additional workspace/didChangeWatchedFiles notifications to arrive,\nbefore processing all such notifications in a single batch. This is\nintended for use by LSP clients that don't support their own batching of\nfile system notifications.\n\nThis option must be set to a valid duration string, for example `\"100ms\"`.\n\nDeprecated: this setting is deprecated and will be removed in a future\nversion of gopls (https://go.dev/issue/55332)\n"
             },
-            "experimentalWorkspaceModule": {
-              "type": "boolean",
-              "default": false,
-              "description": "**This setting is experimental and may be deleted.**\n\nexperimentalWorkspaceModule opts a user into the experimental support\nfor multi-module workspaces.\n\nDeprecated: this feature is deprecated and will be removed in a future\nversion of gopls (https://go.dev/issue/55331).\n"
-            },
             "gofumpt": {
               "type": "boolean",
               "default": false,
