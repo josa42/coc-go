@@ -1,0 +1,45 @@
+name: Publish
+
+on:
+  push:
+    branches: dev
+
+jobs:
+  setup:
+    runs-on: ubuntu-latest
+    outputs:
+      publish: "${{ steps.check.outputs.publish }}"
+    steps:
+      - uses: actions/checkout@v3
+        with:
+          fetch-depth: 1
+      - id: check
+        run: |
+          if [[ "$(git tag --contains HEAD)" == "" ]]; then
+            echo "publish=true" >> "$GITHUB_OUTPUT"
+          fi
+
+  publish:
+    needs: setup
+    runs-on: ubuntu-latest
+    if: needs.setup.outputs.publish == 'true'
+    steps:
+      - uses: actions/checkout@v3
+        with:
+          fetch-depth: 1
+      - run: |
+          git config --global user.name "github-actions[bot]"
+          git config --global user.email "github-actions[bot]@users.noreply.github.com"
+      - uses: actions/setup-node@v3
+        with:
+          node-version: 16
+      - run: yarn --frozen-lockfile
+      - run: yarn lint
+      - run: yarn test
+      - run: npm version patch
+      - run: yarn build
+      - run: echo "//registry.npmjs.org/:_authToken=${{ secrets.NPM_TOKEN }}" >> ~/.npmrc
+      - run: npm publish
+      - run: git push origin HEAD:master --follow-tags
+
+
