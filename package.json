@@ -10,8 +10,8 @@
     "url": "https://github.com/josa42/coc-go.git"
   },
   "engines": {
-    "coc": "^0.0.80",
-    "node": ">=12"
+    "coc": "^0.0.82",
+    "node": ">=16"
   },
   "keywords": [
     "coc.nvim",
@@ -799,21 +799,21 @@
     ]
   },
   "devDependencies": {
-    "@types/jest": "^27.4.1",
-    "@types/node": "^17.0.23",
+    "@types/jest": "^29.4.0",
+    "@types/node": "^18.14.0",
     "@types/tmp": "^0.2.3",
-    "@types/which": "^2.0.1",
-    "@typescript-eslint/eslint-plugin": "^5.16.0",
-    "@typescript-eslint/parser": "^5.16.0",
+    "@types/which": "^2.0.2",
+    "@typescript-eslint/eslint-plugin": "^5.52.0",
+    "@typescript-eslint/parser": "^5.52.0",
     "coc-dev-tools": "^0.1.0",
     "coc.nvim": "^0.0.80",
-    "eslint": "^8.12.0",
+    "eslint": "^8.34.0",
     "eslint-config-josa-typescript": "^0.1.2",
-    "jest": "^27.5.1",
-    "rimraf": "^3.0.2",
+    "jest": "^29.4.3",
+    "rimraf": "^4.1.2",
     "tmp": "^0.2.1",
-    "ts-jest": "^27.1.4",
-    "typescript": "^4.6.3"
+    "ts-jest": "^29.0.5",
+    "typescript": "^4.9.5"
   },
   "dependencies": {
     "tslib": "^2.3.1",
