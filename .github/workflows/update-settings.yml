@@ -1,8 +1,6 @@
 name: update-settings
 
 on:
-  push:
-    branches: [ master ]
   schedule:
     - cron:  '0 * * * *'
 
