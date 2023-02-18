@@ -15,24 +15,8 @@ on:
           - patch
 
 jobs:
-  setup:
-    runs-on: ubuntu-latest
-    outputs:
-      publish: "${{ steps.check.outputs.publish }}"
-    steps:
-      - uses: actions/checkout@v3
-        with:
-          fetch-depth: 1
-      - id: check
-        run: |
-          if [[ "$(git tag --contains HEAD)" == "" ]]; then
-            echo "publish=true" >> "$GITHUB_OUTPUT"
-          fi
-
   publish:
-    needs: setup
     runs-on: ubuntu-latest
-    if: needs.setup.outputs.publish == 'true'
     steps:
       - uses: actions/checkout@v3
         with:
@@ -44,12 +28,33 @@ jobs:
         with:
           node-version: 16
       - run: yarn --frozen-lockfile
-      - run: yarn lint
-      - run: yarn test
       - run: npm version "${{ inputs.version || 'patch' }}"
       - run: yarn build
       - run: echo "//registry.npmjs.org/:_authToken=${{ secrets.NPM_TOKEN }}" >> ~/.npmrc
-      - run: npm publish
-      - run: git push origin HEAD:master --follow-tags
+      - run: npm publish --dry-run
+      - run: npm view coc-go
+      - id: dist-check
+        name: check if has changes
+        run: |
+          head_sha="$(npm publish --dry-run --json 2>/dev/null | jq -r .shasum)"
+          dist_sha="$(npm view coc-go --json | jq -r .dist.shasum)"
+
+          echo "$head_sha == $dist_sha"
+
+          if [[ "$head_sha" == "$dist_sha" ]]; then
+            echo "::notice::No change since last published version"
+            echo "has-changes=false" >> "$GITHUB_OUTPUT"
+          else
+            echo "has-changes=true" >> "$GITHUB_OUTPUT"
+          fi
+
+      - if: steps.dist-check.outputs.has-changes == 'true'
+        run: yarn test
+
+      - if: steps.dist-check.outputs.has-changes == 'true'
+        run: npm publish
+
+      - if: steps.dist-check.outputs.has-changes == 'true'
+        run: git push origin HEAD:master --follow-tags
 
 
