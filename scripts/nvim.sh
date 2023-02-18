@@ -44,7 +44,7 @@ vim.opt.expandtab = false
 vim.api.nvim_set_keymap('i', '<c-space>', 'coc#refresh()', { silent = true, expr = true })
 vim.api.nvim_set_keymap('n', 'gd', '<Plug>(coc-definition)', { silent = true })
 vim.api.nvim_set_keymap('n', 'gf', 'CocAction("format")', { silent = true, expr = true })
-vim.api.nvim_set_keymap("i", "<cr>", [[coc#pum#visible() ? coc#pum#confirm() : "\<C-g>u\<CR>\<c-r>=coc#on_enter()\<CR>"]], { silent = true, expr = true })
+vim.api.nvim_set_keymap("i", "<cr>", [[coc#pum#visible() ? coc#pum#confirm() : "\<CR>"]], { silent = true, expr = true, expr = true, replace_keycodes = false })
 
 function _G.__coc()
   local info = vim.b.coc_diagnostic_info or {}
@@ -61,6 +61,12 @@ vim.opt.statusline = '%{v:lua.__coc()}'
 vim.cmd [[
   au BufRead,BufNewFile go.work.sum set filetype=gosum
   au BufRead,BufNewFile go.work set filetype=gowork
+]]
+
+vim.cmd [[
+  hi CocUnderline gui=undercurl term=undercurl
+  hi CocErrorHighlight ctermfg=red  guifg=#c4384b gui=undercurl term=undercurl
+  hi CocWarningHighlight ctermfg=yellow guifg=#c4ab39 gui=undercurl term=undercurl
 ]]
 EOF
 
