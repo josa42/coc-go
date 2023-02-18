@@ -28,8 +28,6 @@ jobs:
         with:
           node-version: 16
       - run: npm ci
-      - run: npm version "${{ inputs.version || 'patch' }}"
-      - run: npm run build
       - run: echo "//registry.npmjs.org/:_authToken=${{ secrets.NPM_TOKEN }}" >> ~/.npmrc
       - run: npm publish --dry-run
       - run: npm view coc-go
@@ -47,6 +45,11 @@ jobs:
           else
             echo "has-changes=true" >> "$GITHUB_OUTPUT"
           fi
+
+      - if: steps.dist-check.outputs.has-changes == 'true'
+        run: |
+          npm version "${{ inputs.version || 'patch' }}"
+          npm run build
 
       - if: steps.dist-check.outputs.has-changes == 'true'
         run: npm run test
