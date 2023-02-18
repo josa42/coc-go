@@ -55,6 +55,6 @@ jobs:
         run: npm publish
 
       - if: steps.dist-check.outputs.has-changes == 'true'
-        run: git push origin HEAD:master --follow-tags
+        run: git push origin HEAD:main --follow-tags
 
 
