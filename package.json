@@ -129,6 +129,57 @@
               "type": "boolean",
               "default": false,
               "description": "Disable completion feature (Change requires `:CocRestart`)"
+            },
+            "snippetCompletion": {
+              "type": "boolean",
+              "default": false,
+              "description": "Disable snippet completion (Change requires `:CocRestart`)"
+            },
+            "features": {
+              "type": "array",
+              "default": [],
+              "description": "Disabled features (Change requires `:CocRestart`)",
+              "items": {
+                "type": "string",
+                "enum": [
+                  "completion",
+                  "configuration",
+                  "workspaceFolders",
+                  "diagnostics",
+                  "willSave",
+                  "willSaveUntil",
+                  "didSaveTextDocument",
+                  "fileSystemWatcher",
+                  "hover",
+                  "signatureHelp",
+                  "definition",
+                  "references",
+                  "documentHighlight",
+                  "documentSymbol",
+                  "workspaceSymbol",
+                  "codeAction",
+                  "codeLens",
+                  "formatting",
+                  "documentFormatting",
+                  "documentRangeFormatting",
+                  "documentOnTypeFormatting",
+                  "rename",
+                  "documentLink",
+                  "executeCommand",
+                  "pullConfiguration",
+                  "typeDefinition",
+                  "implementation",
+                  "declaration",
+                  "color",
+                  "foldingRange",
+                  "selectionRange",
+                  "progress",
+                  "callHierarchy",
+                  "linkedEditing",
+                  "fileEvents",
+                  "semanticTokens"
+                ]
+              }
             }
           }
         },
@@ -806,7 +857,7 @@
     "@typescript-eslint/eslint-plugin": "^5.52.0",
     "@typescript-eslint/parser": "^5.52.0",
     "coc-dev-tools": "^0.1.0",
-    "coc.nvim": "^0.0.80",
+    "coc.nvim": "^0.0.82",
     "eslint": "^8.34.0",
     "eslint-config-josa-typescript": "^0.1.2",
     "jest": "^29.4.3",
