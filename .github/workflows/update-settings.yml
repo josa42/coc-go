@@ -18,10 +18,10 @@ jobs:
     - run: ./scripts/update-snippets.js
     - run: ./scripts/update-tables.sh
     - run: git diff
-    - run: yarn --frozen-lockfile
-    - run: yarn build
-    - run: yarn lint
-    - run: yarn test
+    - run: npm ci
+    - run: npm run build
+    - run: npm run lint
+    - run: npm run test
     - uses: EndBug/add-and-commit@v5
       with:
         push: true

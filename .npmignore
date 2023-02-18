@@ -15,3 +15,6 @@
 /src
 /tsconfig.json
 /tslint.json
+/debug
+/.envrc
+/.node-version

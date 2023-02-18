@@ -27,9 +27,9 @@ jobs:
       - uses: actions/setup-node@v3
         with:
           node-version: 16
-      - run: yarn --frozen-lockfile
+      - run: npm ci
       - run: npm version "${{ inputs.version || 'patch' }}"
-      - run: yarn build
+      - run: npm run build
       - run: echo "//registry.npmjs.org/:_authToken=${{ secrets.NPM_TOKEN }}" >> ~/.npmrc
       - run: npm publish --dry-run
       - run: npm view coc-go
@@ -49,7 +49,7 @@ jobs:
           fi
 
       - if: steps.dist-check.outputs.has-changes == 'true'
-        run: yarn test
+        run: npm run test
 
       - if: steps.dist-check.outputs.has-changes == 'true'
         run: npm publish

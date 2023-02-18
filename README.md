@@ -144,8 +144,8 @@ Trigger completion in `coc-settings.json` to get complete list.
 
 ## Development
 
-1. Run `yarn build` or `yarn build:watch`
-2. Link extension: `yarn run link` / `yarn run unlink`
+1. Run `npm run build` or `npm run build:watch`
+2. Link extension: `npm run link` / `npm run unlink`
 
 ## Tools
 
