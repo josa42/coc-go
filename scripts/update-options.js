@@ -3,6 +3,32 @@
 const fs = require("fs")
 
 const run = async () => {
+  await updateGoplsOptions()
+  await updateClientOptions()
+}
+
+const updateClientOptions = async () => {
+  const pkg = require("../package.json")
+  const cocVersion = pkg.engines.coc.replace(/^\^/, '')
+
+  const source = await get(
+    `https://raw.githubusercontent.com/neoclide/coc.nvim/v${cocVersion}/data/schema.json`
+  )
+
+  const schema = JSON.parse(source)
+
+  Object.assign(pkg.contributes.configuration.properties["go.disable"].properties, {
+    features: Object.assign(schema.definitions.languageServerBase.properties.disabledFeatures, {
+      description: "Disabled features (Change requires `:CocRestart`)"
+    })
+  })
+
+  fs.writeFileSync("package.json", JSON.stringify(pkg, null, "  ") + "\n")
+
+}
+
+const updateGoplsOptions = async () => {
+
   const source = await get(
     "https://raw.githubusercontent.com/golang/tools/master/gopls/doc/settings.md"
   )
