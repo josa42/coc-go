@@ -9,39 +9,16 @@ jobs:
   update:
     runs-on: ubuntu-latest
     steps:
-    - uses: actions/checkout@v3
-      with: { ref: main }
-    - uses: actions/setup-node@v3
-      with: { node-version: '18' }
-
-    - run: ./scripts/update-commands.js
-    - run: ./scripts/update-options.js
-    - run: ./scripts/update-options-interface.js
-    - run: ./scripts/update-snippets.js
-    - run: ./scripts/update-tables.sh
-
-    - id: check
-      name: check if has changes
-      run: |
-        git diff
-        if [[ "$(git diff --name-only)" == "" ]]; then
-          echo "::notice::No change since last published version"
-          echo "has-changes=false" >> "$GITHUB_OUTPUT"
-        else
-          echo "has-changes=true" >> "$GITHUB_OUTPUT"
-        fi
-
-    - if: steps.check.outputs.has-changes == 'true'
-      run: npm ci
-    - if: steps.check.outputs.has-changes == 'true'
-      run: npm run build
-    - if: steps.check.outputs.has-changes == 'true'
-      run: npm run lint
-    - if: steps.check.outputs.has-changes == 'true'
-      run: npm run test
-    - if: steps.check.outputs.has-changes == 'true'
-      run: |
-        git config --global user.name "github-actions[bot]"
-        git config --global user.email "github-actions[bot]@users.noreply.github.com"
-        git commit --all --message "[auto] Update Settings"
-        git push
+      - uses: josa42/actions/update@main
+        with:
+          run-update: |
+            ./scripts/update-commands.js
+            ./scripts/update-options.js
+            ./scripts/update-options-interface.js
+            ./scripts/update-snippets.js
+            ./scripts/update-tables.sh
+          run-tests: |
+            npm ci
+            npm run build
+            npm run lint
+            npm run test
