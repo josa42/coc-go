@@ -463,27 +463,41 @@
               "properties": {
                 "gc_details": {
                   "type": "boolean",
-                  "default": false
+                  "default": false,
+                  "description": "Toggle the calculation of gc annotations."
                 },
                 "generate": {
                   "type": "boolean",
-                  "default": true
+                  "default": true,
+                  "description": "Runs `go generate` for a given directory."
                 },
                 "regenerate_cgo": {
                   "type": "boolean",
-                  "default": true
+                  "default": true,
+                  "description": "Regenerates cgo definitions."
+                },
+                "run_govulncheck": {
+                  "type": "boolean",
+                  "description": "Run vulnerability check (`govulncheck`)."
+                },
+                "test": {
+                  "type": "boolean",
+                  "description": "Runs `go test` for a specific set of test or benchmark functions."
                 },
                 "tidy": {
                   "type": "boolean",
-                  "default": true
+                  "default": true,
+                  "description": "Runs `go mod tidy` for a module."
                 },
                 "upgrade_dependency": {
                   "type": "boolean",
-                  "default": true
+                  "default": true,
+                  "description": "Upgrades a dependency in the go.mod file for a module."
                 },
                 "vendor": {
                   "type": "boolean",
-                  "default": true
+                  "default": true,
+                  "description": "Runs `go mod vendor` for a module."
                 }
               }
             },
