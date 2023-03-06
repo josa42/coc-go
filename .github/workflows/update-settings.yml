@@ -11,6 +11,7 @@ jobs:
     steps:
       - uses: josa42/actions/update@main
         with:
+          commit-message: "[auto] Update Settings"
           run-update: |
             ./scripts/update-commands.js
             ./scripts/update-options.js
