@@ -34,10 +34,12 @@ const updateGoplsOptions = async () => {
   )
 
   const opts = []
+  const lenses = []
 
   let section
   let m
   let item
+  let lens
 
   source.split("\n").forEach((line) => {
     if (line.match(/^<!-- BEGIN/)) {
@@ -47,7 +49,11 @@ const updateGoplsOptions = async () => {
       )
     }
 
-    if (section) {
+    if (line.match(/^<!-- END/)) {
+      section = ""
+    }
+
+    if (section === 'User') {
       if ((m = line.match(/^###+ \*\*(.*)\*\* \*(.*)\*$/))) {
         const [, Name, Type] = m
         item = { Name, Type, Doc: "", Default: null }
@@ -60,10 +66,17 @@ const updateGoplsOptions = async () => {
       } else if (item) {
         item.Doc = `${item.Doc || ""}\n${line}`
       }
-    }
-
-    if (line.match(/^<!-- END/)) {
-      section = ""
+    } else if (section === 'Lenses') {
+      if ((m = line.match(/^### \*\*(.*)\*\*$/))) {
+        const [, Title] = m
+        lens = { Title, Doc: "" }
+        lenses.push(lens)
+      } else if ((m = line.match(/^Identifier: `(.*)`$/))) {
+        const [, key] = m
+        lens.Key = key
+      } else if (lens?.Key) {
+        lens.Doc += line
+      }
     }
   })
 
@@ -101,97 +114,106 @@ const updateGoplsOptions = async () => {
     properties: await getAnalysesProperties(),
   }
 
-  const codeLenseDefault = JSON.parse(data.codelenses.Default)
+    const codeLenseDefault = JSON.parse(data.codelenses.Default)
 
-  props.codelenses.additionalProperties = false
-  props.codelenses.patternProperties = undefined
-  props.codelenses.properties = Object.keys(codeLenseDefault).reduce(
-    (props, key) => {
-      props[key] = { type: "boolean", default: codeLenseDefault[key] }
-      return props
-    },
-    {}
-  )
+    // Set default lenses
+    Object.entries(codeLenseDefault).forEach(([key, value]) => {
+      const lens = lenses.find((l) => l.Key === key)
+      if (!lens) {
+        lenses.push({ Key: key, Default: value })
+      } else {
+        lens.Default = value
+      }
+    })
 
-  pkg.contributes.configuration.properties["go.goplsOptions"].properties = props
+    props.codelenses.additionalProperties = false
+    props.codelenses.patternProperties = undefined
+    props.codelenses.properties = lenses.sort((a, b) => a.Key.localeCompare(b.Key)).reduce(
+      (props, { Key, Default, Doc }) => {
+        return {...props, [Key]: { type: "boolean", default: Default, description: Doc?.trim() }}
+      },
+      {}
+    )
 
-  fs.writeFileSync("package.json", JSON.stringify(pkg, null, "  ") + "\n")
-}
+    pkg.contributes.configuration.properties["go.goplsOptions"].properties = props
 
-const parseType = (str, doc) => {
-  switch (str) {
-    default:
-      return { type: str }
-    case "bool":
-      return { type: "boolean" }
-    case "[]string":
-      return { type: "array", items: { type: "string" } }
-    case "map[string]bool":
-      return {
-        type: "object",
-        patternProperties: {
-          ".+": {
-            type: "boolean",
+    fs.writeFileSync("package.json", JSON.stringify(pkg, null, "  ") + "\n")
+  }
+
+  const parseType = (str, doc) => {
+    switch (str) {
+      default:
+        return { type: str }
+      case "bool":
+        return { type: "boolean" }
+      case "[]string":
+        return { type: "array", items: { type: "string" } }
+      case "map[string]bool":
+        return {
+          type: "object",
+          patternProperties: {
+            ".+": {
+              type: "boolean",
+            },
           },
-        },
-      }
-    case "map[string]string":
-      return {
-        type: "object",
-        patternProperties: {
-          ".+": {
-            type: "string",
+        }
+      case "map[string]string":
+        return {
+          type: "object",
+          patternProperties: {
+            ".+": {
+              type: "string",
+            },
           },
-        },
-      }
-    case "enum":
-      return {
-        type: "string",
-        enum: parseEnum(doc),
-      }
-    case "time.Duration":
-      return {
-        type: "string",
-      }
-  }
-}
-
-const parseEnum = (str) => {
-  return str
-    .split(/\n/)
-    .filter((l) => l.match(/^ *\* `".*"`.*$/))
-    .map((l) => l.replace(/^ *\* `"(.*)"`.*$/, "$1"))
-}
-
-const parseDefault = (str) => {
-  if (str.match(/^".*"$/)) {
-    return str.replace(/^"/, "").replace(/"$/, "")
+        }
+      case "enum":
+        return {
+          type: "string",
+          enum: parseEnum(doc),
+        }
+      case "time.Duration":
+        return {
+          type: "string",
+        }
+    }
   }
 
-  if (str.match(/^(false|true)$/)) {
-    return str === "true"
+  const parseEnum = (str) => {
+    return str
+      .split(/\n/)
+      .filter((l) => l.match(/^ *\* `".*"`.*$/))
+      .map((l) => l.replace(/^ *\* `"(.*)"`.*$/, "$1"))
   }
 
-  if (str === "null") {
-    return null
+  const parseDefault = (str) => {
+    if (str.match(/^".*"$/)) {
+      return str.replace(/^"/, "").replace(/"$/, "")
+    }
+
+    if (str.match(/^(false|true)$/)) {
+      return str === "true"
+    }
+
+    if (str === "null") {
+      return null
+    }
+
+    return undefined
   }
 
-  return undefined
-}
+  const https = require("https")
 
-const https = require("https")
+  const get = async (url) =>
+    new Promise((resolve, reject) => {
+      https
+        .get(url, (resp) => {
+          let data = ""
 
-const get = async (url) =>
-  new Promise((resolve, reject) => {
-    https
-      .get(url, (resp) => {
-        let data = ""
-
-        resp.on("data", (chunk) => (data += chunk))
-        resp.on("end", () => resolve(data))
-      })
-      .on("error", (err) => reject(err))
-  })
+          resp.on("data", (chunk) => (data += chunk))
+          resp.on("end", () => resolve(data))
+        })
+        .on("error", (err) => reject(err))
+    })
 
 const getAnalysesProperties = async () => {
   let k = ""
