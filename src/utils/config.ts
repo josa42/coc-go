@@ -86,7 +86,7 @@ export interface GoplsOptions {
   completionBudget: string
 
   /**
-   * Default: "250ms"
+   * Default: "1s"
    */
   diagnosticsDelay: string
 
