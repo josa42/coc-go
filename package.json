@@ -54,7 +54,8 @@
       {
         "filetype": "go",
         "patterns": [
-          "go.mod"
+          "go.mod",
+          "go.work"
         ]
       },
       {
