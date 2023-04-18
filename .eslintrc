@@ -2,7 +2,7 @@
   "root": true,
   "extends": ["josa-typescript"],
   "env": {
-    "mocha": true
+    "jest": true
   },
   "rules": {
     "no-extra-semi": "error",

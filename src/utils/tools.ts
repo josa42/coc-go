@@ -89,11 +89,7 @@ export async function runBin(bin: string, args: string[] = []): Promise<[number,
 }
 
 export async function commandExists(command: string): Promise<boolean> {
-  if (path.isAbsolute(command)) {
-    return fileExists(command)
-  }
-  const commandPath = await which(command, { nothrow: true })
-  return commandPath !== null
+  return Boolean(await which(command, { nothrow: true }))
 }
 
 ////////////////////////////////////////////////////////////////////////////////
