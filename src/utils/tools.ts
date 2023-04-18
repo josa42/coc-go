@@ -92,7 +92,8 @@ export async function commandExists(command: string): Promise<boolean> {
   if (path.isAbsolute(command)) {
     return fileExists(command)
   }
-  return new Promise((resolve): void => { which(command, (err) => resolve(err == null)) })
+  const commandPath = await which(command, { nothrow: true })
+  return commandPath !== null
 }
 
 ////////////////////////////////////////////////////////////////////////////////
