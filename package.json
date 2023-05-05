@@ -285,11 +285,6 @@
                   "description": "detect impossible interface-to-interface type assertions\nThis checker flags type assertions v.(T) and corresponding type-switch cases\nin which the static type V of v is an interface that cannot possibly implement\nthe target interface T. This occurs when V and T contain methods with the same\nname but different signatures. Example:\n\tvar v interface {\n\t\tRead()\n\t}\n\t_ = v.(io.Reader)\nThe Read method in v has a different signature than the Read method in\nio.Reader, so this assertion cannot succeed.",
                   "default": true
                 },
-                "infertypeargs": {
-                  "type": "boolean",
-                  "description": "check for unnecessary type arguments in call expressions\nExplicit type arguments may be omitted from call expressions if they can be\ninferred from function arguments, or from other type arguments:\n\tfunc f[T any](T) {}\n\t\n\tfunc _() {\n\t\tf[string](\"foo\") // string could be inferred\n\t}",
-                  "default": true
-                },
                 "loopclosure": {
                   "type": "boolean",
                   "description": "check references to loop variables from within nested functions\nThis analyzer reports places where a function literal references the\niteration variable of an enclosing loop, and the loop calls the function\nin such a way (e.g. with go or defer) that it may outlive the loop\niteration and possibly observe the wrong value of the variable.\nIn this example, all the deferred functions run after the loop has\ncompleted, so all observe the final value of v.\n\tfor _, v := range list {\n\t    defer func() {\n\t        use(v) // incorrect\n\t    }()\n\t}\nOne fix is to create a new variable for each iteration of the loop:\n\tfor _, v := range list {\n\t    v := v // new var per iteration\n\t    defer func() {\n\t        use(v) // ok\n\t    }()\n\t}\nThe next example uses a go statement and has a similar problem.\nIn addition, it has a data race because the loop updates v\nconcurrent with the goroutines accessing it.\n\tfor _, v := range elem {\n\t    go func() {\n\t        use(v)  // incorrect, and a data race\n\t    }()\n\t}\nA fix is the same as before. The checker also reports problems\nin goroutines started by golang.org/x/sync/errgroup.Group.\nA hard-to-spot variant of this form is common in parallel tests:\n\tfunc Test(t *testing.T) {\n\t    for _, test := range tests {\n\t        t.Run(test.name, func(t *testing.T) {\n\t            t.Parallel()\n\t            use(test) // incorrect, and a data race\n\t        })\n\t    }\n\t}\nThe t.Parallel() call causes the rest of the function to execute\nconcurrent with the loop.\nThe analyzer reports references only in the last statement,\nas it is not deep enough to understand the effects of subsequent\nstatements that might render the reference benign.\n(\"Last statement\" is defined recursively in compound\nstatements such as if, switch, and select.)\nSee: https://golang.org/doc/go_faq.html#closures_and_goroutines",
@@ -432,6 +427,11 @@
                 "fillstruct": {
                   "type": "boolean",
                   "description": "note incomplete struct initializations\nThis analyzer provides diagnostics for any struct literals that do not have\nany fields initialized. Because the suggested fix for this analysis is\nexpensive to compute, callers should compute it separately, using the\nSuggestedFix function below.",
+                  "default": true
+                },
+                "infertypeargs": {
+                  "type": "boolean",
+                  "description": "check for unnecessary type arguments in call expressions\nExplicit type arguments may be omitted from call expressions if they can be\ninferred from function arguments, or from other type arguments:\n\tfunc f[T any](T) {}\n\t\n\tfunc _() {\n\t\tf[string](\"foo\") // string could be inferred\n\t}",
                   "default": true
                 },
                 "stubmethods": {
