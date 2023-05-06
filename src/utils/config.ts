@@ -186,6 +186,11 @@ export interface GoplsOptions {
   symbolMatcher: "CaseInsensitive" | "CaseSensitive" | "FastFuzzy" | "Fuzzy"
 
   /**
+   * Default: "workspace"
+   */
+  symbolScope: "all" | "workspace"
+
+  /**
    * Default: "Dynamic"
    */
   symbolStyle: "Dynamic" | "Full" | "Package"
