@@ -186,7 +186,7 @@ export interface GoplsOptions {
   symbolMatcher: "CaseInsensitive" | "CaseSensitive" | "FastFuzzy" | "Fuzzy"
 
   /**
-   * Default: "workspace"
+   * Default: "all"
    */
   symbolScope: "all" | "workspace"
 
