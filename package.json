@@ -441,6 +441,11 @@
                 }
               }
             },
+            "analysisProgressReporting": {
+              "type": "boolean",
+              "default": true,
+              "description": "analysisProgressReporting controls whether gopls sends progress\nnotifications when construction of its index of analysis facts is taking a\nlong time. Cancelling these notifications will cancel the indexing task,\nthough it will restart after the next change in the workspace.\n\nWhen a package is opened for the first time and heavyweight analyses such as\nstaticcheck are enabled, it can take a while to construct the index of\nanalysis facts for all its dependencies. The index is cached in the\nfilesystem, so subsequent analysis should be faster.\n"
+            },
             "annotations": {
               "type": "object",
               "patternProperties": {

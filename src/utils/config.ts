@@ -66,6 +66,11 @@ export interface GoplsOptions {
   analyses: { string: boolean }
 
   /**
+   * Default: true
+   */
+  analysisProgressReporting: boolean
+
+  /**
    * Default: {}
    */
   annotations: { string: boolean }
