@@ -268,7 +268,7 @@
                 },
                 "embed": {
                   "type": "boolean",
-                  "description": "check for //go:embed directive import\nThis analyzer checks that the embed package is imported when source code contains //go:embed comment directives.\nThe embed package must be imported for //go:embed directives to function.import _ \"embed\".",
+                  "description": "check //go:embed directive usage\nThis analyzer checks that the embed package is imported if //go:embed\ndirectives are present, providing a suggested fix to add the import if\nit is missing.\nThis analyzer also checks that //go:embed directives precede the\ndeclaration of a single variable.",
                   "default": true
                 },
                 "errorsas": {
