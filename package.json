@@ -256,9 +256,9 @@
                   "description": "check for calls of reflect.DeepEqual on error values\nThe deepequalerrors checker looks for calls of the form:\n    reflect.DeepEqual(err1, err2)\nwhere err1 and err2 are errors. Using reflect.DeepEqual to compare\nerrors is discouraged.",
                   "default": true
                 },
-                "defer": {
+                "defers": {
                   "type": "boolean",
-                  "description": "report common mistakes in defer statements\nThe defer analyzer reports a diagnostic when a defer statement would\nresult in a non-deferred call to time.Since, as experience has shown\nthat this is nearly always a mistake.\nFor example:\n\tstart := time.Now()\n\t...\n\tdefer recordLatency(time.Since(start)) // error: call to time.Since is not deferred\nThe correct code is:\n\tdefer func() { recordLatency(time.Since(start)) }()",
+                  "description": "report common mistakes in defer statements\nThe defers analyzer reports a diagnostic when a defer statement would\nresult in a non-deferred call to time.Since, as experience has shown\nthat this is nearly always a mistake.\nFor example:\n\tstart := time.Now()\n\t...\n\tdefer recordLatency(time.Since(start)) // error: call to time.Since is not deferred\nThe correct code is:\n\tdefer func() { recordLatency(time.Since(start)) }()",
                   "default": true
                 },
                 "deprecated": {
