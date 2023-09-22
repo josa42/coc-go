@@ -206,6 +206,11 @@
                 }
               },
               "properties": {
+                "appends": {
+                  "type": "boolean",
+                  "description": "check for missing values after append\nThis checker reports calls to append that pass\nno values to be appended to the slice.\n\ts := []string{\"a\", \"b\", \"c\"}\n\t_ = append(s)\nSuch calls are always no-ops and often indicate an\nunderlying mistake.",
+                  "default": true
+                },
                 "asmdecl": {
                   "type": "boolean",
                   "description": "report mismatches between assembly files and Go declarations",
