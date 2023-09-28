@@ -527,6 +527,11 @@
                 }
               }
             },
+            "completeFunctionCalls": {
+              "type": "boolean",
+              "default": true,
+              "description": "completeFunctionCalls enables function call completion.\n\nWhen completing a statement, or when a function return type matches the\nexpected of the expression being completed, completion may suggest call\nexpressions (i.e. may include parentheses).\n"
+            },
             "completionBudget": {
               "type": "string",
               "default": "100ms",

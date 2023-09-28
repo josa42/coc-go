@@ -86,6 +86,11 @@ export interface GoplsOptions {
   codelenses: { string: boolean }
 
   /**
+   * Default: true
+   */
+  completeFunctionCalls: boolean
+
+  /**
    * Default: "100ms"
    */
   completionBudget: string
