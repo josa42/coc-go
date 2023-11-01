@@ -101,6 +101,11 @@ export interface GoplsOptions {
   diagnosticsDelay: string
 
   /**
+   * Default: "Edit"
+   */
+  diagnosticsTrigger: "Edit" | "Save"
+
+  /**
    * Default: []
    */
   directoryFilters: string[]
