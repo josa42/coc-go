@@ -166,9 +166,9 @@ export interface GoplsOptions {
   matcher: "CaseInsensitive" | "CaseSensitive" | "Fuzzy"
 
   /**
-   * Default: "Normal"
+   * Default: ""
    */
-  memoryMode: "DegradeClosed" | "Normal"
+  memoryMode: string
 
   /**
    * Default: false
