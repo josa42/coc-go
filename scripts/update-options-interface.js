@@ -78,7 +78,13 @@ function getType(o) {
     }
     default:
       if (o.enum) {
-        return `"${o.enum.join('" | "')}"`
+        const types = o.enum.map((e) => typeof e === "string" ? `"${e}"` : e)
+
+        if (types.includes(true) && types.includes(false)) {
+          return types.map((t) => typeof t === "boolean" ? "boolean" : t).filter((v, i, a) => a.indexOf(v) === i).join(" | ")
+        }
+
+        return types.join(" | ")
       }
       return o.type
   }
@@ -97,9 +103,11 @@ function getDefault(o) {
 
     case "string":
       return `"${o.default || ""}"`
+    case "boolean | string":
+      return typeof o.default === "string" ? `"${o.default}"` : o.default
   }
 
-  return o.default
+  return `${o.default} (${o.type})`
 }
 
 run()

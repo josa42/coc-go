@@ -166,9 +166,16 @@ const updateGoplsOptions = async () => {
             },
           },
         }
+      case "map[enum]bool":
+        return {
+          type: "object",
+          patternProperties: {
+            ".+": { type: "boolean" },
+          },
+        }
       case "enum":
         return {
-          type: "string",
+          type: parseEnumType(doc),
           enum: parseEnum(doc),
         }
       case "time.Duration":
@@ -178,11 +185,20 @@ const updateGoplsOptions = async () => {
     }
   }
 
+  const parseEnumType = (str) => {
+    const theenum = parseEnum(str)
+    const types = theenum.map((v) => typeof v).filter((v, i, a) => a.indexOf(v) === i).sort()
+
+    return types.join(' | ')
+  }
+
   const parseEnum = (str) => {
     return str
       .split(/\n/)
-      .filter((l) => l.match(/^ *\* `".*"`.*$/))
-      .map((l) => l.replace(/^ *\* `"(.*)"`.*$/, "$1"))
+      .filter((l) => l.match(/^ *\* (`".*"`|true|false).*$/))
+      .map((l) => l.replace(/^ *\* (true|false).*$/, "$1"))
+      .map((l) => l === "true" || l === "false" ? l === "true" : l)
+      .map((l) => l.replace?.(/^ *\* `"(.*)"`.*$/, "$1") ?? l)
   }
 
   const parseDefault = (str) => {
