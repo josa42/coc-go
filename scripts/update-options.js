@@ -54,7 +54,7 @@ const updateGoplsOptions = async () => {
     }
 
     if (section === 'User') {
-      if ((m = line.match(/^###+ \*\*(.*)\*\* \*(.*)\*$/))) {
+      if ((m = line.match(/^### `([^ ]+) (.*)`$/))) {
         const [, Name, Type] = m
         item = { Name, Type, Doc: "", Default: null }
         opts.push(item)
@@ -67,7 +67,7 @@ const updateGoplsOptions = async () => {
         item.Doc = `${item.Doc || ""}\n${line}`
       }
     } else if (section === 'Lenses') {
-      if ((m = line.match(/^### \*\*(.*)\*\*$/))) {
+      if ((m = line.match(/^### `([^ ]+) .*`$/))) {
         const [, Title] = m
         lens = { Title, Doc: "" }
         lenses.push(lens)
@@ -231,9 +231,9 @@ const getAnalysesProperties = async () => {
     }
 
     if (l.match(/^## /)) {
-      k = l.replace(/^## \*\*(.*)\*\*$/, "$1")
+      k = l.replace(/^## `(.*)`: .*/, "$1")
       props[k] = { type: "boolean", description: "" }
-    } else if (l.match(/^\*\*Enabled by default\.\*\*/)) {
+    } else if (l === "Default: on.") {
       props[k].default = true
     } else if (props[k] && l) {
       props[k].description += `${l}\n`
