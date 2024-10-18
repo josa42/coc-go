@@ -56,11 +56,6 @@ export interface GoplsOptions {
   allowImplicitNetworkAccess: boolean
 
   /**
-   * Default: false
-   */
-  allowModfileModifications: boolean
-
-  /**
    * Default: {}
    */
   analyses: { string: boolean }
@@ -153,7 +148,7 @@ export interface GoplsOptions {
   /**
    * Default: true
    */
-  linksInHover: boolean
+  linksInHover: boolean | "gopls"
 
   /**
    * Default: ""
