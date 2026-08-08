@@ -5,7 +5,7 @@ import { ExecOptions, exec, execFile, spawn } from 'child_process'
 import { window, workspace } from 'coc.nvim'
 import which from 'which'
 import { configDir } from './config'
-import { compareVersions } from './versions'
+import { compareVersions, parseGoVersion } from './versions'
 
 const runExec = util.promisify(exec)
 
@@ -61,7 +61,7 @@ async function goVersionOrLater(version: string): Promise<boolean> {
 async function getGoVersion() {
   try {
     const [, out] = await runBin('go', ['version'])
-    return out.trim().match(/^go version go(\S+) .*$/)[1]
+    return parseGoVersion(out)
   } catch(err) {
     // mute
   }

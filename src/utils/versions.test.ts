@@ -1,5 +1,5 @@
 import assert from 'assert'
-import { compareVersions, isValidVersion, parseVersion, version } from './versions'
+import { compareVersions, isValidVersion, parseGoVersion, parseVersion, version } from './versions'
 
 const v0_0_0: version = [0, 0, 0]
 const v1_0_0: version = [1, 0, 0]
@@ -63,4 +63,22 @@ describe('compareVersions()', () => {
     assert.strictEqual(compareVersions('v1.0.0', '1.1.0'), -1)
   })
 
+})
+
+describe('parseGoVersion()', () => {
+  it('parses official version', () => {
+    assert.strictEqual(parseGoVersion('go version go1.26.5 linux/amd64'), '1.26.5')
+  })
+
+  it('parses distro version with metadata suffix', () => {
+    assert.strictEqual(parseGoVersion('go version go1.26.5-X:nodwarf5 linux/amd64'), '1.26.5')
+  })
+
+  it('parses two-part version', () => {
+    assert.strictEqual(parseGoVersion('go version go1.26 linux/amd64'), '1.26')
+  })
+
+  it('returns empty for malformed output', () => {
+    assert.strictEqual(parseGoVersion(''), '')
+  })
 })

@@ -41,3 +41,9 @@ export function parseVersion(v: string): version {
   return ver
 }
 
+const goVersionExp = /^go version go(\d+\.\d+(?:\.\d+)?)/
+
+export function parseGoVersion(output: string): string {
+  const m = output.trim().match(goVersionExp)
+  return m ? m[1] : ''
+}
